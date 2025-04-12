@@ -149,7 +149,7 @@ async function createAccount(username, password) {
       .insertOne(user);
   } catch (e) {
     console.error(e);
-  } 
+  }
 }
 
 async function viewApplication(user, response) {
@@ -167,7 +167,7 @@ async function viewApplication(user, response) {
     response.send(result);
   } catch (e) {
     console.error(e);
-  } 
+  }
 }
 
 async function addApplication(company, position, link, date, status, user) {
@@ -199,15 +199,17 @@ async function addApplication(company, position, link, date, status, user) {
       { username: user },
       { $push: { applications: application } }
     );
-
-   
+    if (status == "Applied") {
+      db.products.updateOne({ username: user }, { $inc: { numApps: 1 } });
+    } else if (status == "Interviewed") {
+      db.products.updateOne({ username: user }, { $inc: { numInterviews: 1 } });
+    } else if (status == "Offer") {
+      db.products.updateOne({ username: user }, { $inc: { numOffers: 1 } });
+    }
   } catch (e) {
     console.error("❌ Error in addApplication:", e);
   }
 }
-
-
-
 
 async function updateStatus(user, company, position, status) {
   try {
@@ -240,7 +242,7 @@ async function updateStatus(user, company, position, status) {
       .updateOne({ username: user }, { applications: applications });
   } catch (e) {
     console.error(e);
-  } 
+  }
 }
 
 async function updateNotes(user, notes) {
@@ -256,5 +258,5 @@ async function updateNotes(user, notes) {
       .updateOne({ username: user }, { notes: notes });
   } catch (e) {
     console.error(e);
-  } 
+  }
 }
