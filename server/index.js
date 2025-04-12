@@ -19,7 +19,9 @@ const databaseAndCollection = {
 };
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:3000"
+}));
 
 const uri = `mongodb+srv://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PASSWORD}@koalafied.szyjdqy.mongodb.net/?retryWrites=true&w=majority&appName=Koalafied`;
 
@@ -28,6 +30,27 @@ const client = new MongoClient(uri, {
 });
 
 app.use(express.static(path.join(__dirname, "../client/build")));
+
+app.get("/api/leaderboard", async (req, res) => {
+  try {
+    await client.connect();
+    const collection = client
+      .db(databaseAndCollection.db)
+      .collection(databaseAndCollection.collection);
+
+    const users = await collection
+      .find({}, { projection: { _id: 0, username: 1, points: 1, numApps: 1 } })
+      .sort({ points: -1 })
+      .limit(10)
+      .toArray();
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error fetching leaderboard data:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
