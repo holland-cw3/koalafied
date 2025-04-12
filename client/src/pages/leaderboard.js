@@ -9,6 +9,11 @@ import "../CSS/leaderboard.css";
 //   backgroundSize: 'contain',
 // };
 
+import searcher from "../searcher.png";
+const headerStyle = {
+  backgroundImage: `url(${searcher})`,
+}
+
 function Leaderboard() {
   //temporary data for testing
   // const [users, setUsers] = useState([]);
@@ -54,10 +59,10 @@ function Leaderboard() {
 
   return (
     <>
-      <div className="home-btn">
+      <div className="home-btn" style={headerStyle}>
         <a href="/">Home</a>
       </div>
-      <div className="leaderboard">
+      <div className="leaderboard" style={headerStyle}>
         <h2>Leaderboard 🏆</h2>
         <ol>
           {users
