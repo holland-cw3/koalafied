@@ -1,22 +1,38 @@
+import { useState } from "react";
+import TextField from "@mui/material/TextField";
+import "../CSS/login.css";
+import Button from "@mui/material/Button";
 
-function App() {
+export default function Login() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn login
-        </a>
-      </header>
+    <div class="container">
+      <form class="loginForm">
+        <h1>Koala-fied Login</h1>
+
+        <TextField
+          id="outlined-basic"
+          label="Username"
+          variant="outlined"
+          value={username}
+          placeholder="Username"
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <TextField
+          id="outlined-basic"
+          label="Password"
+          variant="outlined"
+          value={password}
+          placeholder="Password"
+          type="password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <Button variant="contained">Login</Button>
+
+        <div>Don't Have an Account? Register here</div>
+      </form>
     </div>
   );
 }
-
-export default App;
