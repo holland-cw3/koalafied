@@ -1,53 +1,66 @@
 import React, { useEffect, useState } from "react";
 import "../CSS/leaderboard.css";
+// import treeVine from '../images/PixelatedTreeBranch.png';
+
+// const leaderboardStyle = {
+//   backgroundImage: `url(${treeVine}), url(${treeVine})`,
+//   backgroundRepeat: 'no-repeat',
+//   backgroundPosition: 'top center, bottom center',
+//   backgroundSize: 'contain',
+// };
 
 function Leaderboard() {
   //temporary data for testing
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    const testData = [
-      { username: "user1", numApps: 3, points: 80 },
-      { username: "user4", numApps: 4, points: 60 },
-      { username: "user3", numApps: 2, points: 40 },
-      { username: "user5", numApps: 1, points: 20 },
-      { username: "user2", numApps: 5, points: 100 },
-      { username: "user6", numApps: 3, points: 95 },
-      { username: "user9", numApps: 4, points: 35 },
-      { username: "user7", numApps: 2, points: 65 },
-      { username: "user8", numApps: 1, points: 80 },
-      { username: "user10", numApps: 5, points: 75 },
-      { username: "user1", numApps: 3, points: 80 },
-      { username: "user4", numApps: 4, points: 60 },
-      { username: "user3", numApps: 2, points: 40 },
-      { username: "user5", numApps: 1, points: 20 },
-      { username: "user2", numApps: 5, points: 100 },
-      { username: "user6", numApps: 3, points: 95 },
-      { username: "user9", numApps: 4, points: 35 },
-      { username: "user7", numApps: 2, points: 65 },
-      { username: "user8", numApps: 1, points: 80 },
-      { username: "user10", numApps: 5, points: 75 },
-    ];
-    const sortedData = testData.sort((a, b) => b.points - a.points); // Sort by points descending
-    setUsers(sortedData);
-  }, []);
-
   // const [users, setUsers] = useState([]);
 
   // useEffect(() => {
-  //   fetch("http://localhost:5001/api/leaderboard")
-  //     .then((res) => res.json())
-  //     .then((data) => setUsers(data))
-  //     .catch((err) => console.error("Fetch failed:", err));
+  //   const testData = [
+  //     { username: "user1", numApps: 3, points: 80 },
+  //     { username: "user4", numApps: 4, points: 60 },
+  //     { username: "user3", numApps: 2, points: 40 },
+  //     { username: "user5", numApps: 1, points: 20 },
+  //     { username: "user2", numApps: 5, points: 100 },
+  //     { username: "user6", numApps: 3, points: 95 },
+  //     { username: "user9", numApps: 4, points: 35 },
+  //     { username: "user7", numApps: 2, points: 65 },
+  //     { username: "user8", numApps: 1, points: 80 },
+  //     { username: "user10", numApps: 5, points: 75 },
+  //     { username: "user1", numApps: 3, points: 80 },
+  //     { username: "user4", numApps: 4, points: 60 },
+  //     { username: "user3", numApps: 2, points: 40 },
+  //     { username: "user5", numApps: 1, points: 20 },
+  //     { username: "user2", numApps: 5, points: 100 },
+  //     { username: "user6", numApps: 3, points: 95 },
+  //     { username: "user9", numApps: 4, points: 35 },
+  //     { username: "user7", numApps: 2, points: 65 },
+  //     { username: "user8", numApps: 1, points: 80 },
+  //     { username: "user10", numApps: 5, points: 75 },
+  //   ];
+  //   const sortedData = testData.sort((a, b) => b.points - a.points); // Sort by points descending
+  //   setUsers(sortedData);
   // }, []);
 
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5001/api/leaderboard")
+      .then((res) => res.json())
+      .then((data) => {
+        const sorted = data.sort((a, b) => b.points - a.points);
+        setUsers(sorted);
+      })
+      .catch((err) => console.error("Fetch failed:", err));
+  }, []);
+
   return (
+    <>
+    <div className="home-btn"><a href="/login">Home</a></div>
     <div className="leaderboard">
       <h2>Leaderboard 🏆</h2>
       <ol>
         {users
-          .sort((a, b) => b.points - a.points) // optional: keep it sorted by points
-          .slice(0, 10) // cap to top 10
+          .sort((a, b) => b.points - a.points) 
+          .slice(0, 10)
           .map((user, i) => {
             let rankDisplay = "";
             if (i === 0) rankDisplay = "🥇";
@@ -65,6 +78,7 @@ function Leaderboard() {
           })}
       </ol>
     </div>
+    </>
 
     // <table>
     //   <thead>

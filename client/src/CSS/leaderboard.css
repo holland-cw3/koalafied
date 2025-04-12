@@ -1,7 +1,28 @@
 body {
-    height: 100vh; /* full viewport height */
-  }
-  
+  height: 100vh; /* full viewport height */
+}
+
+.home-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: white;
+  border: none;
+  color: black;
+  padding: 10px 20px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 12px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 .leaderboard {
   width: 50%;
   margin: 2rem auto;
@@ -10,6 +31,8 @@ body {
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   text-align: center; /* centers the header */
+  border: 10px solid #8be0a0; /* light green border */
+  border-color: rgb(139, 224, 126);
 }
 
 .leaderboard h2 {

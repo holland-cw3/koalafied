@@ -8,37 +8,68 @@ import Typography from "@mui/material/Typography";
 
 import "../CSS/main.css";
 
+const globalKoalaList = require("../koalas/koalas.json");
+
+function compareKoalaLists(newList, oldList) {
+  let newKoalas = [];
+  for (let i = 0; i < newList.length; i++) {
+    if (i >= oldList.length) newKoalas.push(newList[i]);
+  }
+}
+
+function getKoalaById(id) {
+  for (let i = 0; i < globalKoalaList.length; i++) {
+    if (id === globalKoalaList[i].id) return globalKoalaList[i];
+  }
+}
+
 async function load(
   setApps,
   setUsername,
   setNumKoalas,
   setNumApps,
   setNumInterviews,
-  setNumOffers
+  setNumOffers,
+  setKoalaList,
+  koalaList
 ) {
   const token = localStorage.getItem("token");
 
   try {
-    const response = await fetch(
-      "https://koala-fied-3.onrender.com/viewApplications",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    // const response = await fetch("https://koala-fied-3.onrender.com/viewApplications", {
+    const response = await fetch("http://localhost:5001/viewApplications", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (response.ok) {
       const data = await response.json();
       setApps(data.applications);
       setUsername(data.username);
       // Replace with length of list of koalas
-      setNumKoalas(0);
+      setNumKoalas(data.koalas.length);
       setNumApps(data.numApps);
       setNumInterviews(data.numInterviews);
       setNumOffers(data.numOffers);
+
+      // Check if the users has received any new koala's
+      let newKoalas = compareKoalaLists(data.koalas, koalaList);
+      if (newKoalas.length != 0) {
+        console.log("A NEW KOALA!!");
+
+        for (let i = 0; i < newKoalas.length; i++) {
+          let newKoala = getKoalaById(newKoalas[i]);
+          console.log(
+            "I just unlocked the " + newKoala.name + ", " + newKoala.description
+          );
+        }
+      }
+
+      setKoalaList(data.koalas);
+
       if (data.notes !== "") {
         document.getElementById("noteField").value = data.notes;
       }
@@ -73,7 +104,8 @@ async function submitNewApp(setApps) {
 
   try {
     const response = await fetch(
-      "https://koala-fied-3.onrender.com/addApplication",
+      // "https://koala-fied-3.onrender.com/addApplication",
+      "http://localhost:5001/addApplication",
       {
         method: "POST",
         headers: {
@@ -108,7 +140,8 @@ async function saveNotes(setNotes) {
 
   try {
     const response = await fetch(
-      "https://koala-fied-3.onrender.com/updateNotes",
+      // "https://koala-fied-3.onrender.com/updateNotes",
+      "http://localhost:5001/updateNotes",
       {
         method: "POST",
         headers: {
@@ -140,11 +173,9 @@ function App() {
   }
 
   // States for stats
-  // Load this data from the server
-  // When loading in user's notes used doc get el by id to add notes in
-  // State wont allow editing
   const [username, setUsername] = useState("User");
   const [numKoalas, setNumKoalas] = useState(0);
+  const [koalaList, setKoalaList] = useState([]);
   const [numApps, setNumApps] = useState(0);
   const [numInterviews, setNumInterviews] = useState(0);
   const [numOffers, setNumOffers] = useState(0);
@@ -177,7 +208,8 @@ function App() {
 
     try {
       const response = await fetch(
-        "https://koala-fied-3.onrender.com//updateStatus",
+        // "https://koala-fied-3.onrender.com/updateStatus",
+        "http://localhost:5001/updateStatus",
         {
           method: "POST",
           headers: {
@@ -235,7 +267,9 @@ function App() {
       setNumKoalas,
       setNumApps,
       setNumInterviews,
-      setNumOffers
+      setNumOffers,
+      setKoalaList,
+      koalaList
     );
   }, []);
 
@@ -352,7 +386,9 @@ function App() {
                       setNumKoalas,
                       setNumApps,
                       setNumInterviews,
-                      setNumOffers
+                      setNumOffers,
+                      setKoalaList,
+                      koalaList
                     );
                     handleClose();
                   }
@@ -446,6 +482,7 @@ function App() {
                       <td>{item.company}</td>
                       <td>
                         <a href={item.link} target="_blank" rel="noreferrer">
+                        <a href={item.link} target="_blank" rel="noreferrer">
                           {item.position}
                         </a>
                       </td>
@@ -474,7 +511,9 @@ function App() {
                               setNumKoalas,
                               setNumApps,
                               setNumInterviews,
-                              setNumOffers
+                              setNumOffers,
+                              setKoalaList,
+                              koalaList
                             );
                           }}
                         >

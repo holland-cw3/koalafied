@@ -7,7 +7,8 @@ import logo from '../logo.png';
 
 async function login(username, password) {
   try {
-    const response = await fetch("https://koala-fied-3.onrender.com/login", {
+    // const response = await fetch("https://koala-fied-3.onrender.com/login", {
+    const response = await fetch("http://localhost:5001/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,6 +33,8 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const handleSubmit = (e) => {
+    e.preventDefault();
+    login(username, password);
     e.preventDefault();
     login(username, password);
   };
@@ -103,6 +106,9 @@ export default function Login() {
           Login
         </Button>
 
+        <div>
+          Don't Have an Account? <a href="/register">Register here</a>
+        </div>
         <div>
           Don't Have an Account? <a href="/register">Register here</a>
         </div>
