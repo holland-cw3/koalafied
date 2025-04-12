@@ -266,15 +266,15 @@ function App() {
           </div>
         </Box>
       </Modal>
-      <div class="tableBody">
-        <div class="stats">
+      <div className="tableBody">
+        <div className="stats">
           <h2>{username}</h2>
           <h3>Koala Count: {numKoalas}</h3>
           <h3 className="silver">Applications: {numApps}</h3>
           <h3 className="bronze">Interviews: {numInterviews}</h3>
           <h3 className="gold">Offers: {numOffers}</h3>
         </div>
-        <div class="table">
+        <div className="table">
           <h4>
             <span className="line">
               Status:{" "}
@@ -295,7 +295,7 @@ function App() {
               Search:{" "}
               <input
                 type="text"
-                class="w-auto px-2 py-0 m-0 bg-white"
+                className="w-auto px-2 py-0 m-0 bg-white"
                 placeholder="Search company or position name"
                 onChange={(e) => setSearchVal(e.target.value)}
               ></input>{" "}
@@ -375,12 +375,12 @@ function App() {
             </table>
           </div>
         </div>
-        <div class="notes">
+        <div className="notes">
           <textarea
             id="noteField"
             placeholder="Write any notes, reminders, or contact information here"
           ></textarea>
-          <button class="saveButton" onClick={saveNotes}>
+          <button className="saveButton" onClick={saveNotes}>
             Save
           </button>
         </div>
