@@ -19,9 +19,11 @@ const databaseAndCollection = {
 };
 
 app.use(express.json());
-app.use(cors({
-  origin: "http://localhost:3000"
-}));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  })
+);
 
 const uri = `mongodb+srv://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PASSWORD}@koalafied.szyjdqy.mongodb.net/?retryWrites=true&w=majority&appName=Koalafied`;
 
@@ -50,7 +52,6 @@ app.get("/api/leaderboard", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
-
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
