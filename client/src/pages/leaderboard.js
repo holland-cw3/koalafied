@@ -38,7 +38,7 @@ function Leaderboard() {
       <tbody>
         {users.map((user, i) => (
           <tr key={i}>
-            <td>{i + 1}</td>
+            {/* <td>{i + 1}</td> */}
             <td>{user.username}</td>
             <td>{user.rank}</td>
             <td>{user.numApps}</td>
