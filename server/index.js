@@ -136,19 +136,16 @@ app.post("/updateNotes", (request, response) => {
 
   updateNotes(id, post_data.notes);
 
-  console.log('hi')
+  console.log("hi");
 
   response.send("Success");
 });
-
-
 
 /// db operations
 
 async function login(username, password) {
   try {
     await client.connect();
-
 
     const collection = client
       .db(databaseAndCollection.db)
@@ -158,29 +155,26 @@ async function login(username, password) {
 
     if (!user) {
       console.error("User not found");
-      return { success: false, message: "User not found" }; 
+      return { success: false, message: "User not found" };
     }
-
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
       console.error("Invalid password");
-      return { success: false, message: "Invalid password" }; 
+      return { success: false, message: "Invalid password" };
     }
 
     const payload = { username: user.username };
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
 
     console.log("Login successful");
-    return { success: true, token: token }; 
+    return { success: true, token: token };
   } catch (e) {
     console.error("Error during login:", e);
-    return { success: false, message: "Error during login" }; 
+    return { success: false, message: "Error during login" };
   }
 }
-
-
 
 async function createAccount(username, password) {
   try {
@@ -234,6 +228,10 @@ async function addApplication(company, position, link, date, status, user) {
   try {
     await client.connect();
 
+    if (!link.contains("https://") && !link.contains("http://")) {
+      link = "https://" + link;
+    }
+
     const application = {
       company,
       position,
@@ -268,7 +266,7 @@ async function addApplication(company, position, link, date, status, user) {
     if (status == "Interviewed") {
       collection.updateOne({ username: user }, { $inc: { numInterviews: 1 } });
       collection.updateOne({ username: user }, { $inc: { points: 5 } });
-    } else if (status == "Offer") {
+    } else if (status == "Offered") {
       collection.updateOne({ username: user }, { $inc: { numOffers: 1 } });
       collection.updateOne({ username: user }, { $inc: { points: 10 } });
     }
@@ -281,24 +279,32 @@ async function updateStatus(user, company, position, status) {
   try {
     await client.connect();
 
-    // DO PASSWORD/SESSION CHECK
-
     // Idea: get applicaiton list, add a new one, update the list
-    const cursor = await client
+
+    const collection = client
       .db(databaseAndCollection.db)
-      .collection(databaseAndCollection.collection)
-      .findOne({ username: user });
+      .collection(databaseAndCollection.collection);
 
-    const obj = await cursor.toArray();
+    const cursor = collection.findOne({ username: user });
 
-    let applications = obj.applicaitons;
+    const obj = await cursor;
+
+    console.log(cursor.username);
+
+    let applications = obj.applications;
 
     // find that job in the application list, update the notes
-    for (app in applications) {
-      if (app.company.equals(company) && app.position.equals(position)) {
+    let foundPosition = false;
+
+    let newApps = [];
+
+    for (let i = 0; i < applications.length && !foundPosition; i++) {
+      let app = applications[i];
+      if (app.company == company && app.position == position) {
         app.status = status;
         break;
       }
+      newApps.push(app);
     }
 
     if (status == "Applied") {
@@ -307,7 +313,7 @@ async function updateStatus(user, company, position, status) {
     } else if (status == "Interviewed") {
       collection.updateOne({ username: user }, { $inc: { numInterviews: 1 } });
       collection.updateOne({ username: user }, { $inc: { points: 5 } });
-    } else if (status == "Offer") {
+    } else if (status == "Offered") {
       collection.updateOne({ username: user }, { $inc: { numOffers: 1 } });
       collection.updateOne({ username: user }, { $inc: { points: 10 } });
     }
@@ -316,7 +322,7 @@ async function updateStatus(user, company, position, status) {
     const result = await client
       .db(databaseAndCollection.db)
       .collection(databaseAndCollection.collection)
-      .updateOne({ username: user }, { applications: applications });
+      .updateOne({ username: user }, { applications: newApps });
   } catch (e) {
     console.error(e);
   }
@@ -333,9 +339,7 @@ async function updateNotes(user, notes) {
         { username: user },
         { $set: { notes: notes } } // <-- fix here
       );
-    
   } catch (e) {
     console.error(e);
   }
 }
-
