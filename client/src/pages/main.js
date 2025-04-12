@@ -68,8 +68,6 @@ async function submitNewApp(setApps) {
     console.error("Error submitting data:", error);
     return false;
   }
-
-  // handleClose();
 }
 
 function App() {
@@ -147,9 +145,6 @@ function App() {
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
       );
   }
-
-  
-
 
   useEffect(() => {
     load(setApps);
@@ -268,6 +263,8 @@ function App() {
           <h3 className="silver">Applications: {numApps}</h3>
           <h3 className="bronze">Interviews: {numInterviews}</h3>
           <h3 className="gold">Offers: {numOffers}</h3>
+          <br></br>
+          <h3>New Koalas:</h3>
         </div>
         <div className="table">
           <h4>
