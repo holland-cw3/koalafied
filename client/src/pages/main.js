@@ -1,6 +1,9 @@
 import Footer from "../components/footer";
 import Header from "../components/header";
 import React, { useState } from "react";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 import "../CSS/main.css";
 
@@ -16,6 +19,17 @@ function App() {
   const [selectedSorting, setSelectedSorting] = useState("newest");
   const [searchVal, setSearchVal] = useState("");
   const [statusVal, setStatusVal] = useState("all");
+
+  // State for modal
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   // list of user's applications
   // Get this from mongo db
@@ -51,6 +65,18 @@ function App() {
     );
   }
 
+  function submitNewApp() {
+    let company = document.getElementById("company").value;
+    let position = document.getElementById("position").value;
+    let link = document.getElementById("link").value;
+    let date = document.getElementById("date").value;
+    let status = document.getElementById("status").value;
+
+    console.log(
+      `Adding new application: Company: ${company} Position: ${position} Link: ${link} Date: ${date} Status: ${status}`
+    );
+  }
+
   switch (selectedSorting) {
     case "oldest":
       ApplicationList.sort(
@@ -71,6 +97,110 @@ function App() {
   return (
     <div className="App">
       <Header />
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box>
+          <div className="modalDiv relative">
+            <div className="flex justify-between items-center">
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Add A New Application
+              </Typography>
+              <button
+                onClick={handleClose}
+                className="text-gray-500 hover:text-black text-xl font-bold"
+                aria-label="Close"
+              >
+                &times;
+              </button>
+            </div>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              <span className="line">
+                <label className=" block mb-1 mt-2" htmlFor="company">
+                  Company:
+                </label>
+                <input
+                  type="text"
+                  id="company"
+                  name="company"
+                  placeholder="Company"
+                  className=" w-full p-2 border rounded"
+                  required
+                />
+              </span>
+
+              <span className="line">
+                <label className="block mb-1 mt-2" htmlFor="position">
+                  Position:
+                </label>
+                <input
+                  type="text"
+                  id="position"
+                  name="position"
+                  placeholder="Position"
+                  className="w-full p-2 border rounded"
+                  required
+                />
+              </span>
+
+              <span className="line">
+                <label className=" block mb-1 mt-2" htmlFor="link">
+                  Link:
+                </label>
+                <input
+                  type="url"
+                  id="link"
+                  name="link"
+                  placeholder="Link"
+                  className=" w-full p-2 border rounded"
+                />
+              </span>
+
+              <span className="line">
+                <label className=" block mb-1 mt-2" htmlFor="date">
+                  Date:
+                </label>
+                <input
+                  type="date"
+                  id="date"
+                  name="date"
+                  className=" w-full p-2 border rounded"
+                  required
+                />
+              </span>
+
+              <span className="line">
+                <label className=" block mb-1 mt-2" htmlFor="status">
+                  Status:
+                </label>
+                <select
+                  id="status"
+                  name="status"
+                  defaultValue="Applied"
+                  className=" w-full p-2 border rounded"
+                  required
+                >
+                  <option value="Applied">Applied</option>
+                  <option value="Interviewed">Interviewed</option>
+                  <option value="Offered">Offered</option>
+                  <option value="Rejected">Rejected</option>
+                </select>
+              </span>
+
+              <button
+                type="submit"
+                onClick={submitNewApp}
+                className="line bg-blue-500 text-white px-4 py-2 rounded mt-4"
+              >
+                Submit
+              </button>
+            </Typography>
+          </div>
+        </Box>
+      </Modal>
       <div class="tableBody">
         <div class="stats">
           <h2>{username}</h2>
@@ -115,7 +245,9 @@ function App() {
                 <option value="oldest">Oldest</option>
               </select>
             </span>
-            <button className="line">Add Application</button>
+            <button className="line" onClick={handleOpen}>
+              Add Application
+            </button>
           </h4>
           <br></br>
           {/* Displaying records table based on filters */}

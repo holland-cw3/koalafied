@@ -70,3 +70,17 @@ th {
   display: inline-block;
   margin-left: 10px;
 }
+
+.line input,
+select {
+  margin-left: 10px;
+}
+
+.modalDiv {
+  width: 50%;
+  margin: auto;
+  background-color: white;
+  margin-top: 10%;
+  border-radius: 1em;
+  padding: 2em;
+}
