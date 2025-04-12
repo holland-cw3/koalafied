@@ -2,6 +2,9 @@ import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import "../CSS/login.css";
 import Button from "@mui/material/Button";
+import axios from 'axios';
+
+
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -29,7 +32,7 @@ export default function Login() {
           type="password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button variant="contained">Login</Button>
+        <Button variant="contained" type='submit'>Login</Button>
 
         <div>Don't Have an Account? Register here</div>
       </form>
