@@ -262,7 +262,7 @@ function App() {
           <h3 className="bronze">Interviews: {numInterviews}</h3>
           <h3 className="gold">Offers: {numOffers}</h3>
           <br></br>
-          <h2>Upcoming Koalas:</h2>
+          <h3>New Koalas:</h3>
         </div>
         <div className="table">
           <h4>
