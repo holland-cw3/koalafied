@@ -332,7 +332,7 @@ async function addApplication(company, position, link, date, status, user) {
       .collection(databaseAndCollection.collection)
       .findOne({ username: user });
 
-    newKoalaList = await addKoalas(
+    let newKoalaList = await addKoalas(
       userObj.koalas,
       userObj.numInterviews,
       userObj.numApps,
@@ -406,7 +406,7 @@ async function updateStatus(user, company, position, status) {
         .collection(databaseAndCollection.collection)
         .findOne({ username: user });
 
-      newKoalaList = await addKoalas(
+      let newKoalaList = await addKoalas(
         userObj.koalas,
         userObj.numInterviews,
         userObj.numApps,
