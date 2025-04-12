@@ -136,6 +136,7 @@ async function createAccount(username, password) {
       numApps: 0,
       numInterviews: 0,
       numOffers: 0,
+      points: 0,
       notes: "",
       applications: [],
     };
@@ -202,12 +203,15 @@ async function addApplication(company, position, link, date, status, user) {
 
     // Always increment application
     collection.updateOne({ username: user }, { $inc: { numApps: 1 } });
+    collection.updateOne({ username: user }, { $inc: { points: 1 } });
 
     // Also increment interview or offer depending on status
     if (status == "Interviewed") {
       collection.updateOne({ username: user }, { $inc: { numInterviews: 1 } });
+      collection.updateOne({ username: user }, { $inc: { points: 5 } });
     } else if (status == "Offer") {
       collection.updateOne({ username: user }, { $inc: { numOffers: 1 } });
+      collection.updateOne({ username: user }, { $inc: { points: 10 } });
     }
   } catch (e) {
     console.error("❌ Error in addApplication:", e);
@@ -240,10 +244,13 @@ async function updateStatus(user, company, position, status) {
 
     if (status == "Applied") {
       collection.updateOne({ username: user }, { $inc: { numApps: 1 } });
+      collection.updateOne({ username: user }, { $inc: { points: 1 } });
     } else if (status == "Interviewed") {
       collection.updateOne({ username: user }, { $inc: { numInterviews: 1 } });
+      collection.updateOne({ username: user }, { $inc: { points: 5 } });
     } else if (status == "Offer") {
       collection.updateOne({ username: user }, { $inc: { numOffers: 1 } });
+      collection.updateOne({ username: user }, { $inc: { points: 10 } });
     }
 
     // update the applicaiton list
