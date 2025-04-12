@@ -36,7 +36,7 @@ async function load(
       setNumApps(data.numApps);
       setNumInterviews(data.numInterviews);
       setNumOffers(data.numOffers);
-      if (data.notes != "") {
+      if (data.notes !== "") {
         document.getElementById("noteField").value = data.notes;
       }
 
@@ -139,7 +139,6 @@ function App() {
   const [numApps, setNumApps] = useState(0);
   const [numInterviews, setNumInterviews] = useState(0);
   const [numOffers, setNumOffers] = useState(0);
-  const [notes, setNotes] = useState("");
 
   // States for table
   const [selectedSorting, setSelectedSorting] = useState("newest");
@@ -422,7 +421,7 @@ function App() {
                     <tr>
                       <td>{item.company}</td>
                       <td>
-                        <a href={item.link} target="_blank">
+                        <a href={item.link} target="_blank"  rel="noreferrer">
                           {item.position}
                         </a>
                       </td>
