@@ -14,7 +14,8 @@ async function load(
   setNumKoalas,
   setNumApps,
   setNumInterviews,
-  setNumOffers
+  setNumOffers,
+  setKoalaList
 ) {
   const token = localStorage.getItem("token");
 
@@ -33,10 +34,11 @@ async function load(
       setApps(data.applications);
       setUsername(data.username);
       // Replace with length of list of koalas
-      setNumKoalas(0);
+      setNumKoalas(data.koalas.length);
       setNumApps(data.numApps);
       setNumInterviews(data.numInterviews);
       setNumOffers(data.numOffers);
+      setKoalaList(data.koalas);
       if (data.notes !== "") {
         document.getElementById("noteField").value = data.notes;
       }
@@ -140,11 +142,9 @@ function App() {
   }
 
   // States for stats
-  // Load this data from the server
-  // When loading in user's notes used doc get el by id to add notes in
-  // State wont allow editing
   const [username, setUsername] = useState("User");
   const [numKoalas, setNumKoalas] = useState(0);
+  const [koalaList, setKoalaList] = useState([]);
   const [numApps, setNumApps] = useState(0);
   const [numInterviews, setNumInterviews] = useState(0);
   const [numOffers, setNumOffers] = useState(0);
@@ -236,7 +236,8 @@ function App() {
       setNumKoalas,
       setNumApps,
       setNumInterviews,
-      setNumOffers
+      setNumOffers,
+      setKoalaList
     );
   }, []);
 
@@ -341,7 +342,8 @@ function App() {
                       setNumKoalas,
                       setNumApps,
                       setNumInterviews,
-                      setNumOffers
+                      setNumOffers,
+                      setKoalaList
                     );
                     handleClose();
                   }
@@ -463,7 +465,8 @@ function App() {
                               setNumKoalas,
                               setNumApps,
                               setNumInterviews,
-                              setNumOffers
+                              setNumOffers,
+                              setKoalaList
                             );
                           }}
                         >
