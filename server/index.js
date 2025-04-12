@@ -170,39 +170,42 @@ async function viewApplication(user, response) {
   } 
 }
 
-
 async function addApplication(company, position, link, date, status, user) {
   try {
     await client.connect();
 
-    let application = {
-      company: company,
-      position: position,
-      link: link,
-      date: date,
-      status: status,
+    const application = {
+      company,
+      position,
+      link,
+      date,
+      status,
     };
 
-    // Idea: get applicaiton list, add a new one, update the list
-    const cursor = await client
+    const collection = client
       .db(databaseAndCollection.db)
-      .collection(databaseAndCollection.collection)
-      .findOne({ username: user });
+      .collection(databaseAndCollection.collection);
 
-    const obj = await cursor.toArray();
+    // Get the user document
+    const userDoc = await collection.findOne({ username: user });
 
-    let applications = obj.applications;
+    if (!userDoc) {
+      console.error("User not found");
+      return;
+    }
 
-    applications.push(application);
+    // Push the new application into the existing array
+    const updatedResult = await collection.updateOne(
+      { username: user },
+      { $push: { applications: application } }
+    );
 
-    const result = await client
-      .db(databaseAndCollection.db)
-      .collection(databaseAndCollection.collection)
-      .updateOne({ username: user }, { applications: applications });
+   
   } catch (e) {
-    console.error("Error in addApplication:", e);
-  } 
+    console.error("❌ Error in addApplication:", e);
+  }
 }
+
 
 
 
