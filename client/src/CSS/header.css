@@ -1,0 +1,49 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    padding-left: 2%;
+    padding-right: 2%;
+  }
+  
+  .header-left,
+  .header-right {
+    flex: 1;
+  }
+
+.header a{
+    font-size: 18px;
+
+}
+
+.header button{
+    font-size: 18px;
+
+}
+
+  .header-right {
+    text-align: right; 
+  }
+  
+  .header-center {
+    flex: 2;
+    text-align: center;
+  }
+  
+  .leaderboard-link {
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .logout-button {
+    padding: 1vh 2vw;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .logout-button:hover {
+    background-color: #ff1a1a;
+  }
