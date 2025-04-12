@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const JWT_SECRET = "your-secret-key";
 
-
 const app = express();
 const path = require("path");
 const { MongoClient, ServerApiVersion } = require("mongodb");
@@ -193,6 +192,7 @@ async function createAccount(username, password) {
       points: 0,
       notes: "",
       applications: [],
+      koalas: [],
     };
 
     // Make sure username/email isnt already used

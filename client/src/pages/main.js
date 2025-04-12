@@ -19,7 +19,8 @@ async function load(
   const token = localStorage.getItem("token");
 
   try {
-    const response = await fetch("https://koala-fied-3.onrender.com/viewApplications", {
+    // const response = await fetch("https://koala-fied-3.onrender.com/viewApplications", {
+    const response = await fetch("http://localhost:5001/viewApplications", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -69,20 +70,24 @@ async function submitNewApp(setApps) {
   const token = localStorage.getItem("token");
 
   try {
-    const response = await fetch("https://koala-fied-3.onrender.com/addApplication", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        company: company,
-        position: position,
-        link: link,
-        date: date,
-        status: status,
-      }),
-    });
+    const response = await fetch(
+      // "https://koala-fied-3.onrender.com/addApplication",
+      "http://localhost:5001/addApplication",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          company: company,
+          position: position,
+          link: link,
+          date: date,
+          status: status,
+        }),
+      }
+    );
 
     if (response.ok) {
       return true;
@@ -101,16 +106,20 @@ async function saveNotes(setNotes) {
   let notes = document.getElementById("noteField").value;
 
   try {
-    const response = await fetch("https://koala-fied-3.onrender.com/updateNotes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        notes: notes,
-      }),
-    });
+    const response = await fetch(
+      // "https://koala-fied-3.onrender.com/updateNotes",
+      "http://localhost:5001/updateNotes",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          notes: notes,
+        }),
+      }
+    );
 
     if (response.ok) {
       // const data = await response.json();
@@ -167,19 +176,23 @@ function App() {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch("https://koala-fied-3.onrender.com//updateStatus", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          user: username,
-          company: company,
-          position: position,
-          status: newStatus,
-        }),
-      });
+      const response = await fetch(
+        // "https://koala-fied-3.onrender.com/updateStatus",
+        "http://localhost:5001/updateStatus",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            user: username,
+            company: company,
+            position: position,
+            status: newStatus,
+          }),
+        }
+      );
 
       if (response.ok) {
         return true;
@@ -421,7 +434,7 @@ function App() {
                     <tr>
                       <td>{item.company}</td>
                       <td>
-                        <a href={item.link} target="_blank"  rel="noreferrer">
+                        <a href={item.link} target="_blank" rel="noreferrer">
                           {item.position}
                         </a>
                       </td>
