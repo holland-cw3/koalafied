@@ -6,9 +6,49 @@
       "description": "Just a chill guy looking to get hired"
     },
     {
-      "filename": "koala2.jpg",
+      "filename": "applicationKoala1.png",
+      "name": "Application Koala 1",
+      "description": "for 10 apps"
+    },
+    {
+      "filename": "applicationKoala2.png",
+      "name": "Application Koala 2",
+      "description": "for 25 apps"
+    },
+    {
+      "filename": "applicationKoala3.png",
+      "name": "Application Koala 3",
+      "description": "for 50 apps"
+    },
+    {
+      "filename": "applicationKoala4.png",
+      "name": "Application Koala 4",
+      "description": "for 100 apps"
+    },
+    {
+      "filename": "interviewKoala1.png",
+      "name": "Interview Koala 1",
+      "description": "for 1 interview"
+    },
+    {
+      "filename": "interviewKoala2.png",
+      "name": "Interview Koala 2",
+      "description": "for 5 interviews"
+    },
+    {
+      "filename": "interviewKoala2.png",
+      "name": "Interview Koala 2",
+      "description": "for 5 interviews"
+    },
+    {
+      "filename": "interviewKoala3.png",
+      "name": "Interview Koala 3",
+      "description": "for 10 interviews"
+    },
+    {
+      "filename": "offerKoala.png",
       "name": "Offer Koala",
-      "description": "The actual goat, good work dog"
+      "description": "for an offer, congradulations!"
     }
   ]
 }
