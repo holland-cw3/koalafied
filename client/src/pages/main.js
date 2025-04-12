@@ -33,8 +33,6 @@ async function load(setApps) {
   }
 }
 
-
-
 function App() {
   if (!localStorage.getItem("token")) {
     window.location.href = "/login";
@@ -139,7 +137,7 @@ function App() {
       );
   }
 
-  const [apps, setApps] = useState([])
+  const [apps, setApps] = useState([]);
 
   useEffect(() => {
     load(setApps);
