@@ -54,30 +54,32 @@ function Leaderboard() {
 
   return (
     <>
-    <div className="home-btn"><a href="/login">Home</a></div>
-    <div className="leaderboard">
-      <h2>Leaderboard 🏆</h2>
-      <ol>
-        {users
-          .sort((a, b) => b.points - a.points) 
-          .slice(0, 10)
-          .map((user, i) => {
-            let rankDisplay = "";
-            if (i === 0) rankDisplay = "🥇";
-            else if (i === 1) rankDisplay = "🥈";
-            else if (i === 2) rankDisplay = "🥉";
-            else rankDisplay = `${i + 1}`;
-            return (
-              <li key={i} className="fade-in">
-                <span className="rank">{rankDisplay}</span>
-                <span className="user">{user.username}</span>
-                <span className="apps">{user.numApps} applications </span>
-                <span className="points">{user.points} pts</span>
-              </li>
-            );
-          })}
-      </ol>
-    </div>
+      <div className="home-btn">
+        <a href="/">Home</a>
+      </div>
+      <div className="leaderboard">
+        <h2>Leaderboard 🏆</h2>
+        <ol>
+          {users
+            .sort((a, b) => b.points - a.points)
+            .slice(0, 10)
+            .map((user, i) => {
+              let rankDisplay = "";
+              if (i === 0) rankDisplay = "🥇";
+              else if (i === 1) rankDisplay = "🥈";
+              else if (i === 2) rankDisplay = "🥉";
+              else rankDisplay = `${i + 1}`;
+              return (
+                <li key={i} className="fade-in">
+                  <span className="rank">{rankDisplay}</span>
+                  <span className="user">{user.username}</span>
+                  <span className="apps">{user.numApps} applications </span>
+                  <span className="points">{user.points} pts</span>
+                </li>
+              );
+            })}
+        </ol>
+      </div>
     </>
 
     // <table>
