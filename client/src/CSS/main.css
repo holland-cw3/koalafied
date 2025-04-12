@@ -1,27 +1,54 @@
-.tableBody{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
-
+.tableBody {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
 }
 
-.table{
-    height: 60vh;
-    background-color: black;
-    width: 63%;
-    margin-right: 2vw;
-    margin-left: 2vw;
+.table {
+  height: 60vh;
+  background-color: white;
+  width: 63%;
+  margin-right: 2vw;
+  margin-left: 2vw;
 }
 
-th{
-    color:whitesmoke;
+th {
+  color: whitesmoke;
 }
 
-.notes{
-    height: 60vh;
-    background-color: black;
-    margin-right: 2vw;
+.notes {
+  height: 60vh;
+  background-color: white;
+  margin-right: 2vw;
 
-    width: 35%;
+  width: 17.5%;
+}
+
+.stats {
+  height: 60vh;
+  background-color: white;
+  margin-left: 2vw;
+
+  width: 17.5%;
+}
+
+.stats h2 {
+  margin: 1em;
+}
+
+.stats h3 {
+  margin: 1em;
+}
+
+.silver {
+  color: silver;
+}
+
+.bronze {
+  color: #cd7f32;
+}
+
+.gold {
+  color: gold;
 }
