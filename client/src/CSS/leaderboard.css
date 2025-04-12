@@ -8,14 +8,18 @@ body {
   left: 20px;
   background-color: white;
   border: none;
-  color: black;
+  color: red;
   padding: 10px 20px;
   text-align: center;
   display: inline-block;
-  font-size: 16px;
+  font-size: 20px;
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 12px;
+  text-shadow: 1px 1px 0 #000;
+  width: 5%;
+  height: 5%;
+  margin-top: 33px
 }
 
 a {
@@ -29,15 +33,14 @@ a {
   padding: 1rem;
   background: white;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(130, 109, 109, 0.1);
   text-align: center; /* centers the header */
-  border: 10px solid #8be0a0; /* light green border */
-  border-color: rgb(139, 224, 126);
 }
 
 .leaderboard h2 {
   font-family: sans-serif;
-  color: #333;
+  color: black;
+  text-shadow: 1px 1px 0 #000;
   margin-bottom: 1rem;
 }
 
