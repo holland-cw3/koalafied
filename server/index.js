@@ -33,7 +33,6 @@ app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
 
-
 // For Secure Routes:
 function verifyJWT(token) {
   if (!token) {
@@ -64,9 +63,6 @@ app.post("/createAccount", (request, response) => {
   });
 });
 
-
-
-
 app.get("/viewApplications", (request, response) => {
   const token = request.headers.authorization.split(" ")[1];
   verifyJWT(token);
@@ -76,9 +72,6 @@ app.get("/viewApplications", (request, response) => {
 
   viewApplication(id, response);
 });
-
-
-
 
 app.post("/addApplication", (request, response) => {
   const post_data = request.body;
@@ -94,13 +87,12 @@ app.post("/addApplication", (request, response) => {
     post_data.position,
     post_data.link,
     post_data.date,
-    post_data.status, 
+    post_data.status,
     id
   );
 
   response.send("Success");
 });
-
 
 app.post("/updateStatus", (request, response) => {
   const post_data = request.body;
@@ -129,12 +121,7 @@ app.post("/updateNotes", (request, response) => {
   response.send("Success");
 });
 
-
-
-
 /// db operations
-
-
 
 async function createAccount(username, password) {
   try {
@@ -154,7 +141,6 @@ async function createAccount(username, password) {
     };
 
     // Make sure username/email isnt already used
-    
 
     // Add user to the database
     const res = await client
@@ -167,7 +153,6 @@ async function createAccount(username, password) {
     await client.close();
   }
 }
-
 
 async function viewApplication(user, response) {
   try {
@@ -189,11 +174,7 @@ async function viewApplication(user, response) {
   }
 }
 
-
-
-
-
-async function addApplication(company, position, link, date, status,user) {
+async function addApplication(company, position, link, date, status, user) {
   try {
     await client.connect();
 
@@ -204,7 +185,6 @@ async function addApplication(company, position, link, date, status,user) {
       date: date,
       status: status,
     };
-
 
     // Idea: get applicaiton list, add a new one, update the list
     const cursor = await client
@@ -228,8 +208,6 @@ async function addApplication(company, position, link, date, status,user) {
     await client.close();
   }
 }
-
-
 
 async function updateStatus(user, company, posiiton, status) {
   try {
@@ -266,8 +244,6 @@ async function updateStatus(user, company, posiiton, status) {
     await client.close();
   }
 }
-
-
 
 async function updateNotes(user, notes) {
   try {
