@@ -228,14 +228,15 @@ async function addApplication(company, position, link, date, status, user) {
   try {
     await client.connect();
 
-    if (!link.contains("https://") && !link.contains("http://")) {
-      link = "https://" + link;
+    let linkString = link.toString();
+    if (!linkString.includes("https://") && !linkString.includes("http://")) {
+      linkString = "https://" + linkString;
     }
 
     const application = {
       company,
       position,
-      link,
+      linkString,
       date,
       status,
     };
@@ -289,40 +290,44 @@ async function updateStatus(user, company, position, status) {
 
     const obj = await cursor;
 
-    console.log(cursor.username);
-
     let applications = obj.applications;
 
     // find that job in the application list, update the notes
     let foundPosition = false;
-
-    let newApps = [];
+    let changedStatus = false;
+    let oldStatus = "";
 
     for (let i = 0; i < applications.length && !foundPosition; i++) {
       let app = applications[i];
       if (app.company == company && app.position == position) {
+        if (app.status != status) changedStatus = true;
+        oldStatus = app.status;
         app.status = status;
-        break;
+        foundPosition = true;
       }
-      newApps.push(app);
     }
 
-    if (status == "Applied") {
-      collection.updateOne({ username: user }, { $inc: { numApps: 1 } });
-      collection.updateOne({ username: user }, { $inc: { points: 1 } });
-    } else if (status == "Interviewed") {
-      collection.updateOne({ username: user }, { $inc: { numInterviews: 1 } });
-      collection.updateOne({ username: user }, { $inc: { points: 5 } });
-    } else if (status == "Offered") {
-      collection.updateOne({ username: user }, { $inc: { numOffers: 1 } });
-      collection.updateOne({ username: user }, { $inc: { points: 10 } });
-    }
+    if (changedStatus) {
+      if (status == "Interviewed" && oldStatus != "Offered") {
+        collection.updateOne(
+          { username: user },
+          { $inc: { numInterviews: 1 } }
+        );
+        collection.updateOne({ username: user }, { $inc: { points: 5 } });
+      } else if (status == "Offered") {
+        collection.updateOne({ username: user }, { $inc: { numOffers: 1 } });
+        collection.updateOne({ username: user }, { $inc: { points: 10 } });
+      }
 
-    // update the applicaiton list
-    const result = await client
-      .db(databaseAndCollection.db)
-      .collection(databaseAndCollection.collection)
-      .updateOne({ username: user }, { applications: newApps });
+      // update the applicaiton list
+      const result = await client
+        .db(databaseAndCollection.db)
+        .collection(databaseAndCollection.collection)
+        .updateOne(
+          { username: user },
+          { $set: { applications: applications } }
+        ); // <-- fix here
+    }
   } catch (e) {
     console.error(e);
   }

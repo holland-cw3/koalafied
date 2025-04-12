@@ -29,7 +29,6 @@ async function load(
 
     if (response.ok) {
       const data = await response.json();
-      console.log(data.applications);
       setApps(data.applications);
       setUsername(data.username);
       // Replace with length of list of koalas
@@ -348,7 +347,7 @@ function App() {
                 <option value="all">All</option>
                 <option value="Applied">Applied</option>
                 <option value="Interviewed">Interviewed</option>
-                <option value="Offer">Offer</option>
+                <option value="Offered">Offer</option>
                 <option value="Rejected">Rejected</option>
               </select>
             </span>
@@ -417,7 +416,7 @@ function App() {
                         >
                           <option value="Applied">Applied</option>
                           <option value="Interviewed">Interviewed</option>
-                          <option value="Offer">Offer</option>
+                          <option value="Offered">Offer</option>
                           <option value="Rejected">Rejected</option>
                         </select>
                         <button
