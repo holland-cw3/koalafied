@@ -39,13 +39,15 @@ function App() {
   function updateStatus(company, position, selectId) {
     // Replace this with function to update the position status using the express endpoint
 
+    let newStatus = document.getElementById(selectId).value;
+
     console.log(
       "application for " +
         position +
         " at " +
         company +
         " status is: " +
-        document.getElementById(selectId).value
+        newStatus
     );
   }
 
