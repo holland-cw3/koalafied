@@ -19,7 +19,7 @@ async function load(
   const token = localStorage.getItem("token");
 
   try {
-    const response = await fetch("http://localhost:5001/viewApplications", {
+    const response = await fetch("https://koala-fied-3.onrender.com/viewApplications", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -69,7 +69,7 @@ async function submitNewApp(setApps) {
   const token = localStorage.getItem("token");
 
   try {
-    const response = await fetch("http://localhost:5001/addApplication", {
+    const response = await fetch("https://koala-fied-3.onrender.com/addApplication", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -101,7 +101,7 @@ async function saveNotes(setNotes) {
   let notes = document.getElementById("noteField").value;
 
   try {
-    const response = await fetch("http://localhost:5001/updateNotes", {
+    const response = await fetch("https://koala-fied-3.onrender.com/updateNotes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -168,7 +168,7 @@ function App() {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch("http://localhost:5001/updateStatus", {
+      const response = await fetch("https://koala-fied-3.onrender.com//updateStatus", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
