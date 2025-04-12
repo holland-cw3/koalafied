@@ -538,7 +538,11 @@ function App() {
                     <tr>
                       <td>{item.company}</td>
                       <td>
-                        <a href={item.link} target="_blank" rel="noreferrer">
+                        <a
+                          href={item.linkString}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
                           {item.position}
                         </a>
                       </td>
