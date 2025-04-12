@@ -96,7 +96,7 @@ function App() {
   const [open, setOpen] = useState(false);
 
   const [apps, setApps] = useState([]);
-  let ApplicationList = apps
+  let ApplicationList = apps;
 
   const handleOpen = () => {
     setOpen(true);
@@ -147,9 +147,6 @@ function App() {
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
       );
   }
-
-  
-
 
   useEffect(() => {
     load(setApps);
@@ -247,9 +244,7 @@ function App() {
               <button
                 type="submit"
                 onClick={() => {
-                  submitNewApp(setApps)
-                  
-                
+                  submitNewApp(setApps);
                 }}
                 className="line bg-blue-500 text-white px-4 py-2 rounded"
               >
@@ -266,6 +261,8 @@ function App() {
           <h3 className="silver">Applications: {numApps}</h3>
           <h3 className="bronze">Interviews: {numInterviews}</h3>
           <h3 className="gold">Offers: {numOffers}</h3>
+          <br></br>
+          <h2>Upcoming Koalas:</h2>
         </div>
         <div className="table">
           <h4>
