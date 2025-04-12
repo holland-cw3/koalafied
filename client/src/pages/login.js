@@ -16,10 +16,9 @@ async function login(username, password) {
     if (response.ok) {
       const res = await response.json();
       localStorage.setItem("token", res.token);
-      alert(localStorage.getItem('token'));
+      alert(localStorage.getItem("token"));
       window.location.href = "/";
     } else {
-
       alert("Login Failed: Username or Password is incorrect");
     }
   } catch (error) {
@@ -36,9 +35,9 @@ export default function Login() {
   };
 
   return (
-    <div class="container">
+    <div className="container">
       <form className="loginForm" onSubmit={handleSubmit}>
-      <h1>Koala-fied Login</h1>
+        <h1>Koala-fied Login</h1>
 
         <TextField
           id="outlined-basic"
@@ -57,10 +56,7 @@ export default function Login() {
           type="password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button
-          variant="contained"
-          type='submit'
-        >
+        <Button variant="contained" type="submit">
           Login
         </Button>
 

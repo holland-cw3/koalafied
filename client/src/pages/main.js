@@ -167,7 +167,7 @@ function App() {
       );
   }
 
-  const [apps, setApps] = useState([])
+  const [apps, setApps] = useState([]);
 
   useEffect(() => {
     load(setApps);
@@ -182,84 +182,77 @@ function App() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box>
-          <div className="modalDiv relative">
-            <div className="flex justify-between items-center">
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                Add A New Application
-              </Typography>
-              <button
-                onClick={handleClose}
-                className="text-gray-500 hover:text-black text-xl font-bold"
-                aria-label="Close"
-              >
-                &times;
-              </button>
-            </div>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              <span className="line">
-                <label className=" block mb-1 mt-2" htmlFor="company">
-                  Company:
-                </label>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "25%",
+            left: "22.5%",
+            width: "50%",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+          }}
+        >
+          <div className="flex justify-between items-center mb-4">
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Add A New Application
+            </Typography>
+            <button
+              onClick={handleClose}
+              className="text-gray-500 hover:text-black text-xl font-bold"
+              aria-label="Close"
+            >
+              &times;
+            </button>
+
+            {/* form inputs here */}
+            <div id="modal-modal-description">
+              <div className="line mb-2">
+                <label htmlFor="company">Company:</label>
                 <input
                   type="text"
                   id="company"
-                  name="company"
-                  placeholder="Company"
-                  className=" w-full p-2 border rounded"
-                  required
-                />
-              </span>
-
-              <span className="line">
-                <label className="block mb-1 mt-2" htmlFor="position">
-                  Position:
-                </label>
-                <input
-                  type="text"
-                  id="position"
-                  name="position"
-                  placeholder="Position"
                   className="w-full p-2 border rounded"
                   required
                 />
-              </span>
+              </div>
 
-              <span className="line">
-                <label className=" block mb-1 mt-2" htmlFor="link">
-                  Link:
-                </label>
+              <div className="line mb-2">
+                <label htmlFor="position">Position:</label>
+                <input
+                  type="text"
+                  id="position"
+                  className="w-full p-2 border rounded"
+                  required
+                />
+              </div>
+
+              <div className="line mb-2">
+                <label htmlFor="link">Link:</label>
                 <input
                   type="url"
                   id="link"
-                  name="link"
-                  placeholder="Link"
-                  className=" w-full p-2 border rounded"
+                  className="w-full p-2 border rounded"
                 />
-              </span>
+              </div>
 
-              <span className="line">
-                <label className=" block mb-1 mt-2" htmlFor="date">
-                  Date:
-                </label>
+              <div className="line mb-2">
+                <label htmlFor="date">Date:</label>
                 <input
                   type="date"
                   id="date"
-                  name="date"
-                  className=" w-full p-2 border rounded"
+                  className="w-full p-2 border rounded"
                   required
                 />
-              </span>
+              </div>
 
-              <span className="line">
-                <label className=" block mb-1 mt-2" htmlFor="status">
-                  Status:
-                </label>
+              <div className="line mb-4">
+                <label htmlFor="status">Status:</label>
                 <select
                   id="status"
-                  name="status"
+                  className="w-full p-2 border rounded"
                   defaultValue="Applied"
-                  className=" w-full p-2 border rounded"
                   required
                 >
                   <option value="Applied">Applied</option>
@@ -267,16 +260,16 @@ function App() {
                   <option value="Offered">Offered</option>
                   <option value="Rejected">Rejected</option>
                 </select>
-              </span>
+              </div>
 
               <button
                 type="submit"
                 onClick={submitNewApp}
-                className="line bg-blue-500 text-white px-4 py-2 rounded mt-4"
+                className="line bg-blue-500 text-white px-4 py-2 rounded"
               >
                 Submit
               </button>
-            </Typography>
+            </div>
           </div>
         </Box>
       </Modal>
