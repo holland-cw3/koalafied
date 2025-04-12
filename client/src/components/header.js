@@ -1,6 +1,14 @@
 import '../CSS/header.css';
 
+function logout(){
+  localStorage.setItem('token', '')
+  alert("Successfully Logged Out");
+  window.location.href = "/login";
+}
+
 export default function Header() {
+
+
   return (
     <div className="header">
       <div className="header-left">
@@ -14,7 +22,7 @@ export default function Header() {
       </div>
 
       <div className="header-right">
-        <button className="logout-button" onClick={() => alert('Logging out...')}>
+        <button className="logout-button" onClick={() => logout()}>
           LOGOUT
         </button>
       </div>
