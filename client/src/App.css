@@ -2,7 +2,7 @@
 body{
   width: 100%;
   background-image: url('./bg.png');
-  background-size: contain;
+  background-size: cover;
 
 }
 
