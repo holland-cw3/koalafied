@@ -173,7 +173,6 @@ async function viewApplication(user, response) {
     await client.close();
   }
 }
-
 async function addApplication(company, position, link, date, status, user) {
   try {
     await client.connect();
