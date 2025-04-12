@@ -185,7 +185,6 @@ async function addApplication(company, position, link, date, status, user) {
       status: status,
     };
 
-<<<<<<< HEAD
     // Idea: get applicaiton list, add a new one, update the list
     const cursor = await client
       .db(databaseAndCollection.db)
