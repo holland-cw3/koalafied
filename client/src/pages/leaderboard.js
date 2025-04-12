@@ -9,7 +9,7 @@ import "../CSS/leaderboard.css";
 //   backgroundSize: 'contain',
 // };
 
-import searcher from "../searcher.png";
+import searcher from "../images/searcher.png";
 const headerStyle = {
   backgroundImage: `url(${searcher})`,
 }
@@ -59,6 +59,7 @@ function Leaderboard() {
 
   return (
     <>
+      
       <div className="home-btn" style={headerStyle}>
         <a href="/">Home</a>
       </div>
@@ -78,7 +79,7 @@ function Leaderboard() {
                 <li key={i} className="fade-in">
                   <span className="rank">{rankDisplay}</span>
                   <span className="user">{user.username}</span>
-                  <span className="apps">{user.numApps} applications </span>
+                  <span className="apps2">{user.numApps} applications </span>
                   <span className="points">{user.points} pts</span>
                 </li>
               );

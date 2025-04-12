@@ -2,7 +2,7 @@ import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import "../CSS/login.css";
 import Button from "@mui/material/Button";
-import logo from "../logo.png";
+import logo from '../images/logo.png';
 
 async function login(username, password) {
   try {
@@ -42,9 +42,6 @@ export default function Login() {
       <form className="loginForm" onSubmit={handleSubmit}>
         <img src={logo} alt="logo" />
 
-        <h1 class="loginTitle">
-          <br />
-        </h1>
 
         <TextField
           id="outlined-basic"
@@ -99,13 +96,15 @@ export default function Login() {
           sx={{
             backgroundColor: "green",
             boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.9)", // Custom box shadow
+            width:'100%',
+            marginBottom:'10px'
           }}
         >
           Login
         </Button>
 
-        <div>
-          Don't Have an Account? <a href="/register">Register here</a>
+        <div class='altLogin'>
+          New User? <a href="/register">Sign-Up Here!</a>
         </div>
       </form>
     </div>

@@ -17,19 +17,30 @@
   width: 35%;
 }
 
+.altLogin{
+  font-weight: bold;
+  text-shadow: 1px 1px rgb(0, 0, 0);
+}
+
+.altLogin a{
+  color: green;
+  text-decoration: underline;
+
+}
+
 .loginForm {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
   padding: 45px;
-  padding-top: 13vh;
-  padding-bottom:10vh;
+  padding-top: 10vh;
 
-  background-image: url("../lgBg2.png");
-  background-size: cover;
+  padding-bottom:6vh;
+  background-image: url("../images/searcher.png");
+  background-size: contain;
   border-radius: 8px;
-  box-shadow: 0 15px 20px rgba(0, 0, 0, 0.4);
-  width: 60%;
+  box-shadow: 0 15px 20px rgba(30, 30, 30, 0.4);
+  width: 45%;
   text-align: center;
 }
 
