@@ -83,7 +83,7 @@ app.get("/viewApplications", (request, response) => {
 app.post("/addApplication", (request, response) => {
   const post_data = request.body;
 
-  const token = req.headers.authorization.split(" ")[1];
+  const token = request.headers.authorization.split(" ")[1];
   verifyJWT(token);
 
   const decodedToken = jwt.verify(token, JWT_SECRET);
@@ -193,13 +193,13 @@ async function viewApplication(user, response) {
 
 
 
-async function addApplication(company, posiiton, link, date, status,user) {
+async function addApplication(company, position, link, date, status,user) {
   try {
     await client.connect();
 
     let application = {
       company: company,
-      posiiton: posiiton,
+      position: position,
       link: link,
       date: date,
       status: status,
@@ -214,7 +214,7 @@ async function addApplication(company, posiiton, link, date, status,user) {
 
     const obj = await cursor.toArray();
 
-    let applications = obj.applicaitons;
+    let applications = obj.applications;
 
     applications.push(application);
 
