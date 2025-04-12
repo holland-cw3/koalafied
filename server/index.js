@@ -163,9 +163,7 @@ async function createAccount(username, password) {
       .insertOne(user);
   } catch (e) {
     console.error(e);
-  } finally {
-    await client.close();
-  }
+  } 
 }
 
 
@@ -184,13 +182,8 @@ async function viewApplication(user, response) {
     response.send(result);
   } catch (e) {
     console.error(e);
-  } finally {
-    await client.close();
-  }
+  } 
 }
-
-
-
 
 
 async function addApplication(company, position, link, date, status, user) {
@@ -224,14 +217,12 @@ async function addApplication(company, position, link, date, status, user) {
 
   } catch (e) {
     console.error("Error in addApplication:", e);
-  } finally {
-    await client.close();
-  }
+  } 
 }
 
 
 
-async function updateStatus(user, company, posiiton, status) {
+async function updateStatus(user, company, position, status) {
   try {
     await client.connect();
 
@@ -249,7 +240,7 @@ async function updateStatus(user, company, posiiton, status) {
 
     // find that job in the application list, update the notes
     for (app in applications) {
-      if (app.company.equals(company) && app.posiiton.equals(posiiton)) {
+      if (app.company.equals(company) && app.position.equals(position)) {
         app.status = status;
         break;
       }
@@ -262,9 +253,7 @@ async function updateStatus(user, company, posiiton, status) {
       .updateOne({ username: user }, { applications: applications });
   } catch (e) {
     console.error(e);
-  } finally {
-    await client.close();
-  }
+  } 
 }
 
 
@@ -282,7 +271,5 @@ async function updateNotes(user, notes) {
       .updateOne({ username: user }, { notes: notes });
   } catch (e) {
     console.error(e);
-  } finally {
-    await client.close();
-  }
+  } 
 }
