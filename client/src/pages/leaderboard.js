@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "../CSS/leaderboard.css";
+// import treeVine from '../images/PixelatedTreeBranch.png';
+
+// const leaderboardStyle = {
+//   backgroundImage: `url(${treeVine}), url(${treeVine})`,
+//   backgroundRepeat: 'no-repeat',
+//   backgroundPosition: 'top center, bottom center',
+//   backgroundSize: 'contain',
+// };
 
 function Leaderboard() {
   //temporary data for testing
@@ -48,6 +56,7 @@ function Leaderboard() {
     <>
     <div className="home-btn"><a href="/login">Home</a></div>
     <div className="leaderboard">
+    {/* <div className="leaderboard" style={leaderboardStyle}> */}
       <h2>Leaderboard 🏆</h2>
       <ol>
         {users
