@@ -34,29 +34,29 @@ const client = new MongoClient(uri, {
 app.use(express.static(path.join(__dirname, "../client/build")));
 
 function addKoalas(koalaList, numInterviews, numApps, newOffer) {
-  if (numApps >= 10 && !koalaList.includes("applicationKoala1.png")) {
-    koalaList.push("applicationKoala1.png");
+  if (numApps >= 10 && !koalaList.includes("applicationKoala1")) {
+    koalaList.push("applicationKoala1");
   }
-  if (numApps >= 25 && !koalaList.includes("applicationKoala2.png")) {
-    koalaList.push("applicationKoala2.png");
+  if (numApps >= 25 && !koalaList.includes("applicationKoala2")) {
+    koalaList.push("applicationKoala2");
   }
-  if (numApps >= 50 && !koalaList.includes("applicationKoala3.png")) {
-    koalaList.push("applicationKoala3.png");
+  if (numApps >= 50 && !koalaList.includes("applicationKoala3")) {
+    koalaList.push("applicationKoala3");
   }
-  if (numApps >= 100 && !koalaList.includes("applicationKoala4.png")) {
-    koalaList.push("applicationKoala4.png");
+  if (numApps >= 100 && !koalaList.includes("applicationKoala4")) {
+    koalaList.push("applicationKoala4");
   }
-  if (numInterviews >= 1 && !koalaList.includes("interviewKoala1.png")) {
-    koalaList.push("interviewKoala1.png");
+  if (numInterviews >= 1 && !koalaList.includes("interviewKoala1")) {
+    koalaList.push("interviewKoala1");
   }
-  if (numInterviews >= 5 && !koalaList.includes("interviewKoala2.png")) {
-    koalaList.push("interviewKoala2.png");
+  if (numInterviews >= 5 && !koalaList.includes("interviewKoala2")) {
+    koalaList.push("interviewKoala2");
   }
-  if (numInterviews >= 10 && !koalaList.includes("interviewKoala3.png")) {
-    koalaList.push("interviewKoala3.png");
+  if (numInterviews >= 10 && !koalaList.includes("interviewKoala3")) {
+    koalaList.push("interviewKoala3");
   }
   if (newOffer) {
-    koalaList.push("offerKoala.png");
+    koalaList.push("offerKoala");
   }
 
   return koalaList;
@@ -245,7 +245,7 @@ async function createAccount(username, password) {
       points: 0,
       notes: "",
       applications: [],
-      koalas: ["basicKoala.png"],
+      koalas: ["basicKoala"],
     };
 
     // Make sure username/email isnt already used

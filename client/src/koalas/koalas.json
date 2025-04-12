@@ -1,51 +1,55 @@
 {
   "koalas": [
     {
+      "id": "basicKoala",
       "filename": "basicKoala.png",
       "name": "Basic Koala",
       "description": "Just a chill guy looking to get hired"
     },
     {
+      "id": "applicationKoala1",
       "filename": "applicationKoala1.png",
       "name": "Application Koala 1",
       "description": "for 10 apps"
     },
     {
+      "id": "applicationKoala2",
       "filename": "applicationKoala2.png",
       "name": "Application Koala 2",
       "description": "for 25 apps"
     },
     {
+      "id": "applicationKoala3",
       "filename": "applicationKoala3.png",
       "name": "Application Koala 3",
       "description": "for 50 apps"
     },
     {
+      "id": "applicationKoala4",
       "filename": "applicationKoala4.png",
       "name": "Application Koala 4",
       "description": "for 100 apps"
     },
     {
+      "id": "interviewKoala1",
       "filename": "interviewKoala1.png",
       "name": "Interview Koala 1",
       "description": "for 1 interview"
     },
     {
+      "id": "interviewKoala2",
       "filename": "interviewKoala2.png",
       "name": "Interview Koala 2",
       "description": "for 5 interviews"
     },
     {
-      "filename": "interviewKoala2.png",
-      "name": "Interview Koala 2",
-      "description": "for 5 interviews"
-    },
-    {
+      "id": "interviewKoala3",
       "filename": "interviewKoala3.png",
       "name": "Interview Koala 3",
       "description": "for 10 interviews"
     },
     {
+      "id": "offerKoala",
       "filename": "offerKoala.png",
       "name": "Offer Koala",
       "description": "for an offer, congradulations!"

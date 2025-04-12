@@ -17,9 +17,9 @@ function compareKoalaLists(newList, oldList) {
   }
 }
 
-function getKoalaById(id, list) {
-  for (let i = 0; i < list.length; i++) {
-    if (id === list[i].filename) return list[i];
+function getKoalaById(id) {
+  for (let i = 0; i < globalKoalaList.length; i++) {
+    if (id === globalKoalaList[i].id) return globalKoalaList[i];
   }
 }
 
