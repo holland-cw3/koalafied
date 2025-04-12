@@ -4,7 +4,6 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const JWT_SECRET = "your-secret-key";
-const serverless = require('serverless-http');
 
 
 const app = express();
@@ -31,11 +30,9 @@ const client = new MongoClient(uri, {
 
 app.use(express.static(path.join(__dirname, "../client/build")));
 
-
-app.get("/hi", (request, response) => {
-  response.send('hello')
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
 });
-
 
 // For Secure Routes:
 function verifyJWT(token) {
@@ -352,5 +349,3 @@ async function updateNotes(user, notes) {
     console.error(e);
   }
 }
-
-module.exports = serverless(app);
