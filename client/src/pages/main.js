@@ -1,14 +1,35 @@
-import Footer from "../components/footer";
+// import Footer from "../components/footer";
 import Header from "../components/header";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useEffect } from "react";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 import "../CSS/main.css";
-
 const globalKoalaList = require("../koalas/koalas.json").koalas;
+
+function animateKoalas(koalaObjList, koalaTimeout) {
+  for (let i = 0; i < koalaObjList.length; i++) {
+    let koala = koalaObjList[i];
+
+    // Use direction to choose where to move, go to a negative amount off screen and flip direction
+    koala.topPos += Math.random() * 10 - 5;
+    if (koala.topPos > 10) koala.topPos = 10;
+    if (koala.topPos < 5) koala.topPos = 5;
+    document.getElementById(koala.elemId).style.top = koala.top + "px";
+
+    koala.leftPos += Math.random() * 100 - 50;
+    if (koala.leftPos > 100) koala.leftPos = 100;
+    if (koala.leftPos < 5) koala.leftPos = 5;
+    document.getElementById(koala.elemId).style.left = koala.leftPos + "px";
+  }
+
+  clearTimeout(koalaTimeout);
+  koalaTimeout = setTimeout(() => {
+    animateKoalas(koalaObjList, koalaTimeout);
+  }, 10000);
+}
 
 function compareKoalaLists(newList, oldList) {
   let newKoalas = [];
@@ -19,9 +40,9 @@ function compareKoalaLists(newList, oldList) {
 }
 
 function getKoalaById(id) {
-  console.log("Koala list length: " + globalKoalaList.length);
+  // console.log("Koala list length: " + globalKoalaList.length);
   for (let i = 0; i < globalKoalaList.length; i++) {
-    console.log(globalKoalaList[i].id);
+    // console.log(globalKoalaList[i].id);
     if (id === globalKoalaList[i].id) return globalKoalaList[i];
   }
   return { name: "", description: "" };
@@ -36,7 +57,9 @@ async function load(
   setNumOffers,
   setKoalaList,
   koalaList,
-  handleOpenNewKoala
+  handleOpenNewKoala,
+  koalaTimeout,
+  koalaObjList
 ) {
   const token = localStorage.getItem("token");
 
@@ -92,6 +115,11 @@ async function load(
           ).value = item.status;
         }
       }, 300);
+
+      clearTimeout(koalaTimeout);
+      koalaTimeout = setTimeout(() => {
+        animateKoalas(koalaObjList, koalaTimeout);
+      }, 10000);
 
       return;
     } else {
@@ -189,6 +217,45 @@ function App() {
   const [numInterviews, setNumInterviews] = useState(0);
   const [numOffers, setNumOffers] = useState(0);
 
+  const [koalaObjList, setKoalaObjList] = useState([]);
+
+  // Koala array to display
+  const handleStateChange = () => {
+    // console.log("State has changed:", koalaList);
+    // Perform actions based on the state change here
+    if (koalaList.length !== koalaObjList.length) {
+      for (let i = 0; i < koalaList.length; i++) {
+        let koala = getKoalaById(koalaList[i]);
+        if (!inKoalaList(koala.id, koalaObjList))
+          setKoalaObjList([
+            ...koalaObjList,
+            {
+              id: koala.id,
+              desc: koala.description,
+              name: koala.name,
+              filename: "../koalas/" + koala.filename,
+              elemId: koala.id + i,
+              leftPos: 0,
+              topPos: 0,
+              direction: "left",
+              src: require("../koalas/" + koala.filename),
+            },
+          ]);
+      }
+    }
+  };
+
+  function inKoalaList(id, list) {
+    for (let i = 0; i < list.length; i++) {
+      if (list[i].id === id) return true;
+    }
+    return false;
+  }
+
+  useEffect(() => {
+    handleStateChange();
+  }, [koalaList]);
+
   // States for table
   const [selectedSorting, setSelectedSorting] = useState("newest");
   const [searchVal, setSearchVal] = useState("");
@@ -202,6 +269,8 @@ function App() {
   const [koalaDesc, setkoalaDesc] = useState("");
 
   const [apps, setApps] = useState([]);
+
+  let koalaTimeout = useRef(null);
 
   const handleOpen = () => {
     setOpen(true);
@@ -292,7 +361,9 @@ function App() {
       setNumOffers,
       setKoalaList,
       koalaList,
-      handleOpenNewKoala
+      handleOpenNewKoala,
+      koalaTimeout,
+      koalaObjList
     );
   }, [koalaList]);
 
@@ -415,7 +486,9 @@ function App() {
                         setNumOffers,
                         setKoalaList,
                         koalaList,
-                        handleOpenNewKoala
+                        handleOpenNewKoala,
+                        koalaTimeout,
+                        koalaObjList
                       );
                     }
                   }}
@@ -574,7 +647,9 @@ function App() {
                               setNumOffers,
                               setKoalaList,
                               koalaList,
-                              handleOpenNewKoala
+                              handleOpenNewKoala,
+                              koalaTimeout,
+                              koalaObjList
                             );
                           }}
                         >
@@ -594,7 +669,19 @@ function App() {
             onBlur={() => saveNotes()}
           ></textarea>
         </div>
-        <Footer />
+        <div className="footer">
+          <div className="koalas">
+            {koalaObjList.map((item) => (
+              <img
+                id={item.elemId}
+                className="koalaSprite"
+                src={item.src}
+                alt={item.name}
+                style={{ left: item.leftPos, top: item.topPos }}
+              ></img>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

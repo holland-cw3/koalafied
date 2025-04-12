@@ -22,13 +22,13 @@ th {
   position: relative; /* Make the container a positioned element */
   height: 70vh;
   width: 25%;
- 
+
   box-sizing: border-box; /* Ensure padding doesn't affect width/height */
 }
 
 .notes textarea {
   background-color: rgba(0, 0, 0, 0); /* Transparent background */
-  background-image: url('../chalk.png');
+  background-image: url("../chalk.png");
   background-size: cover; /* Ensures the image covers the entire container */
   background-position: center; /* Centers the image within the container */
   background-repeat: no-repeat;
@@ -43,8 +43,6 @@ th {
   box-sizing: border-box; /* Ensure padding doesn't affect width/height */
   overflow: hidden; /* Prevent scrollbars if text overflows */
 }
-
-
 
 .stats {
   height: 60vh;
@@ -103,4 +101,24 @@ select {
   margin-top: 10%;
   border-radius: 1em;
   padding: 2em;
+}
+
+.koalas p {
+  color: white;
+}
+
+.koalaSprite {
+  position: absolute;
+  width: 5em;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: black;
+  text-align: center;
+  height: 15vh;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
