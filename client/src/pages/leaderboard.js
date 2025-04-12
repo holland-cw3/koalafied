@@ -20,7 +20,7 @@ function Leaderboard() {
   // const [users, setUsers] = useState([]);
 
   // useEffect(() => {
-  //   fetch("http://localhost:5000/api/leaderboard")
+  //   fetch("http://localhost:5001/api/leaderboard")
   //     .then((res) => res.json())
   //     .then((data) => setUsers(data))
   //     .catch((err) => console.error("Fetch failed:", err));

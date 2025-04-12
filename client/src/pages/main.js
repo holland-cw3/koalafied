@@ -12,7 +12,7 @@ async function load(setApps) {
   const token = localStorage.getItem("token");
 
   try {
-    const response = await fetch("http://localhost:5000/viewApplications", {
+    const response = await fetch("http://localhost:5001/viewApplications", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -33,7 +33,7 @@ async function load(setApps) {
   }
 }
 
-async function submitNewApp() {
+async function submitNewApp(setApps) {
   let company = document.getElementById("company").value;
   let position = document.getElementById("position").value;
   let link = document.getElementById("link").value;
@@ -43,7 +43,7 @@ async function submitNewApp() {
   const token = localStorage.getItem("token");
 
   try {
-    const response = await fetch("http://localhost:5000/addApplication", {
+    const response = await fetch("http://localhost:5001/addApplication", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -59,7 +59,7 @@ async function submitNewApp() {
     });
 
     if (response.ok) {
-      
+      load(setApps);
       return;
     } else {
       alert("User not authenticated");
@@ -67,13 +67,7 @@ async function submitNewApp() {
   } catch (error) {
     console.error("Error submitting data:", error);
   }
-
-  
-
-  // handleClose();
 }
-
-
 
 function App() {
   if (!localStorage.getItem("token")) {
@@ -99,6 +93,9 @@ function App() {
   // State for modal
   const [open, setOpen] = useState(false);
 
+  const [apps, setApps] = useState([]);
+  let ApplicationList = apps;
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -109,22 +106,6 @@ function App() {
 
   // list of user's applications
   // Get this from mongo db
-  let ApplicationList = [
-    {
-      company: "GeoCam",
-      position: "SWE Intern",
-      link: "https://geocam.app/link",
-      date: "4/19/2025",
-      status: "Applied",
-    },
-    {
-      company: "Club Running",
-      position: "Webmaster",
-      link: "https://umdclubrunning.com",
-      date: "4/05/2025",
-      status: "Interviewed",
-    },
-  ];
 
   function updateStatus(company, position, selectId) {
     // Replace this with function to update the position status using the express endpoint
@@ -140,8 +121,6 @@ function App() {
         newStatus
     );
   }
-
-  
 
   // Connect to backend
   function saveNotes() {
@@ -166,8 +145,6 @@ function App() {
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
       );
   }
-
-  const [apps, setApps] = useState([]);
 
   useEffect(() => {
     load(setApps);
@@ -264,7 +241,10 @@ function App() {
 
               <button
                 type="submit"
-                onClick={submitNewApp}
+                onClick={() => {
+                  submitNewApp(setApps);
+                  handleClose();
+                }}
                 className="line bg-blue-500 text-white px-4 py-2 rounded"
               >
                 Submit
@@ -273,15 +253,17 @@ function App() {
           </div>
         </Box>
       </Modal>
-      <div class="tableBody">
-        <div class="stats">
+      <div className="tableBody">
+        <div className="stats">
           <h2>{username}</h2>
           <h3>Koala Count: {numKoalas}</h3>
           <h3 className="silver">Applications: {numApps}</h3>
           <h3 className="bronze">Interviews: {numInterviews}</h3>
           <h3 className="gold">Offers: {numOffers}</h3>
+          <br></br>
+          <h3>New Koalas:</h3>
         </div>
-        <div class="table">
+        <div className="table">
           <h4>
             <span className="line">
               Status:{" "}
@@ -302,7 +284,7 @@ function App() {
               Search:{" "}
               <input
                 type="text"
-                class="w-auto px-2 py-0 m-0 bg-white"
+                className="w-auto px-2 py-0 m-0 bg-white"
                 placeholder="Search company or position name"
                 onChange={(e) => setSearchVal(e.target.value)}
               ></input>{" "}
@@ -382,12 +364,12 @@ function App() {
             </table>
           </div>
         </div>
-        <div class="notes">
+        <div className="notes">
           <textarea
             id="noteField"
             placeholder="Write any notes, reminders, or contact information here"
           ></textarea>
-          <button class="saveButton" onClick={saveNotes}>
+          <button className="saveButton" onClick={saveNotes}>
             Save
           </button>
         </div>

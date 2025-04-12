@@ -11,7 +11,7 @@ const { MongoClient, ServerApiVersion } = require("mongodb");
 
 require("dotenv").config({ path: path.resolve(__dirname, "credentials/.env") });
 
-const port = 5000;
+const port = 5001;
 
 const databaseAndCollection = {
   db: process.env.MONGO_DB_NAME,
@@ -149,9 +149,7 @@ async function createAccount(username, password) {
       .insertOne(user);
   } catch (e) {
     console.error(e);
-  } finally {
-    await client.close();
-  }
+  } 
 }
 
 async function viewApplication(user, response) {
@@ -169,46 +167,49 @@ async function viewApplication(user, response) {
     response.send(result);
   } catch (e) {
     console.error(e);
-  } finally {
-    await client.close();
-  }
+  } 
 }
+
 async function addApplication(company, position, link, date, status, user) {
   try {
     await client.connect();
 
-    let application = {
-      company: company,
-      position: position,
-      link: link,
-      date: date,
-      status: status,
+    const application = {
+      company,
+      position,
+      link,
+      date,
+      status,
     };
 
-    // Idea: get applicaiton list, add a new one, update the list
-    const cursor = await client
+    const collection = client
       .db(databaseAndCollection.db)
-      .collection(databaseAndCollection.collection)
-      .findOne({ username: user });
+      .collection(databaseAndCollection.collection);
 
-    const obj = await cursor.toArray();
+    // Get the user document
+    const userDoc = await collection.findOne({ username: user });
 
-    let applications = obj.applications;
+    if (!userDoc) {
+      console.error("User not found");
+      return;
+    }
 
-    applications.push(application);
+    // Push the new application into the existing array
+    const updatedResult = await collection.updateOne(
+      { username: user },
+      { $push: { applications: application } }
+    );
 
-    const result = await client
-      .db(databaseAndCollection.db)
-      .collection(databaseAndCollection.collection)
-      .updateOne({ username: user }, { applications: applications });
+   
   } catch (e) {
-    console.error(e);
-  } finally {
-    await client.close();
+    console.error("❌ Error in addApplication:", e);
   }
 }
 
-async function updateStatus(user, company, posiiton, status) {
+
+
+
+async function updateStatus(user, company, position, status) {
   try {
     await client.connect();
 
@@ -226,7 +227,7 @@ async function updateStatus(user, company, posiiton, status) {
 
     // find that job in the application list, update the notes
     for (app in applications) {
-      if (app.company.equals(company) && app.posiiton.equals(posiiton)) {
+      if (app.company.equals(company) && app.position.equals(position)) {
         app.status = status;
         break;
       }
@@ -239,9 +240,7 @@ async function updateStatus(user, company, posiiton, status) {
       .updateOne({ username: user }, { applications: applications });
   } catch (e) {
     console.error(e);
-  } finally {
-    await client.close();
-  }
+  } 
 }
 
 async function updateNotes(user, notes) {
@@ -257,7 +256,5 @@ async function updateNotes(user, notes) {
       .updateOne({ username: user }, { notes: notes });
   } catch (e) {
     console.error(e);
-  } finally {
-    await client.close();
-  }
+  } 
 }
