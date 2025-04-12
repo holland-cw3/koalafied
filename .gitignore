@@ -27,3 +27,4 @@ yarn-debug.log*
 yarn-error.log*
 client/node_modules/.cache/.eslintcache
 client/node_modules/.cache/.eslintcache
+.vercel

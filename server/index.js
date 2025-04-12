@@ -31,9 +31,11 @@ const client = new MongoClient(uri, {
 
 app.use(express.static(path.join(__dirname, "../client/build")));
 
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+
+app.get("/hi", (request, response) => {
+  response.send('hello')
 });
+
 
 // For Secure Routes:
 function verifyJWT(token) {
