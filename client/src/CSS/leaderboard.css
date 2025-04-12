@@ -1,6 +1,6 @@
 body {
-    height: 100vh; /* full viewport height */
-  }
+  height: 100vh; /* full viewport height */
+}
 
 .home-btn {
   position: absolute;
@@ -18,11 +18,11 @@ body {
   border-radius: 12px;
 }
 
-a{
+a {
   text-decoration: none;
   color: inherit;
 }
-  
+
 .leaderboard {
   width: 50%;
   margin: 2rem auto;
