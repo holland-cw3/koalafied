@@ -11,6 +11,7 @@
   width: 63%;
   margin-right: 2vw;
   margin-left: 2vw;
+  overflow: scroll;
 }
 
 th {
@@ -51,4 +52,21 @@ th {
 
 .gold {
   color: gold;
+}
+
+#noteField {
+  position: relative;
+  width: 97%;
+  height: 90%;
+  resize: none;
+}
+
+.saveButton {
+  width: 50%;
+  margin-left: 25%;
+}
+
+.line {
+  display: inline-block;
+  margin-left: 10px;
 }
