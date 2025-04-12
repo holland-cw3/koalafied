@@ -11,7 +11,7 @@ const { MongoClient, ServerApiVersion } = require("mongodb");
 
 require("dotenv").config({ path: path.resolve(__dirname, "credentials/.env") });
 
-const port = 5000;
+const port = 5001;
 
 const databaseAndCollection = {
   db: process.env.MONGO_DB_NAME,

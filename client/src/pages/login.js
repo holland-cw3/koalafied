@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 
 async function login(username, password) {
   try {
-    const response = await fetch("http://localhost:5000/createAccount", {
+    const response = await fetch("http://localhost:5001/createAccount", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

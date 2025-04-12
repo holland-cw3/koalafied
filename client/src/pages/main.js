@@ -12,7 +12,7 @@ async function load(setApps) {
   const token = localStorage.getItem("token");
 
   try {
-    const response = await fetch("http://localhost:5000/viewApplications", {
+    const response = await fetch("http://localhost:5001/viewApplications", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -43,7 +43,7 @@ async function submitNewApp() {
   const token = localStorage.getItem("token");
 
   try {
-    const response = await fetch("http://localhost:5000/addApplication", {
+    const response = await fetch("http://localhost:5001/addApplication", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -59,7 +59,6 @@ async function submitNewApp() {
     });
 
     if (response.ok) {
-      
       return;
     } else {
       alert("User not authenticated");
@@ -68,12 +67,8 @@ async function submitNewApp() {
     console.error("Error submitting data:", error);
   }
 
-  
-
   // handleClose();
 }
-
-
 
 function App() {
   if (!localStorage.getItem("token")) {
@@ -140,8 +135,6 @@ function App() {
         newStatus
     );
   }
-
-  
 
   // Connect to backend
   function saveNotes() {
