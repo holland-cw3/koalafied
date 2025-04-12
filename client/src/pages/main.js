@@ -59,7 +59,8 @@ async function load(
   koalaList,
   handleOpenNewKoala,
   koalaTimeout,
-  koalaObjList
+  koalaObjList,
+  statusTimeout
 ) {
   const token = localStorage.getItem("token");
 
@@ -106,7 +107,8 @@ async function load(
         document.getElementById("noteField").value = data.notes;
       }
 
-      setTimeout(() => {
+      clearTimeout(statusTimeout);
+      statusTimeout = setTimeout(() => {
         let applications = data.applications;
         for (let i = 0; i < applications.length; i++) {
           let item = applications[i];
@@ -271,6 +273,7 @@ function App() {
   const [apps, setApps] = useState([]);
 
   let koalaTimeout = useRef(null);
+  let statusTimeout = useRef(null);
 
   const handleOpen = () => {
     setOpen(true);
@@ -363,7 +366,8 @@ function App() {
       koalaList,
       handleOpenNewKoala,
       koalaTimeout,
-      koalaObjList
+      koalaObjList,
+      statusTimeout
     );
   }, [koalaList]);
 
@@ -396,9 +400,9 @@ function App() {
               top: "25%",
               left: "22.5%",
               width: "50%",
-              bgcolor: "background.paper", 
-              display:'flex',
-             
+              bgcolor: "background.paper",
+              display: "flex",
+
               boxShadow: 24,
               p: 4,
               borderRadius: 2,
@@ -490,7 +494,8 @@ function App() {
                         koalaList,
                         handleOpenNewKoala,
                         koalaTimeout,
-                        koalaObjList
+                        koalaObjList,
+                        statusTimeout
                       );
                     }
                   }}
@@ -535,19 +540,18 @@ function App() {
 
       <div className="tableBody">
         <div className="stats">
-        <div className='stats2'>
-          <h2>Stats For: {username}</h2>
-          <h3 class='kCount'>Koala Count: {numKoalas}</h3>
-          <h3 className="silver">Applications: {numApps}</h3>
-          <h3 className="bronze">Interviews: {numInterviews}</h3>
-          <h3 className="gold">Offers: {numOffers}</h3>
-          <br></br>
-          <h3 className="kCount">New Koalas:</h3>
+          <div className="stats2">
+            <h2>Stats For: {username}</h2>
+            <h3 class="kCount">Koala Count: {numKoalas}</h3>
+            <h3 className="silver">Applications: {numApps}</h3>
+            <h3 className="bronze">Interviews: {numInterviews}</h3>
+            <h3 className="gold">Offers: {numOffers}</h3>
+            <br></br>
+            <h3 className="kCount">New Koalas:</h3>
           </div>
-
         </div>
         <div className="table">
-          <h4 class='sorter'>
+          <h4 class="sorter">
             <span className="line">
               Status:{" "}
               <select
@@ -613,7 +617,6 @@ function App() {
                   )
                   .map((item) => (
                     <tr>
-                      
                       <td>{item.company}</td>
                       <td>
                         <a
@@ -654,10 +657,11 @@ function App() {
                               koalaList,
                               handleOpenNewKoala,
                               koalaTimeout,
-                              koalaObjList
+                              koalaObjList,
+                              statusTimeout
                             );
                           }}
-                          class='updateBtn'
+                          class="updateBtn"
                         >
                           Update
                         </button>
