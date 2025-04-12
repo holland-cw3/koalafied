@@ -33,7 +33,6 @@ app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
 
-
 // For Secure Routes:
 function verifyJWT(token) {
   if (!token) {
@@ -64,9 +63,6 @@ app.post("/createAccount", (request, response) => {
   });
 });
 
-
-
-
 app.get("/viewApplications", (request, response) => {
   const token = request.headers.authorization.split(" ")[1];
   verifyJWT(token);
@@ -76,9 +72,6 @@ app.get("/viewApplications", (request, response) => {
 
   viewApplication(id, response);
 });
-
-
-
 
 app.post("/addApplication", (request, response) => {
   const post_data = request.body;
@@ -94,13 +87,12 @@ app.post("/addApplication", (request, response) => {
     post_data.position,
     post_data.link,
     post_data.date,
-    post_data.status, 
+    post_data.status,
     id
   );
 
   response.send("Success");
 });
-
 
 app.post("/updateStatus", (request, response) => {
   const post_data = request.body;
@@ -129,12 +121,7 @@ app.post("/updateNotes", (request, response) => {
   response.send("Success");
 });
 
-
-
-
 /// db operations
-
-
 
 async function createAccount(username, password) {
   try {
@@ -154,7 +141,6 @@ async function createAccount(username, password) {
     };
 
     // Make sure username/email isnt already used
-    
 
     // Add user to the database
     const res = await client
@@ -167,7 +153,6 @@ async function createAccount(username, password) {
     await client.close();
   }
 }
-
 
 async function viewApplication(user, response) {
   try {
@@ -188,48 +173,40 @@ async function viewApplication(user, response) {
     await client.close();
   }
 }
-
-
-
-
-
 async function addApplication(company, position, link, date, status, user) {
   try {
     await client.connect();
 
-    const application = {
-      company,
-      position,
-      link,
-      date,
-      status,
+    let application = {
+      company: company,
+      position: position,
+      link: link,
+      date: date,
+      status: status,
     };
 
-    const db = client.db(databaseAndCollection.db);
-    const collection = db.collection(databaseAndCollection.collection);
+    // Idea: get applicaiton list, add a new one, update the list
+    const cursor = await client
+      .db(databaseAndCollection.db)
+      .collection(databaseAndCollection.collection)
+      .findOne({ username: user });
 
-    const obj = await collection.findOne({ username: user });
+    const obj = await cursor.toArray();
 
-    if (!obj) {
-      throw new Error("User not found");
-    }
+    let applications = obj.applications;
 
-    const applications = obj.applications || [];
     applications.push(application);
 
-    const result = await collection.updateOne(
-      { username: user },
-      { $set: { applications: applications } }
-    );
-
+    const result = await client
+      .db(databaseAndCollection.db)
+      .collection(databaseAndCollection.collection)
+      .updateOne({ username: user }, { applications: applications });
   } catch (e) {
-    console.error("Error in addApplication:", e);
+    console.error(e);
   } finally {
     await client.close();
   }
 }
-
-
 
 async function updateStatus(user, company, posiiton, status) {
   try {
@@ -266,8 +243,6 @@ async function updateStatus(user, company, posiiton, status) {
     await client.close();
   }
 }
-
-
 
 async function updateNotes(user, notes) {
   try {
