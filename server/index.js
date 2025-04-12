@@ -83,7 +83,7 @@ app.get("/viewApplications", (request, response) => {
 app.post("/addApplication", (request, response) => {
   const post_data = request.body;
 
-  const token = req.headers.authorization.split(" ")[1];
+  const token = request.headers.authorization.split(" ")[1];
   verifyJWT(token);
 
   const decodedToken = jwt.verify(token, JWT_SECRET);
@@ -193,37 +193,37 @@ async function viewApplication(user, response) {
 
 
 
-async function addApplication(company, posiiton, link, date, status,user) {
+async function addApplication(company, position, link, date, status, user) {
   try {
     await client.connect();
 
-    let application = {
-      company: company,
-      posiiton: posiiton,
-      link: link,
-      date: date,
-      status: status,
+    const application = {
+      company,
+      position,
+      link,
+      date,
+      status,
     };
 
+    const db = client.db(databaseAndCollection.db);
+    const collection = db.collection(databaseAndCollection.collection);
 
-    // Idea: get applicaiton list, add a new one, update the list
-    const cursor = await client
-      .db(databaseAndCollection.db)
-      .collection(databaseAndCollection.collection)
-      .findOne({ username: user });
+    const obj = await collection.findOne({ username: user });
 
-    const obj = await cursor.toArray();
+    if (!obj) {
+      throw new Error("User not found");
+    }
 
-    let applications = obj.applicaitons;
-
+    const applications = obj.applications || [];
     applications.push(application);
 
-    const result = await client
-      .db(databaseAndCollection.db)
-      .collection(databaseAndCollection.collection)
-      .updateOne({ username: user }, { applications: applications });
+    const result = await collection.updateOne(
+      { username: user },
+      { $set: { applications: applications } }
+    );
+
   } catch (e) {
-    console.error(e);
+    console.error("Error in addApplication:", e);
   } finally {
     await client.close();
   }
