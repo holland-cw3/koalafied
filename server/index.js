@@ -89,7 +89,7 @@ app.listen(port, () => {
 // For Secure Routes:
 function verifyJWT(token) {
   if (!token) {
-    res.status(200).json({
+    response.status(200).json({
       success: false,
       message: "Error! User Not Authenticated.",
     });

@@ -396,7 +396,9 @@ function App() {
               top: "25%",
               left: "22.5%",
               width: "50%",
-              bgcolor: "background.paper",
+              bgcolor: "background.paper", 
+              display:'flex',
+             
               boxShadow: 24,
               p: 4,
               borderRadius: 2,
@@ -533,16 +535,19 @@ function App() {
 
       <div className="tableBody">
         <div className="stats">
-          <h2>{username}</h2>
-          <h3>Koala Count: {numKoalas}</h3>
+        <div className='stats2'>
+          <h2>Stats For: {username}</h2>
+          <h3 class='kCount'>Koala Count: {numKoalas}</h3>
           <h3 className="silver">Applications: {numApps}</h3>
           <h3 className="bronze">Interviews: {numInterviews}</h3>
           <h3 className="gold">Offers: {numOffers}</h3>
           <br></br>
-          <h3>New Koalas:</h3>
+          <h3 className="kCount">New Koalas:</h3>
+          </div>
+
         </div>
         <div className="table">
-          <h4>
+          <h4 class='sorter'>
             <span className="line">
               Status:{" "}
               <select
@@ -581,10 +586,9 @@ function App() {
               Add Application
             </button>
           </h4>
-          <br></br>
           {/* Displaying records table based on filters */}
           <div className="overflow-x-auto max-w-full">
-            <table className="mb-10 table-auto">
+            <table className="table-auto apps">
               <thead>
                 <tr>
                   <th>Company</th>
@@ -609,6 +613,7 @@ function App() {
                   )
                   .map((item) => (
                     <tr>
+                      
                       <td>{item.company}</td>
                       <td>
                         <a
@@ -652,6 +657,7 @@ function App() {
                               koalaObjList
                             );
                           }}
+                          class='updateBtn'
                         >
                           Update
                         </button>

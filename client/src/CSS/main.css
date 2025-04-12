@@ -7,69 +7,116 @@
 
 .table {
   height: 60vh;
-  background-color: white;
-  width: 63%;
+  width: 62%;
   margin-right: 2vw;
   margin-left: 2vw;
-  overflow: scroll;
+  margin-top: -1vh;
 }
 
-th {
-  color: whitesmoke;
+thead {
+  font-size: 20px;
+  color: green;
+  text-shadow: 3px 3px black;
+  font-weight: bold;
+}
+
+.apps {
+  background-image: url("../images/tbbg.png");
+}
+
+table tbody tr {
+  background-position: center top;
+  font-size: 18px;
+  color: white;
+  border-radius: 2px;
+}
+
+tr td {
+  width: 15%;
+  outline: thin solid rgba(0, 0, 0, 0.6);
+  text-align: center;
+}
+
+td {
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .notes {
-  position: relative; /* Make the container a positioned element */
-  height: 70vh;
+  position: relative;
+  height: 67vh;
   width: 25%;
 
-  box-sizing: border-box; /* Ensure padding doesn't affect width/height */
+  box-sizing: border-box;
 }
 
 .notes textarea {
-  background-color: rgba(0, 0, 0, 0); /* Transparent background */
-  background-image: url("../chalk.png");
-  background-size: cover; /* Ensures the image covers the entire container */
-  background-position: center; /* Centers the image within the container */
+  background-color: rgba(0, 0, 0, 0);
+  background-image: url("../images/chalk.png");
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
 
-  border: none; /* Remove border */
-  color: white; /* Text color */
-  font-weight: bold; /* Bold text */
+  border: none;
+  color: white;
+  font-weight: bold;
   font-size: 18px;
-  resize: none; /* Prevent resizing */
-  outline: none; /* Remove the highlight on click */
-  padding: 40px; /* Add padding for better spacing */
-  box-sizing: border-box; /* Ensure padding doesn't affect width/height */
-  overflow: hidden; /* Prevent scrollbars if text overflows */
+  resize: none;
+  outline: none;
+  padding: 50px;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .stats {
   height: 60vh;
-  background-color: white;
-  margin-left: 2vw;
+  background-image: url("../images/mirror.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
-  width: 17.5%;
+  width: 20%;
+}
+
+.stats2 {
+  padding: 25px;
+  margin-left: 0.5vw;
 }
 
 .stats h2 {
   margin: 1em;
+  color: rgb(182, 92, 182);
+  text-shadow: 2px 2px black;
+  text-decoration: underline;
+}
+
+.updateBtn {
+  width: 33%;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .stats h3 {
   margin: 1em;
 }
 
+.kCount {
+  color: white;
+  text-shadow: 2px 2px black;
+}
+
 .silver {
   color: silver;
+  text-shadow: 2px 2px black;
 }
 
 .bronze {
   color: #cd7f32;
+  text-shadow: 2px 2px black;
 }
 
 .gold {
   color: gold;
+  text-shadow: 2px 2px black;
 }
 
 #noteField {
@@ -97,10 +144,49 @@ select {
 .modalDiv {
   width: 50%;
   margin: auto;
-  background-color: white;
+  background-image: url("../images/searcher.png");
   margin-top: 10%;
   border-radius: 1em;
   padding: 2em;
+}
+
+.line {
+  font-size: 17px;
+}
+
+select {
+  background-color: #d2b48c;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 2px 2px;
+}
+
+input {
+  background-color: #d2b48c;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 2px 2px;
+}
+
+button {
+  background-color: #3b7830;
+  color: whitesmoke;
+  font-size: bold;
+  padding: 8px;
+  border-radius: 5px;
+  box-shadow: 2px 2px black;
+  width: 10vw;
+}
+
+.sorter {
+  background-image: url("../images/searcher.png");
+  padding: 20px;
+  border-radius: 5px;
+  font-size: 18px;
+  box-shadow: 9px 9px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .koalas p {
