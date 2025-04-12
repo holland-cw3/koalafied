@@ -33,6 +33,46 @@ async function load(setApps) {
   }
 }
 
+async function submitNewApp() {
+  let company = document.getElementById("company").value;
+  let position = document.getElementById("position").value;
+  let link = document.getElementById("link").value;
+  let date = document.getElementById("date").value;
+  let status = document.getElementById("status").value;
+
+  const token = localStorage.getItem("token");
+
+  try {
+    const response = await fetch("http://localhost:5000/addApplication", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        company: company,
+        position: position,
+        link: link,
+        date: date,
+        status: status,
+      }),
+    });
+
+    if (response.ok) {
+      
+      return;
+    } else {
+      alert("User not authenticated");
+    }
+  } catch (error) {
+    console.error("Error submitting data:", error);
+  }
+
+  
+
+  // handleClose();
+}
+
 
 
 function App() {
@@ -101,19 +141,7 @@ function App() {
     );
   }
 
-  function submitNewApp() {
-    let company = document.getElementById("company").value;
-    let position = document.getElementById("position").value;
-    let link = document.getElementById("link").value;
-    let date = document.getElementById("date").value;
-    let status = document.getElementById("status").value;
-
-    console.log(
-      `Adding new application: Company: ${company} Position: ${position} Link: ${link} Date: ${date} Status: ${status}`
-    );
-
-    handleClose();
-  }
+  
 
   // Connect to backend
   function saveNotes() {
