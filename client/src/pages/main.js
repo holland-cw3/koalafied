@@ -8,7 +8,14 @@ import Typography from "@mui/material/Typography";
 
 import "../CSS/main.css";
 
-async function load(setApps) {
+async function load(
+  setApps,
+  setUsername,
+  setNumKoalas,
+  setNumApps,
+  setNumInterviews,
+  setNumOffers
+) {
   const token = localStorage.getItem("token");
 
   try {
@@ -24,6 +31,15 @@ async function load(setApps) {
       const data = await response.json();
       console.log(data.applications);
       setApps(data.applications);
+      setUsername(data.username);
+      // Replace with length of list of koalas
+      setNumKoalas(0);
+      setNumApps(data.numApps);
+      setNumInterviews(data.numInterviews);
+      setNumOffers(data.numOffers);
+      if (data.notes != "") {
+        document.getElementById("noteField").value = data.notes;
+      }
       return;
     } else {
       alert("User not authenticated");
@@ -59,7 +75,38 @@ async function submitNewApp(setApps) {
     });
 
     if (response.ok) {
-      load(setApps);
+      return true;
+    } else {
+      alert("User not authenticated");
+      return false;
+    }
+  } catch (error) {
+    console.error("Error submitting data:", error);
+    return false;
+  }
+}
+
+async function saveNotes(setNotes){
+  const token = localStorage.getItem("token");
+  let notes = document.getElementById("noteField").value;
+
+  try {
+    const response = await fetch("http://localhost:5001/updateNotes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+       notes: notes,
+     
+      }),
+    });
+
+    if (response.ok) {
+      // const data = await response.json();
+      // console.log(data.applications);
+      // setNotes(data.applications);
       return;
     } else {
       alert("User not authenticated");
@@ -68,6 +115,7 @@ async function submitNewApp(setApps) {
     console.error("Error submitting data:", error);
   }
 }
+
 
 function App() {
   if (!localStorage.getItem("token")) {
@@ -94,7 +142,6 @@ function App() {
   const [open, setOpen] = useState(false);
 
   const [apps, setApps] = useState([]);
-  let ApplicationList = apps;
 
   const handleOpen = () => {
     setOpen(true);
@@ -122,32 +169,40 @@ function App() {
     );
   }
 
-  // Connect to backend
-  function saveNotes() {
-    let notes = document.getElementById("noteField").value;
-
-    console.log("Notes: " + notes);
-  }
+  
 
   switch (selectedSorting) {
     case "oldest":
-      ApplicationList.sort(
-        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-      );
+      try {
+        apps.sort(
+          (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+        );
+      } catch {}
       break;
     case "newest":
-      ApplicationList.sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-      );
+      try {
+        apps.sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
+      } catch {}
       break;
     default:
-      ApplicationList.sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-      );
+      try {
+        apps.sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
+      } catch {}
   }
 
   useEffect(() => {
-    load(setApps);
+    load(
+      setApps,
+      setUsername,
+      setNumKoalas,
+      setNumApps,
+      setNumInterviews,
+      setNumOffers
+    );
   }, []);
 
   return (
@@ -241,9 +296,13 @@ function App() {
 
               <button
                 type="submit"
-                onClick={() => {
-                  submitNewApp(setApps);
-                  handleClose();
+                onClick={async () => {
+                  const success = await submitNewApp();
+                  if (success) {
+                    await new Promise((res) => setTimeout(res, 300)); // short delay
+                    await load(setApps);
+                    handleClose();
+                  }
                 }}
                 className="line bg-blue-500 text-white px-4 py-2 rounded"
               >
@@ -316,50 +375,52 @@ function App() {
                 </tr>
               </thead>
               <tbody>
-                {ApplicationList.filter(
-                  (item) =>
-                    (searchVal === "" ||
-                      item.company
-                        .toLowerCase()
-                        .includes(searchVal.toLowerCase()) ||
-                      item.position
-                        .toLowerCase()
-                        .includes(searchVal.toLowerCase()) ||
-                      item.meet) &&
-                    (statusVal === "all" || statusVal === item.status)
-                ).map((item) => (
-                  <tr>
-                    <td>{item.company}</td>
-                    <td>
-                      <a href={item.link} target="_blank">
-                        {item.position}
-                      </a>
-                    </td>
-                    <td>{item.date}</td>
-                    <td>
-                      <select
-                        id={"status_" + item.company + item.position}
-                        defaultValue={item.status}
-                      >
-                        <option value="Applied">Applied</option>
-                        <option value="Interviewed">Interviewed</option>
-                        <option value="Offer">Offer</option>
-                        <option value="Rejected">Rejected</option>
-                      </select>
-                      <button
-                        onClick={() => {
-                          updateStatus(
-                            item.company,
-                            item.position,
-                            "status_" + item.company + item.position
-                          );
-                        }}
-                      >
-                        Update
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {apps
+                  .filter(
+                    (item) =>
+                      (searchVal === "" ||
+                        item.company
+                          .toLowerCase()
+                          .includes(searchVal.toLowerCase()) ||
+                        item.position
+                          .toLowerCase()
+                          .includes(searchVal.toLowerCase()) ||
+                        item.meet) &&
+                      (statusVal === "all" || statusVal === item.status)
+                  )
+                  .map((item) => (
+                    <tr>
+                      <td>{item.company}</td>
+                      <td>
+                        <a href={item.link} target="_blank">
+                          {item.position}
+                        </a>
+                      </td>
+                      <td>{item.date}</td>
+                      <td>
+                        <select
+                          id={"status_" + item.company + item.position}
+                          defaultValue={item.status}
+                        >
+                          <option value="Applied">Applied</option>
+                          <option value="Interviewed">Interviewed</option>
+                          <option value="Offer">Offer</option>
+                          <option value="Rejected">Rejected</option>
+                        </select>
+                        <button
+                          onClick={() => {
+                            updateStatus(
+                              item.company,
+                              item.position,
+                              "status_" + item.company + item.position
+                            );
+                          }}
+                        >
+                          Update
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

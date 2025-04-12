@@ -63,6 +63,21 @@ app.post("/createAccount", (request, response) => {
   });
 });
 
+app.post("/login", async (request, response) => {
+  const post_data = request.body;
+
+  const result = await login(post_data.username, post_data.password);
+
+  if (!result.success) {
+    return response.status(400).json({ message: result.message });
+  }
+
+  response.json({
+    message: "Login successful",
+    token: result.token,
+  });
+});
+
 app.get("/viewApplications", (request, response) => {
   const token = request.headers.authorization.split(" ")[1];
   verifyJWT(token);
@@ -97,7 +112,7 @@ app.post("/addApplication", (request, response) => {
 app.post("/updateStatus", (request, response) => {
   const post_data = request.body;
 
-  const token = req.headers.authorization.split(" ")[1];
+  const token = request.headers.authorization.split(" ")[1];
   verifyJWT(token);
 
   updateStatus(
@@ -113,15 +128,59 @@ app.post("/updateStatus", (request, response) => {
 app.post("/updateNotes", (request, response) => {
   const post_data = request.body;
 
-  const token = req.headers.authorization.split(" ")[1];
+  const token = request.headers.authorization.split(" ")[1];
   verifyJWT(token);
 
-  updateNotes(post_data.user, post_data.notes);
+  const decodedToken = jwt.verify(token, JWT_SECRET);
+  const id = decodedToken.username;
+
+  updateNotes(id, post_data.notes);
+
+  console.log('hi')
 
   response.send("Success");
 });
 
+
+
 /// db operations
+
+async function login(username, password) {
+  try {
+    await client.connect();
+
+
+    const collection = client
+      .db(databaseAndCollection.db)
+      .collection(databaseAndCollection.collection);
+
+    const user = await collection.findOne({ username: username });
+
+    if (!user) {
+      console.error("User not found");
+      return { success: false, message: "User not found" }; 
+    }
+
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      console.error("Invalid password");
+      return { success: false, message: "Invalid password" }; 
+    }
+
+    const payload = { username: user.username };
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+
+    console.log("Login successful");
+    return { success: true, token: token }; 
+  } catch (e) {
+    console.error("Error during login:", e);
+    return { success: false, message: "Error during login" }; 
+  }
+}
+
+
 
 async function createAccount(username, password) {
   try {
@@ -136,6 +195,7 @@ async function createAccount(username, password) {
       numApps: 0,
       numInterviews: 0,
       numOffers: 0,
+      points: 0,
       notes: "",
       applications: [],
     };
@@ -149,7 +209,7 @@ async function createAccount(username, password) {
       .insertOne(user);
   } catch (e) {
     console.error(e);
-  } 
+  }
 }
 
 async function viewApplication(user, response) {
@@ -167,7 +227,7 @@ async function viewApplication(user, response) {
     response.send(result);
   } catch (e) {
     console.error(e);
-  } 
+  }
 }
 
 async function addApplication(company, position, link, date, status, user) {
@@ -200,14 +260,22 @@ async function addApplication(company, position, link, date, status, user) {
       { $push: { applications: application } }
     );
 
-   
+    // Always increment application
+    collection.updateOne({ username: user }, { $inc: { numApps: 1 } });
+    collection.updateOne({ username: user }, { $inc: { points: 1 } });
+
+    // Also increment interview or offer depending on status
+    if (status == "Interviewed") {
+      collection.updateOne({ username: user }, { $inc: { numInterviews: 1 } });
+      collection.updateOne({ username: user }, { $inc: { points: 5 } });
+    } else if (status == "Offer") {
+      collection.updateOne({ username: user }, { $inc: { numOffers: 1 } });
+      collection.updateOne({ username: user }, { $inc: { points: 10 } });
+    }
   } catch (e) {
     console.error("❌ Error in addApplication:", e);
   }
 }
-
-
-
 
 async function updateStatus(user, company, position, status) {
   try {
@@ -233,6 +301,17 @@ async function updateStatus(user, company, position, status) {
       }
     }
 
+    if (status == "Applied") {
+      collection.updateOne({ username: user }, { $inc: { numApps: 1 } });
+      collection.updateOne({ username: user }, { $inc: { points: 1 } });
+    } else if (status == "Interviewed") {
+      collection.updateOne({ username: user }, { $inc: { numInterviews: 1 } });
+      collection.updateOne({ username: user }, { $inc: { points: 5 } });
+    } else if (status == "Offer") {
+      collection.updateOne({ username: user }, { $inc: { numOffers: 1 } });
+      collection.updateOne({ username: user }, { $inc: { points: 10 } });
+    }
+
     // update the applicaiton list
     const result = await client
       .db(databaseAndCollection.db)
@@ -240,21 +319,23 @@ async function updateStatus(user, company, position, status) {
       .updateOne({ username: user }, { applications: applications });
   } catch (e) {
     console.error(e);
-  } 
+  }
 }
 
 async function updateNotes(user, notes) {
   try {
     await client.connect();
 
-    // DO PASSWORD/SESSION CHECK
-
-    // find that user and update the notes
     const result = await client
       .db(databaseAndCollection.db)
       .collection(databaseAndCollection.collection)
-      .updateOne({ username: user }, { notes: notes });
+      .updateOne(
+        { username: user },
+        { $set: { notes: notes } } // <-- fix here
+      );
+    
   } catch (e) {
     console.error(e);
-  } 
+  }
 }
+
