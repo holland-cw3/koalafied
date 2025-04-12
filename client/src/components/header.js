@@ -1,6 +1,6 @@
 import '../CSS/header.css';
 
-import logo from '../logo.png';
+import logo from '../images/logo.png';
 
 function logout(){
   localStorage.setItem('token', '')
@@ -8,22 +8,25 @@ function logout(){
   window.location.href = "/login";
 }
 
+
+
 export default function Header() {
 
 
   return (
     <div className="header">
       <div className="header-left">
-        <a href="/leaderboard" className="leaderboard-link">
-          LEADERBOARD
-        </a>
+        <button className="leaderboard-button" onClick={() => window.location.href = "/leaderboard"}>
+          Leaderboard
+        </button>
+        
       </div>
 
         <img src={logo} alt='logo'/>
 
       <div className="header-right">
         <button className="logout-button" onClick={() => logout()}>
-          LOGOUT
+          Logout
         </button>
       </div>
     </div>

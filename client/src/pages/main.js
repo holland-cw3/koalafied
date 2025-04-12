@@ -325,7 +325,9 @@ function App() {
               top: "25%",
               left: "22.5%",
               width: "50%",
-              bgcolor: "background.paper",
+              bgcolor: "background.paper", 
+              display:'flex',
+             
               boxShadow: 24,
               p: 4,
               borderRadius: 2,
@@ -511,10 +513,9 @@ function App() {
               Add Application
             </button>
           </h4>
-          <br></br>
           {/* Displaying records table based on filters */}
           <div className="overflow-x-auto max-w-full">
-            <table className="mb-10 table-auto">
+            <table className="table-auto apps">
               <thead>
                 <tr>
                   <th>Company</th>
@@ -581,6 +582,7 @@ function App() {
                               handleOpenNewKoala
                             );
                           }}
+                          class='updateBtn'
                         >
                           Update
                         </button>
