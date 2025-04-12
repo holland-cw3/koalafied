@@ -29,7 +29,6 @@ async function load(
 
     if (response.ok) {
       const data = await response.json();
-      console.log(data.applications);
       setApps(data.applications);
       setUsername(data.username);
       // Replace with length of list of koalas
@@ -86,7 +85,7 @@ async function submitNewApp(setApps) {
   }
 }
 
-async function saveNotes(setNotes){
+async function saveNotes(setNotes) {
   const token = localStorage.getItem("token");
   let notes = document.getElementById("noteField").value;
 
@@ -98,8 +97,7 @@ async function saveNotes(setNotes){
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-       notes: notes,
-     
+        notes: notes,
       }),
     });
 
@@ -115,7 +113,6 @@ async function saveNotes(setNotes){
     console.error("Error submitting data:", error);
   }
 }
-
 
 function App() {
   if (!localStorage.getItem("token")) {
@@ -154,22 +151,37 @@ function App() {
   // list of user's applications
   // Get this from mongo db
 
-  function updateStatus(company, position, selectId) {
-    // Replace this with function to update the position status using the express endpoint
-
+  async function updateStatus(company, position, selectId) {
     let newStatus = document.getElementById(selectId).value;
 
-    console.log(
-      "application for " +
-        position +
-        " at " +
-        company +
-        " status is: " +
-        newStatus
-    );
-  }
+    const token = localStorage.getItem("token");
 
-  
+    try {
+      const response = await fetch("http://localhost:5001/updateStatus", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          user: username,
+          company: company,
+          position: position,
+          status: newStatus,
+        }),
+      });
+
+      if (response.ok) {
+        return true;
+      } else {
+        alert("User not authenticated");
+        return false;
+      }
+    } catch (error) {
+      console.error("Error submitting data:", error);
+      return false;
+    }
+  }
 
   switch (selectedSorting) {
     case "oldest":
@@ -335,7 +347,7 @@ function App() {
                 <option value="all">All</option>
                 <option value="Applied">Applied</option>
                 <option value="Interviewed">Interviewed</option>
-                <option value="Offer">Offer</option>
+                <option value="Offered">Offer</option>
                 <option value="Rejected">Rejected</option>
               </select>
             </span>
@@ -404,7 +416,7 @@ function App() {
                         >
                           <option value="Applied">Applied</option>
                           <option value="Interviewed">Interviewed</option>
-                          <option value="Offer">Offer</option>
+                          <option value="Offered">Offer</option>
                           <option value="Rejected">Rejected</option>
                         </select>
                         <button

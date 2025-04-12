@@ -56,7 +56,7 @@ export default function Login() {
           type="password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button variant="contained" type="submit">
+        <Button variant="contained" type="submit" sx={{backgroundColor:'green'}}>
           Login
         </Button>
 
