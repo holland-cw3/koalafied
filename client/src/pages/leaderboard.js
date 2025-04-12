@@ -50,13 +50,12 @@ function Leaderboard() {
         setUsers(sorted);
       })
       .catch((err) => console.error("Fetch failed:", err));
-  }, []);  
+  }, []);
 
   return (
     <>
     <div className="home-btn"><a href="/login">Home</a></div>
     <div className="leaderboard">
-    {/* <div className="leaderboard" style={leaderboardStyle}> */}
       <h2>Leaderboard 🏆</h2>
       <ol>
         {users

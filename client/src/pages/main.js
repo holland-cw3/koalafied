@@ -8,6 +8,21 @@ import Typography from "@mui/material/Typography";
 
 import "../CSS/main.css";
 
+const globalKoalaList = require("../koalas/koalas.json");
+
+function compareKoalaLists(newList, oldList) {
+  let newKoalas = [];
+  for (let i = 0; i < newList.length; i++) {
+    if (i >= oldList.length) newKoalas.push(newList[i]);
+  }
+}
+
+function getKoalaById(id, list) {
+  for (let i = 0; i < list.length; i++) {
+    if (id === list[i].filename) return list[i];
+  }
+}
+
 async function load(
   setApps,
   setUsername,
@@ -41,9 +56,16 @@ async function load(
       setNumOffers(data.numOffers);
 
       // Check if the users has received any new koala's
-      // If koalaList was never initialized ignore it
-      if (koalaList != data.koalas && koalaList != []) {
+      let newKoalas = compareKoalaLists(data.koalas, koalaList);
+      if (newKoalas.length != 0) {
         console.log("A NEW KOALA!!");
+
+        for (let i = 0; i < newKoalas.length; i++) {
+          let newKoala = getKoalaById(newKoalas[i]);
+          console.log(
+            "I just unlocked the " + newKoala.name + ", " + newKoala.description
+          );
+        }
       }
 
       setKoalaList(data.koalas);

@@ -19,9 +19,11 @@ const databaseAndCollection = {
 };
 
 app.use(express.json());
-app.use(cors({
-  origin: "http://localhost:3000"
-}));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  })
+);
 
 const uri = `mongodb+srv://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PASSWORD}@koalafied.szyjdqy.mongodb.net/?retryWrites=true&w=majority&appName=Koalafied`;
 
@@ -30,6 +32,35 @@ const client = new MongoClient(uri, {
 });
 
 app.use(express.static(path.join(__dirname, "../client/build")));
+
+function addKoalas(koalaList, numInterviews, numApps, newOffer) {
+  if (numApps >= 10 && !koalaList.includes("applicationKoala1.png")) {
+    koalaList.push("applicationKoala1.png");
+  }
+  if (numApps >= 25 && !koalaList.includes("applicationKoala2.png")) {
+    koalaList.push("applicationKoala2.png");
+  }
+  if (numApps >= 50 && !koalaList.includes("applicationKoala3.png")) {
+    koalaList.push("applicationKoala3.png");
+  }
+  if (numApps >= 100 && !koalaList.includes("applicationKoala4.png")) {
+    koalaList.push("applicationKoala4.png");
+  }
+  if (numInterviews >= 1 && !koalaList.includes("interviewKoala1.png")) {
+    koalaList.push("interviewKoala1.png");
+  }
+  if (numInterviews >= 5 && !koalaList.includes("interviewKoala2.png")) {
+    koalaList.push("interviewKoala2.png");
+  }
+  if (numInterviews >= 10 && !koalaList.includes("interviewKoala3.png")) {
+    koalaList.push("interviewKoala3.png");
+  }
+  if (newOffer) {
+    koalaList.push("offerKoala.png");
+  }
+
+  return koalaList;
+}
 
 app.get("/api/leaderboard", async (req, res) => {
   try {
@@ -50,7 +81,6 @@ app.get("/api/leaderboard", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
-
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
@@ -215,7 +245,7 @@ async function createAccount(username, password) {
       points: 0,
       notes: "",
       applications: [],
-      koalas: [],
+      koalas: ["basicKoala.png"],
     };
 
     // Make sure username/email isnt already used
@@ -295,6 +325,24 @@ async function addApplication(company, position, link, date, status, user) {
       collection.updateOne({ username: user }, { $inc: { numOffers: 1 } });
       collection.updateOne({ username: user }, { $inc: { points: 10 } });
     }
+
+    // Update the user's koalas
+    const userObj = await client
+      .db(databaseAndCollection.db)
+      .collection(databaseAndCollection.collection)
+      .findOne({ username: user });
+
+    newKoalaList = await addKoalas(
+      userObj.koalas,
+      userObj.numInterviews,
+      userObj.numApps,
+      status == "Offered"
+    );
+
+    collection.updateOne(
+      { username: user },
+      { $set: { koalas: newKoalaList } }
+    );
   } catch (e) {
     console.error("❌ Error in addApplication:", e);
   }
@@ -351,6 +399,24 @@ async function updateStatus(user, company, position, status) {
           { username: user },
           { $set: { applications: applications } }
         ); // <-- fix here
+
+      // Update the user's koalas
+      const userObj = await client
+        .db(databaseAndCollection.db)
+        .collection(databaseAndCollection.collection)
+        .findOne({ username: user });
+
+      newKoalaList = await addKoalas(
+        userObj.koalas,
+        userObj.numInterviews,
+        userObj.numApps,
+        status == "Offered"
+      );
+
+      collection.updateOne(
+        { username: user },
+        { $set: { koalas: newKoalaList } }
+      );
     }
   } catch (e) {
     console.error(e);
