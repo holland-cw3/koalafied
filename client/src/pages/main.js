@@ -59,13 +59,14 @@ async function submitNewApp(setApps) {
     });
 
     if (response.ok) {
-      load(setApps);
-      return;
+      return true;
     } else {
       alert("User not authenticated");
+      return false;
     }
   } catch (error) {
     console.error("Error submitting data:", error);
+    return false;
   }
 }
 
@@ -94,7 +95,6 @@ function App() {
   const [open, setOpen] = useState(false);
 
   const [apps, setApps] = useState([]);
-  let ApplicationList = apps;
 
   const handleOpen = () => {
     setOpen(true);
@@ -131,17 +131,17 @@ function App() {
 
   switch (selectedSorting) {
     case "oldest":
-      ApplicationList.sort(
+      apps.sort(
         (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
       );
       break;
     case "newest":
-      ApplicationList.sort(
+      apps.sort(
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
       );
       break;
     default:
-      ApplicationList.sort(
+      apps.sort(
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
       );
   }
@@ -241,10 +241,13 @@ function App() {
 
               <button
                 type="submit"
-                onClick={() => {
-                  submitNewApp(setApps);
-                  handleClose();
-                }}
+                onClick={async () => {
+                  const success = await submitNewApp();
+                  if (success) {
+                    await new Promise((res) => setTimeout(res, 300)); // short delay
+                    await load(setApps);
+                    handleClose();
+                }}}
                 className="line bg-blue-500 text-white px-4 py-2 rounded"
               >
                 Submit
@@ -316,7 +319,7 @@ function App() {
                 </tr>
               </thead>
               <tbody>
-                {ApplicationList.filter(
+                {apps.filter(
                   (item) =>
                     (searchVal === "" ||
                       item.company
