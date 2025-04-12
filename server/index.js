@@ -44,6 +44,7 @@ async function createAccount(username, email, password) {
       numApps: 0,
       numInterviews: 0,
       numOffers: 0,
+      notes: "",
       applications: [],
     };
 
@@ -73,7 +74,7 @@ async function viewApplication(user, response) {
   try {
     await client.connect();
 
-    // Do we need to add password check here? otherwise anyone can get anyone's tracker
+    // DO PASSWORD/SESSION CHECK
 
     const cursor = await client
       .db(databaseAndCollection.db)
@@ -99,14 +100,13 @@ app.post("/addApplication", (request, response) => {
     post_data.position,
     post_data.link,
     post_data.date,
-    post_data.status,
-    post_data.notes
+    post_data.status
   );
 
   response.send("Success");
 });
 
-async function addApplication(company, posiiton, link, date, status, notes) {
+async function addApplication(company, posiiton, link, date, status) {
   try {
     await client.connect();
 
@@ -116,11 +116,9 @@ async function addApplication(company, posiiton, link, date, status, notes) {
       link: link,
       date: date,
       status: status,
-      notes: notes,
     };
 
-    // make sure this is good
-    // do we need to check password?
+    // DO PASSWORD/SESSION CHECK
 
     // Idea: get applicaiton list, add a new one, update the list
     const cursor = await client
@@ -145,27 +143,26 @@ async function addApplication(company, posiiton, link, date, status, notes) {
   }
 }
 
-app.post("/updateNotes", (request, response) => {
+app.post("/updateStatus", (request, response) => {
   const post_data = request.body;
 
-  // check if user is logged in??
+  // DO PASSWORD/SESSION CHECK
 
-  updateNotes(
+  updateStatus(
     post_data.user,
     post_data.company,
     post_data.position,
-    post_data.notes
+    post_data.status
   );
 
   response.send("Success");
 });
 
-async function updateNotes(user, company, posiiton, notes) {
+async function updateStatus(user, company, posiiton, status) {
   try {
     await client.connect();
 
-    // make sure this is good
-    // do we need to check password?
+    // DO PASSWORD/SESSION CHECK
 
     // Idea: get applicaiton list, add a new one, update the list
     const cursor = await client
@@ -180,7 +177,8 @@ async function updateNotes(user, company, posiiton, notes) {
     // find that job in the application list, update the notes
     for (app in applications) {
       if (app.company.equals(company) && app.posiiton.equals(posiiton)) {
-        app.notes = notes;
+        app.status = status;
+        break;
       }
     }
 
@@ -189,6 +187,34 @@ async function updateNotes(user, company, posiiton, notes) {
       .db(databaseAndCollection.db)
       .collection(databaseAndCollection.collection)
       .updateOne({ username: user }, { applications: applications });
+  } catch (e) {
+    console.error(e);
+  } finally {
+    await client.close();
+  }
+}
+
+app.post("/updateNotes", (request, response) => {
+  const post_data = request.body;
+
+  // DO PASSWORD/SESSION CHECK
+
+  updateNotes(post_data.user, post_data.notes);
+
+  response.send("Success");
+});
+
+async function updateNotes(user, notes) {
+  try {
+    await client.connect();
+
+    // DO PASSWORD/SESSION CHECK
+
+    // find that user and update the notes
+    const result = await client
+      .db(databaseAndCollection.db)
+      .collection(databaseAndCollection.collection)
+      .updateOne({ username: user }, { notes: notes });
   } catch (e) {
     console.error(e);
   } finally {
