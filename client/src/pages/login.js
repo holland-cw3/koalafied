@@ -2,6 +2,8 @@ import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import "../CSS/login.css";
 import Button from "@mui/material/Button";
+import logo from '../logo.png';
+
 
 async function login(username, password) {
   try {
@@ -33,12 +35,16 @@ export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     login(username, password);
+    e.preventDefault();
+    login(username, password);
   };
 
   return (
     <div className="container">
       <form className="loginForm" onSubmit={handleSubmit}>
-        <h1>Koala-fied Login</h1>
+        <img src={logo} alt='logo'/>
+        
+        <h1 class='loginTitle'><br/></h1>
 
         <TextField
           id="outlined-basic"
@@ -47,6 +53,22 @@ export default function Login() {
           value={username}
           placeholder="Username"
           onChange={(e) => setUsername(e.target.value)}
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              backgroundColor: '#d2b48c',
+              boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.9)', // Custom box shadow
+             
+            },
+            '& .MuiInputLabel-root': {
+              color: 'green',  // Change this to your desired label color
+              fontWeight:'bold',
+              textShadow:' 1px 1px 0 #000',
+              fontSize: '20px'
+            },
+            '& .MuiOutlinedInput-root.Mui-focused': {
+              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.9)', // Focused state shadow
+            }
+          }}
         />
         <TextField
           id="outlined-basic"
@@ -56,18 +78,37 @@ export default function Login() {
           placeholder="Password"
           type="password"
           onChange={(e) => setPassword(e.target.value)}
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              backgroundColor: '#d2b48c',
+              boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.9)', // Custom box shadow
+             
+            },
+            '& .MuiInputLabel-root': {
+              color: 'green',  // Change this to your desired label color
+              fontWeight:'bold',
+              textShadow:' 1px 1px 0 #000',
+              fontSize: '20px'
+            },
+            '& .MuiOutlinedInput-root.Mui-focused': {
+              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.9)', // Focused state shadow
+            }
+          }}
         />
         <Button
           variant="contained"
           type="submit"
           sx={{
             backgroundColor: "green",
-            boxShadow: "0 4px 10px rgb(1, 30, 7)",
+            boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.9)', // Custom box shadow
           }}
         >
           Login
         </Button>
 
+        <div>
+          Don't Have an Account? <a href="/register">Register here</a>
+        </div>
         <div>
           Don't Have an Account? <a href="/register">Register here</a>
         </div>

@@ -296,6 +296,18 @@ function App() {
     );
   }, [koalaList]);
 
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      saveNotes(); // Save notes before the page is closed
+    };
+  
+    window.addEventListener("beforeunload", handleBeforeUnload);
+  
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   return (
     <div className="App">
       <Header />
@@ -527,6 +539,7 @@ function App() {
                       <td>{item.company}</td>
                       <td>
                         <a href={item.link} target="_blank" rel="noreferrer">
+                        <a href={item.link} target="_blank" rel="noreferrer">
                           {item.position}
                         </a>
                       </td>
@@ -575,10 +588,8 @@ function App() {
           <textarea
             id="noteField"
             placeholder="Write any notes, reminders, or contact information here"
+            onBlur={() => saveNotes()} 
           ></textarea>
-          <button className="saveButton" onClick={saveNotes}>
-            Save
-          </button>
         </div>
         <Footer />
       </div>
