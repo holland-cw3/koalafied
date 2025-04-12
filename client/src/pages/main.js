@@ -60,7 +60,9 @@ async function load(
   handleOpenNewKoala,
   koalaTimeout,
   koalaObjList,
-  statusTimeout
+  statusTimeout,
+  printStr,
+  koalaListChanged
 ) {
   const token = localStorage.getItem("token");
 
@@ -99,6 +101,8 @@ async function load(
             "I just unlocked the " + newKoala.name + ", " + newKoala.description
           );
         }
+
+        koalaListChanged();
       }
 
       setKoalaList(data.koalas);
@@ -107,16 +111,19 @@ async function load(
         document.getElementById("noteField").value = data.notes;
       }
 
-      clearTimeout(statusTimeout);
-      statusTimeout = setTimeout(() => {
-        let applications = data.applications;
-        for (let i = 0; i < applications.length; i++) {
-          let item = applications[i];
-          document.getElementById(
-            "status_" + item.company + item.position
-          ).value = item.status;
-        }
-      }, 300);
+      console.log("Origin: " + printStr);
+
+      // clearTimeout(statusTimeout);
+      // statusTimeout = setTimeout(() => {
+      let applications = data.applications;
+      for (let i = 0; i < applications.length; i++) {
+        let item = applications[i];
+        document.getElementById(
+          "status_" + item.company + item.position
+        ).value = item.status;
+        console.log("Changing status");
+      }
+      // }, 300);
 
       clearTimeout(koalaTimeout);
       koalaTimeout = setTimeout(() => {
@@ -211,20 +218,7 @@ function App() {
     window.location.href = "/login";
   }
 
-  // States for stats
-  const [username, setUsername] = useState("User");
-  const [numKoalas, setNumKoalas] = useState(0);
-  const [koalaList, setKoalaList] = useState([]);
-  const [numApps, setNumApps] = useState(0);
-  const [numInterviews, setNumInterviews] = useState(0);
-  const [numOffers, setNumOffers] = useState(0);
-
-  const [koalaObjList, setKoalaObjList] = useState([]);
-
-  // Koala array to display
-  const handleStateChange = () => {
-    // console.log("State has changed:", koalaList);
-    // Perform actions based on the state change here
+  function koalaListChanged() {
     if (koalaList.length !== koalaObjList.length) {
       for (let i = 0; i < koalaList.length; i++) {
         let koala = getKoalaById(koalaList[i]);
@@ -245,7 +239,7 @@ function App() {
           ]);
       }
     }
-  };
+  }
 
   function inKoalaList(id, list) {
     for (let i = 0; i < list.length; i++) {
@@ -253,10 +247,6 @@ function App() {
     }
     return false;
   }
-
-  useEffect(() => {
-    handleStateChange();
-  }, [koalaList]);
 
   // States for table
   const [selectedSorting, setSelectedSorting] = useState("newest");
@@ -271,6 +261,16 @@ function App() {
   const [koalaDesc, setkoalaDesc] = useState("");
 
   const [apps, setApps] = useState([]);
+
+  // States for stats
+  const [username, setUsername] = useState("User");
+  const [numKoalas, setNumKoalas] = useState(0);
+  const [koalaList, setKoalaList] = useState([]);
+  const [numApps, setNumApps] = useState(0);
+  const [numInterviews, setNumInterviews] = useState(0);
+  const [numOffers, setNumOffers] = useState(0);
+
+  const [koalaObjList, setKoalaObjList] = useState([]);
 
   let koalaTimeout = useRef(null);
   let statusTimeout = useRef(null);
@@ -319,6 +319,24 @@ function App() {
         }
       );
 
+      await new Promise((res) => setTimeout(res, 300)); // short delay
+      await load(
+        setApps,
+        setUsername,
+        setNumKoalas,
+        setNumApps,
+        setNumInterviews,
+        setNumOffers,
+        setKoalaList,
+        koalaList,
+        handleOpenNewKoala,
+        koalaTimeout,
+        koalaObjList,
+        statusTimeout,
+        "update status",
+        koalaListChanged
+      );
+
       if (response.ok) {
         return true;
       } else {
@@ -330,6 +348,25 @@ function App() {
       return false;
     }
   }
+
+  useEffect(() => {
+    load(
+      setApps,
+      setUsername,
+      setNumKoalas,
+      setNumApps,
+      setNumInterviews,
+      setNumOffers,
+      setKoalaList,
+      koalaList,
+      handleOpenNewKoala,
+      koalaTimeout,
+      koalaObjList,
+      statusTimeout,
+      "top level",
+      koalaListChanged
+    );
+  }, []);
 
   switch (selectedSorting) {
     case "oldest":
@@ -353,23 +390,6 @@ function App() {
         );
       } catch {}
   }
-
-  useEffect(() => {
-    load(
-      setApps,
-      setUsername,
-      setNumKoalas,
-      setNumApps,
-      setNumInterviews,
-      setNumOffers,
-      setKoalaList,
-      koalaList,
-      handleOpenNewKoala,
-      koalaTimeout,
-      koalaObjList,
-      statusTimeout
-    );
-  }, [koalaList]);
 
   useEffect(() => {
     const handleBeforeUnload = () => {
@@ -495,7 +515,9 @@ function App() {
                         handleOpenNewKoala,
                         koalaTimeout,
                         koalaObjList,
-                        statusTimeout
+                        statusTimeout,
+                        "submit app",
+                        koalaListChanged
                       );
                     }
                   }}
@@ -542,7 +564,7 @@ function App() {
         <div className="stats">
           <div className="stats2">
             <h2>Stats For: {username}</h2>
-            <h3 class="kCount">Koala Count: {numKoalas}</h3>
+            <h3 className="kCount">Koala Count: {numKoalas}</h3>
             <h3 className="silver">Applications: {numApps}</h3>
             <h3 className="bronze">Interviews: {numInterviews}</h3>
             <h3 className="gold">Offers: {numOffers}</h3>
@@ -551,7 +573,7 @@ function App() {
           </div>
         </div>
         <div className="table">
-          <h4 class="sorter">
+          <h4 className="sorter">
             <span className="line">
               Status:{" "}
               <select
@@ -644,21 +666,6 @@ function App() {
                               item.company,
                               item.position,
                               "status_" + item.company + item.position
-                            );
-                            await new Promise((res) => setTimeout(res, 300)); // short delay
-                            await load(
-                              setApps,
-                              setUsername,
-                              setNumKoalas,
-                              setNumApps,
-                              setNumInterviews,
-                              setNumOffers,
-                              setKoalaList,
-                              koalaList,
-                              handleOpenNewKoala,
-                              koalaTimeout,
-                              koalaObjList,
-                              statusTimeout
                             );
                           }}
                           class="updateBtn"
