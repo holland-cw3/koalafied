@@ -15,7 +15,8 @@ async function load(
   setNumApps,
   setNumInterviews,
   setNumOffers,
-  setKoalaList
+  setKoalaList,
+  koalaList
 ) {
   const token = localStorage.getItem("token");
 
@@ -38,7 +39,15 @@ async function load(
       setNumApps(data.numApps);
       setNumInterviews(data.numInterviews);
       setNumOffers(data.numOffers);
+
+      // Check if the users has received any new koala's
+      // If koalaList was never initialized ignore it
+      if (koalaList != data.koalas && koalaList != []) {
+        console.log("A NEW KOALA!!");
+      }
+
       setKoalaList(data.koalas);
+
       if (data.notes !== "") {
         document.getElementById("noteField").value = data.notes;
       }
@@ -237,7 +246,8 @@ function App() {
       setNumApps,
       setNumInterviews,
       setNumOffers,
-      setKoalaList
+      setKoalaList,
+      koalaList
     );
   }, []);
 
@@ -343,7 +353,8 @@ function App() {
                       setNumApps,
                       setNumInterviews,
                       setNumOffers,
-                      setKoalaList
+                      setKoalaList,
+                      koalaList
                     );
                     handleClose();
                   }
@@ -466,7 +477,8 @@ function App() {
                               setNumApps,
                               setNumInterviews,
                               setNumOffers,
-                              setKoalaList
+                              setKoalaList,
+                              koalaList
                             );
                           }}
                         >
