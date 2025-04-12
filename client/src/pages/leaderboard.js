@@ -1,22 +1,36 @@
+import React, { useEffect, useState } from "react";
 
-function App() {
+function Leaderboard() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/leaderboard")
+      .then((res) => res.json())
+      .then((data) => setUsers(data))
+      .catch((err) => console.error("Fetch failed:", err));
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Leaderboard
-        </a>
-      </header>
-    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Rank</th>
+          <th># of Applications</th>
+        </tr>
+      </thead>
+      <tbody>
+        {users.map((user, i) => (
+          <tr key={i}>
+            <td>{i + 1}</td>
+            <td>{user.username}</td>
+            <td>{user.rank}</td>
+            <td>{user.numApps}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }
 
-export default App;
+export default Leaderboard;
