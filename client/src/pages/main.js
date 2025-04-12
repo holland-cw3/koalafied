@@ -19,13 +19,16 @@ async function load(
   const token = localStorage.getItem("token");
 
   try {
-    const response = await fetch("https://koala-fied-3.onrender.com/viewApplications", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      "https://koala-fied-3.onrender.com/viewApplications",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (response.ok) {
       const data = await response.json();
@@ -69,20 +72,23 @@ async function submitNewApp(setApps) {
   const token = localStorage.getItem("token");
 
   try {
-    const response = await fetch("https://koala-fied-3.onrender.com/addApplication", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        company: company,
-        position: position,
-        link: link,
-        date: date,
-        status: status,
-      }),
-    });
+    const response = await fetch(
+      "https://koala-fied-3.onrender.com/addApplication",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          company: company,
+          position: position,
+          link: link,
+          date: date,
+          status: status,
+        }),
+      }
+    );
 
     if (response.ok) {
       return true;
@@ -101,16 +107,19 @@ async function saveNotes(setNotes) {
   let notes = document.getElementById("noteField").value;
 
   try {
-    const response = await fetch("https://koala-fied-3.onrender.com/updateNotes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        notes: notes,
-      }),
-    });
+    const response = await fetch(
+      "https://koala-fied-3.onrender.com/updateNotes",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          notes: notes,
+        }),
+      }
+    );
 
     if (response.ok) {
       // const data = await response.json();
@@ -167,19 +176,22 @@ function App() {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch("https://koala-fied-3.onrender.com//updateStatus", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          user: username,
-          company: company,
-          position: position,
-          status: newStatus,
-        }),
-      });
+      const response = await fetch(
+        "https://koala-fied-3.onrender.com//updateStatus",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            user: username,
+            company: company,
+            position: position,
+            status: newStatus,
+          }),
+        }
+      );
 
       if (response.ok) {
         return true;
@@ -225,6 +237,18 @@ function App() {
       setNumInterviews,
       setNumOffers
     );
+  }, []);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      saveNotes(); // Save notes before the page is closed
+    };
+  
+    window.addEventListener("beforeunload", handleBeforeUnload);
+  
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
   }, []);
 
   return (
@@ -421,7 +445,7 @@ function App() {
                     <tr>
                       <td>{item.company}</td>
                       <td>
-                        <a href={item.link} target="_blank"  rel="noreferrer">
+                        <a href={item.link} target="_blank" rel="noreferrer">
                           {item.position}
                         </a>
                       </td>
@@ -467,10 +491,8 @@ function App() {
           <textarea
             id="noteField"
             placeholder="Write any notes, reminders, or contact information here"
+            onBlur={() => saveNotes()} 
           ></textarea>
-          <button className="saveButton" onClick={saveNotes}>
-            Save
-          </button>
         </div>
         <Footer />
       </div>

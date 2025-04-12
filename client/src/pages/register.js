@@ -3,15 +3,21 @@ import TextField from "@mui/material/TextField";
 import "../CSS/login.css";
 import Button from "@mui/material/Button";
 
+import logo from '../logo.png';
+
+
 async function login(username, password) {
   try {
-    const response = await fetch("https://koala-fied-3.onrender.com/createAccount", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    });
+    const response = await fetch(
+      "https://koala-fied-3.onrender.com/createAccount",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      }
+    );
 
     if (response.ok) {
       const res = await response.json();
@@ -37,7 +43,8 @@ export default function Login() {
   return (
     <div className="container">
       <form className="loginForm" onSubmit={handleSubmit}>
-        <h1>Koala-fied Register</h1>
+                <img src={logo} alt='logo'/>
+        
 
         <TextField
           id="outlined-basic"
@@ -46,6 +53,21 @@ export default function Login() {
           value={username}
           placeholder="Username"
           onChange={(e) => setUsername(e.target.value)}
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              backgroundColor: "#d2b48c",
+              boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.9)", // Custom box shadow
+            },
+            "& .MuiInputLabel-root": {
+              color: "green", // Change this to your desired label color
+              fontWeight: "bold",
+              textShadow: " 1px 1px 0 #000",
+              fontSize: "20px",
+            },
+            "& .MuiOutlinedInput-root.Mui-focused": {
+              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.9)", // Focused state shadow
+            },
+          }}
         />
         <TextField
           id="outlined-basic"
@@ -55,13 +77,36 @@ export default function Login() {
           placeholder="Password"
           type="password"
           onChange={(e) => setPassword(e.target.value)}
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              backgroundColor: "#d2b48c",
+              boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.9)", // Custom box shadow
+            },
+            "& .MuiInputLabel-root": {
+              color: "green", // Change this to your desired label color
+              fontWeight: "bold",
+              textShadow: " 1px 1px 0 #000",
+              fontSize: "20px",
+            },
+            "& .MuiOutlinedInput-root.Mui-focused": {
+              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.9)", // Focused state shadow
+            },
+          }}
         />
-        <Button variant="contained" type="submit">
+        <Button
+          variant="contained"
+          type="submit"
+          sx={{
+            backgroundColor: "green",
+            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.9)", // Custom box shadow
+          }}
+        >
           Register
         </Button>
 
-        <div>Already Have an Account? <a href='/login'>Login here</a></div>
-
+        <div>
+          Already Have an Account? <a href="/login">Login here</a>
+        </div>
       </form>
     </div>
   );

@@ -1,5 +1,7 @@
 import '../CSS/header.css';
 
+import logo from '../logo.png';
+
 function logout(){
   localStorage.setItem('token', '')
   alert("Successfully Logged Out");
@@ -17,9 +19,7 @@ export default function Header() {
         </a>
       </div>
 
-      <div className="header-center">
-        <h1>KOALAFIED</h1>
-      </div>
+        <img src={logo} alt='logo'/>
 
       <div className="header-right">
         <button className="logout-button" onClick={() => logout()}>

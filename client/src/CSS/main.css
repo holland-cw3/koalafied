@@ -19,12 +19,32 @@ th {
 }
 
 .notes {
-  height: 60vh;
-  background-color: white;
-  margin-right: 2vw;
-
-  width: 17.5%;
+  position: relative; /* Make the container a positioned element */
+  height: 70vh;
+  width: 25%;
+ 
+  box-sizing: border-box; /* Ensure padding doesn't affect width/height */
 }
+
+.notes textarea {
+  background-color: rgba(0, 0, 0, 0); /* Transparent background */
+  background-image: url('../chalk.png');
+  background-size: cover; /* Ensures the image covers the entire container */
+  background-position: center; /* Centers the image within the container */
+  background-repeat: no-repeat;
+
+  border: none; /* Remove border */
+  color: white; /* Text color */
+  font-weight: bold; /* Bold text */
+  font-size: 18px;
+  resize: none; /* Prevent resizing */
+  outline: none; /* Remove the highlight on click */
+  padding: 40px; /* Add padding for better spacing */
+  box-sizing: border-box; /* Ensure padding doesn't affect width/height */
+  overflow: hidden; /* Prevent scrollbars if text overflows */
+}
+
+
 
 .stats {
   height: 60vh;
