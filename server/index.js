@@ -1,15 +1,25 @@
+"use strict";
 const express = require("express");
-const path = require("path");
 const app = express();
-const port = process.env.PORT || 5000;
+const path = require("path");
+const { MongoClient, ServerApiVersion } = require("mongodb");
+
+require("dotenv").config({ path: path.resolve(__dirname, "credentials/.env") });
+
+const port = 5000;
 
 const databaseAndCollection = {
   db: process.env.MONGO_DB_NAME,
   collection: process.env.MONGO_COLLECTION,
 };
 
-const uri = process.env.MONGO_CONNECTION_STRING;
-const { MongoClient, ServerApiVersion } = require("mongodb");
+
+
+app.use(express.json());
+
+
+const uri = `mongodb+srv://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PASSWORD}@koalafied.szyjdqy.mongodb.net/?retryWrites=true&w=majority&appName=Koalafied`
+
 
 const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1,
@@ -18,13 +28,14 @@ const client = new MongoClient(uri, {
 app.use(express.static(path.join(__dirname, "../client/build")));
 
 app.get("/api/hello", (req, res) => {
-  res.send("Hello from Express!");
+  res.send(`${process.env.MONGO_DB_PASSWORD}`);
 });
 
 app.post("/createAccount", (request, response) => {
   const post_data = request.body;
 
   createAccount(post_data.username, post_data.email, post_data.password);
+  
 
   response.send("Success");
 });
