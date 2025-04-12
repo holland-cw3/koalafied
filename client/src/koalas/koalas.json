@@ -1,0 +1,14 @@
+{
+  "koalasw": [
+    {
+      "filename": "koala1.jpg",
+      "name": "Basic Koala",
+      "description": "Koala sitting in a tree"
+    },
+    {
+      "filename": "koala2.jpg",
+      "name": "Offer Koala",
+      "description": "The actual goat, good work dog"
+    }
+  ]
+}
