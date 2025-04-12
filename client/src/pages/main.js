@@ -9,11 +9,15 @@ import "../CSS/main.css";
 
 function App() {
   // States for stats
+  // Load this data from the server
+  // When loading in user's notes used doc get el by id to add notes in
+  // State wont allow editing
   const [username, setUsername] = useState("User");
   const [numKoalas, setNumKoalas] = useState(0);
   const [numApps, setNumApps] = useState(0);
   const [numInterviews, setNumInterviews] = useState(0);
   const [numOffers, setNumOffers] = useState(0);
+  const [notes, setNotes] = useState("");
 
   // States for table
   const [selectedSorting, setSelectedSorting] = useState("newest");
@@ -75,6 +79,15 @@ function App() {
     console.log(
       `Adding new application: Company: ${company} Position: ${position} Link: ${link} Date: ${date} Status: ${status}`
     );
+
+    handleClose();
+  }
+
+  // Connect to backend
+  function saveNotes() {
+    let notes = document.getElementById("noteField").value;
+
+    console.log("Notes: " + notes);
   }
 
   switch (selectedSorting) {
@@ -315,7 +328,9 @@ function App() {
             id="noteField"
             placeholder="Write any notes, reminders, or contact information here"
           ></textarea>
-          <button class="saveButton">Save</button>
+          <button class="saveButton" onClick={saveNotes}>
+            Save
+          </button>
         </div>
         <Footer />
       </div>
