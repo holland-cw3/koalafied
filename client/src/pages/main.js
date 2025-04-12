@@ -8,19 +8,23 @@ import Typography from "@mui/material/Typography";
 
 import "../CSS/main.css";
 
-const globalKoalaList = require("../koalas/koalas.json");
+const globalKoalaList = require("../koalas/koalas.json").koalas;
 
 function compareKoalaLists(newList, oldList) {
   let newKoalas = [];
   for (let i = 0; i < newList.length; i++) {
     if (i >= oldList.length) newKoalas.push(newList[i]);
   }
+  return newKoalas;
 }
 
 function getKoalaById(id) {
+  console.log("Koala list length: " + globalKoalaList.length);
   for (let i = 0; i < globalKoalaList.length; i++) {
+    console.log(globalKoalaList[i].id);
     if (id === globalKoalaList[i].id) return globalKoalaList[i];
   }
+  return { name: "", description: "" };
 }
 
 async function load(
@@ -31,7 +35,8 @@ async function load(
   setNumInterviews,
   setNumOffers,
   setKoalaList,
-  koalaList
+  koalaList,
+  handleOpenNewKoala
 ) {
   const token = localStorage.getItem("token");
 
@@ -57,11 +62,15 @@ async function load(
 
       // Check if the users has received any new koala's
       let newKoalas = compareKoalaLists(data.koalas, koalaList);
-      if (newKoalas.length !== 0) {
+      if (newKoalas.length !== 0 && koalaList.length !== 0) {
+        // Update how to display a new koala
         console.log("A NEW KOALA!!");
 
         for (let i = 0; i < newKoalas.length; i++) {
           let newKoala = getKoalaById(newKoalas[i]);
+
+          handleOpenNewKoala(newKoala.name, newKoala.description);
+
           console.log(
             "I just unlocked the " + newKoala.name + ", " + newKoala.description
           );
@@ -93,7 +102,7 @@ async function load(
   }
 }
 
-async function submitNewApp(setApps) {
+async function submitNewApp() {
   let company = document.getElementById("company").value;
   let position = document.getElementById("position").value;
   let link = document.getElementById("link").value;
@@ -187,15 +196,28 @@ function App() {
 
   // State for modal
   const [open, setOpen] = useState(false);
+  const [modalAddingApp, setModalAddingApp] = useState(true);
+
+  const [koalaName, setKoalaName] = useState("");
+  const [koalaDesc, setkoalaDesc] = useState("");
 
   const [apps, setApps] = useState([]);
 
   const handleOpen = () => {
     setOpen(true);
+    setModalAddingApp(true);
+  };
+
+  const handleOpenNewKoala = (name, desc) => {
+    setOpen(true);
+    setModalAddingApp(false);
+    setKoalaName(name);
+    setkoalaDesc(desc);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setModalAddingApp(true);
   };
 
   // list of user's applications
@@ -269,17 +291,18 @@ function App() {
       setNumInterviews,
       setNumOffers,
       setKoalaList,
-      koalaList
+      koalaList,
+      handleOpenNewKoala
     );
-  }, []);
+  }, [koalaList]);
 
   useEffect(() => {
     const handleBeforeUnload = () => {
       saveNotes(); // Save notes before the page is closed
     };
-  
+
     window.addEventListener("beforeunload", handleBeforeUnload);
-  
+
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
@@ -294,113 +317,147 @@ function App() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "25%",
-            left: "22.5%",
-            width: "50%",
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            p: 4,
-            borderRadius: 2,
-          }}
-        >
-          <div className="flex justify-between items-center mb-4">
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Add A New Application
-            </Typography>
-            <button
-              onClick={handleClose}
-              className="text-gray-500 hover:text-black text-xl font-bold"
-              aria-label="Close"
-            >
-              &times;
-            </button>
-
-            {/* form inputs here */}
-            <div id="modal-modal-description">
-              <div className="line mb-2">
-                <label htmlFor="company">Company:</label>
-                <input
-                  type="text"
-                  id="company"
-                  className="w-full p-2 border rounded"
-                  required
-                />
-              </div>
-
-              <div className="line mb-2">
-                <label htmlFor="position">Position:</label>
-                <input
-                  type="text"
-                  id="position"
-                  className="w-full p-2 border rounded"
-                  required
-                />
-              </div>
-
-              <div className="line mb-2">
-                <label htmlFor="link">Link:</label>
-                <input
-                  type="url"
-                  id="link"
-                  className="w-full p-2 border rounded"
-                />
-              </div>
-
-              <div className="line mb-2">
-                <label htmlFor="date">Date:</label>
-                <input
-                  type="date"
-                  id="date"
-                  className="w-full p-2 border rounded"
-                  required
-                />
-              </div>
-
-              <div className="line mb-4">
-                <label htmlFor="status">Status:</label>
-                <select
-                  id="status"
-                  className="w-full p-2 border rounded"
-                  defaultValue="Applied"
-                  required
-                >
-                  <option value="Applied">Applied</option>
-                  <option value="Interviewed">Interviewed</option>
-                  <option value="Offered">Offered</option>
-                  <option value="Rejected">Rejected</option>
-                </select>
-              </div>
-
+        {modalAddingApp ? (
+          // Display the add application modal
+          <Box
+            sx={{
+              position: "absolute",
+              top: "25%",
+              left: "22.5%",
+              width: "50%",
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              borderRadius: 2,
+            }}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Add A New Application
+              </Typography>
               <button
-                type="submit"
-                onClick={async () => {
-                  const success = await submitNewApp();
-                  if (success) {
-                    await new Promise((res) => setTimeout(res, 300)); // short delay
-                    await load(
-                      setApps,
-                      setUsername,
-                      setNumKoalas,
-                      setNumApps,
-                      setNumInterviews,
-                      setNumOffers,
-                      setKoalaList,
-                      koalaList
-                    );
-                    handleClose();
-                  }
-                }}
-                className="line bg-blue-500 text-white px-4 py-2 rounded"
+                onClick={handleClose}
+                className="text-gray-500 hover:text-black text-xl font-bold"
+                aria-label="Close"
               >
-                Submit
+                &times;
               </button>
+
+              {/* form inputs here */}
+              <div id="modal-modal-description">
+                <div className="line mb-2">
+                  <label htmlFor="company">Company:</label>
+                  <input
+                    type="text"
+                    id="company"
+                    className="w-full p-2 border rounded"
+                    required
+                  />
+                </div>
+
+                <div className="line mb-2">
+                  <label htmlFor="position">Position:</label>
+                  <input
+                    type="text"
+                    id="position"
+                    className="w-full p-2 border rounded"
+                    required
+                  />
+                </div>
+
+                <div className="line mb-2">
+                  <label htmlFor="link">Link:</label>
+                  <input
+                    type="url"
+                    id="link"
+                    className="w-full p-2 border rounded"
+                  />
+                </div>
+
+                <div className="line mb-2">
+                  <label htmlFor="date">Date:</label>
+                  <input
+                    type="date"
+                    id="date"
+                    className="w-full p-2 border rounded"
+                    required
+                  />
+                </div>
+
+                <div className="line mb-4">
+                  <label htmlFor="status">Status:</label>
+                  <select
+                    id="status"
+                    className="w-full p-2 border rounded"
+                    defaultValue="Applied"
+                    required
+                  >
+                    <option value="Applied">Applied</option>
+                    <option value="Interviewed">Interviewed</option>
+                    <option value="Offered">Offered</option>
+                    <option value="Rejected">Rejected</option>
+                  </select>
+                </div>
+
+                <button
+                  type="submit"
+                  onClick={async () => {
+                    const success = await submitNewApp();
+                    if (success) {
+                      handleClose();
+                      await new Promise((res) => setTimeout(res, 300)); // short delay
+                      await load(
+                        setApps,
+                        setUsername,
+                        setNumKoalas,
+                        setNumApps,
+                        setNumInterviews,
+                        setNumOffers,
+                        setKoalaList,
+                        koalaList,
+                        handleOpenNewKoala
+                      );
+                    }
+                  }}
+                  className="line bg-blue-500 text-white px-4 py-2 rounded"
+                >
+                  Submit
+                </button>
+              </div>
             </div>
-          </div>
-        </Box>
+          </Box>
+        ) : (
+          // Display the new koala modal
+          <Box
+            sx={{
+              position: "absolute",
+              top: "25%",
+              left: "22.5%",
+              width: "50%",
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              borderRadius: 2,
+            }}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                New Koala Unlockled!
+              </Typography>
+              <button
+                onClick={handleClose}
+                className="text-gray-500 hover:text-black text-xl font-bold"
+                aria-label="Close"
+              >
+                &times;
+              </button>
+              <h3>{koalaName}</h3>
+              <h4>{koalaDesc}</h4>
+            </div>
+          </Box>
+        )}
       </Modal>
+
       <div className="tableBody">
         <div className="stats">
         <div className='stats2'>
@@ -485,7 +542,11 @@ function App() {
                       
                       <td>{item.company}</td>
                       <td>
-                        <a href={item.link} target="_blank" rel="noreferrer">
+                        <a
+                          href={item.linkString}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
                           {item.position}
                         </a>
                       </td>
@@ -516,7 +577,8 @@ function App() {
                               setNumInterviews,
                               setNumOffers,
                               setKoalaList,
-                              koalaList
+                              koalaList,
+                              handleOpenNewKoala
                             );
                           }}
                         >
@@ -533,7 +595,7 @@ function App() {
           <textarea
             id="noteField"
             placeholder="Write any notes, reminders, or contact information here"
-            onBlur={() => saveNotes()} 
+            onBlur={() => saveNotes()}
           ></textarea>
         </div>
         <Footer />
