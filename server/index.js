@@ -201,13 +201,13 @@ async function addApplication(company, position, link, date, status, user) {
     );
 
     // Always increment application
-    db.products.updateOne({ username: user }, { $inc: { numApps: 1 } });
+    collection.updateOne({ username: user }, { $inc: { numApps: 1 } });
 
     // Also increment interview or offer depending on status
     if (status == "Interviewed") {
-      db.products.updateOne({ username: user }, { $inc: { numInterviews: 1 } });
+      collection.updateOne({ username: user }, { $inc: { numInterviews: 1 } });
     } else if (status == "Offer") {
-      db.products.updateOne({ username: user }, { $inc: { numOffers: 1 } });
+      collection.updateOne({ username: user }, { $inc: { numOffers: 1 } });
     }
   } catch (e) {
     console.error("❌ Error in addApplication:", e);
@@ -239,11 +239,11 @@ async function updateStatus(user, company, position, status) {
     }
 
     if (status == "Applied") {
-      db.products.updateOne({ username: user }, { $inc: { numApps: 1 } });
+      collection.updateOne({ username: user }, { $inc: { numApps: 1 } });
     } else if (status == "Interviewed") {
-      db.products.updateOne({ username: user }, { $inc: { numInterviews: 1 } });
+      collection.updateOne({ username: user }, { $inc: { numInterviews: 1 } });
     } else if (status == "Offer") {
-      db.products.updateOne({ username: user }, { $inc: { numOffers: 1 } });
+      collection.updateOne({ username: user }, { $inc: { numOffers: 1 } });
     }
 
     // update the applicaiton list

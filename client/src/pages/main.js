@@ -8,7 +8,14 @@ import Typography from "@mui/material/Typography";
 
 import "../CSS/main.css";
 
-async function load(setApps) {
+async function load(
+  setApps,
+  setUsername,
+  setNumKoalas,
+  setNumApps,
+  setNumInterviews,
+  setNumOffers
+) {
   const token = localStorage.getItem("token");
 
   try {
@@ -24,6 +31,15 @@ async function load(setApps) {
       const data = await response.json();
       console.log(data.applications);
       setApps(data.applications);
+      setUsername(data.username);
+      // Replace with length of list of koalas
+      setNumKoalas(0);
+      setNumApps(data.numApps);
+      setNumInterviews(data.numInterviews);
+      setNumOffers(data.numOffers);
+      if (data.notes != "") {
+        document.getElementById("noteField").value = data.notes;
+      }
       return;
     } else {
       alert("User not authenticated");
@@ -131,23 +147,36 @@ function App() {
 
   switch (selectedSorting) {
     case "oldest":
-      apps.sort(
-        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-      );
+      try {
+        apps.sort(
+          (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+        );
+      } catch {}
       break;
     case "newest":
-      apps.sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-      );
+      try {
+        apps.sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
+      } catch {}
       break;
     default:
-      apps.sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-      );
+      try {
+        apps.sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
+      } catch {}
   }
 
   useEffect(() => {
-    load(setApps);
+    load(
+      setApps,
+      setUsername,
+      setNumKoalas,
+      setNumApps,
+      setNumInterviews,
+      setNumOffers
+    );
   }, []);
 
   return (
@@ -247,7 +276,8 @@ function App() {
                     await new Promise((res) => setTimeout(res, 300)); // short delay
                     await load(setApps);
                     handleClose();
-                }}}
+                  }
+                }}
                 className="line bg-blue-500 text-white px-4 py-2 rounded"
               >
                 Submit
@@ -319,50 +349,52 @@ function App() {
                 </tr>
               </thead>
               <tbody>
-                {apps.filter(
-                  (item) =>
-                    (searchVal === "" ||
-                      item.company
-                        .toLowerCase()
-                        .includes(searchVal.toLowerCase()) ||
-                      item.position
-                        .toLowerCase()
-                        .includes(searchVal.toLowerCase()) ||
-                      item.meet) &&
-                    (statusVal === "all" || statusVal === item.status)
-                ).map((item) => (
-                  <tr>
-                    <td>{item.company}</td>
-                    <td>
-                      <a href={item.link} target="_blank">
-                        {item.position}
-                      </a>
-                    </td>
-                    <td>{item.date}</td>
-                    <td>
-                      <select
-                        id={"status_" + item.company + item.position}
-                        defaultValue={item.status}
-                      >
-                        <option value="Applied">Applied</option>
-                        <option value="Interviewed">Interviewed</option>
-                        <option value="Offer">Offer</option>
-                        <option value="Rejected">Rejected</option>
-                      </select>
-                      <button
-                        onClick={() => {
-                          updateStatus(
-                            item.company,
-                            item.position,
-                            "status_" + item.company + item.position
-                          );
-                        }}
-                      >
-                        Update
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {apps
+                  .filter(
+                    (item) =>
+                      (searchVal === "" ||
+                        item.company
+                          .toLowerCase()
+                          .includes(searchVal.toLowerCase()) ||
+                        item.position
+                          .toLowerCase()
+                          .includes(searchVal.toLowerCase()) ||
+                        item.meet) &&
+                      (statusVal === "all" || statusVal === item.status)
+                  )
+                  .map((item) => (
+                    <tr>
+                      <td>{item.company}</td>
+                      <td>
+                        <a href={item.link} target="_blank">
+                          {item.position}
+                        </a>
+                      </td>
+                      <td>{item.date}</td>
+                      <td>
+                        <select
+                          id={"status_" + item.company + item.position}
+                          defaultValue={item.status}
+                        >
+                          <option value="Applied">Applied</option>
+                          <option value="Interviewed">Interviewed</option>
+                          <option value="Offer">Offer</option>
+                          <option value="Rejected">Rejected</option>
+                        </select>
+                        <button
+                          onClick={() => {
+                            updateStatus(
+                              item.company,
+                              item.position,
+                              "status_" + item.company + item.position
+                            );
+                          }}
+                        >
+                          Update
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
