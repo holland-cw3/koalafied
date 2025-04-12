@@ -67,8 +67,6 @@ async function submitNewApp(setApps) {
   } catch (error) {
     console.error("Error submitting data:", error);
   }
-
-  // handleClose();
 }
 
 function App() {
@@ -245,6 +243,7 @@ function App() {
                 type="submit"
                 onClick={() => {
                   submitNewApp(setApps);
+                  handleClose();
                 }}
                 className="line bg-blue-500 text-white px-4 py-2 rounded"
               >
