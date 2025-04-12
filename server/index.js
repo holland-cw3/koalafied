@@ -169,11 +169,8 @@ async function viewApplication(user, response) {
     console.error(e);
   } 
 }
-<<<<<<< HEAD
 
 
-=======
->>>>>>> 98b507f7d5a38cde4926daf61576f5be9dc37610
 async function addApplication(company, position, link, date, status, user) {
   try {
     await client.connect();
@@ -203,7 +200,6 @@ async function addApplication(company, position, link, date, status, user) {
       .collection(databaseAndCollection.collection)
       .updateOne({ username: user }, { applications: applications });
   } catch (e) {
-<<<<<<< HEAD
     console.error("Error in addApplication:", e);
   } 
 }
@@ -211,15 +207,6 @@ async function addApplication(company, position, link, date, status, user) {
 
 
 async function updateStatus(user, company, position, status) {
-=======
-    console.error(e);
-  } finally {
-    await client.close();
-  }
-}
-
-async function updateStatus(user, company, posiiton, status) {
->>>>>>> 98b507f7d5a38cde4926daf61576f5be9dc37610
   try {
     await client.connect();
 
