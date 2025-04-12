@@ -41,12 +41,14 @@
     }
     
     .logout-button {
-      padding: 5px 10px;
-      background-color: #ff4d4d;
+      padding:10px 10px;
+      background-color: #f23333;
       color: white;
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      box-shadow: 5px 5px black;
+
     }
     
     .logout-button:hover {

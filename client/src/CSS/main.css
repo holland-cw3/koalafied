@@ -7,20 +7,42 @@
 
 .table {
   height: 60vh;
-  background-color: white;
-  width: 63%;
+  /* background-color: white; */
+  width: 62%;
   margin-right: 2vw;
   margin-left: 2vw;
-  overflow: scroll;
 }
 
 th {
   color: whitesmoke;
 }
 
+table tbody tr {
+  background-image: url('../row.png');
+  background-size: cover;
+  
+  background-position: center top;
+  font-size: 20px;
+  color: white;
+  border-radius: 2px;
+}
+
+tr td{
+  padding-top: 5px;
+  padding-bottom: 5px;
+  width: 18%;
+  outline: thin solid;
+
+
+}
+
+td{
+  background-color: rgba(0, 0, 0, 0);
+}
+
 .notes {
   position: relative; /* Make the container a positioned element */
-  height: 70vh;
+  height: 67vh;
   width: 25%;
  
   box-sizing: border-box; /* Ensure padding doesn't affect width/height */
@@ -39,39 +61,58 @@ th {
   font-size: 18px;
   resize: none; /* Prevent resizing */
   outline: none; /* Remove the highlight on click */
-  padding: 40px; /* Add padding for better spacing */
+  padding: 50px; /* Add padding for better spacing */
   box-sizing: border-box; /* Ensure padding doesn't affect width/height */
-  overflow: hidden; /* Prevent scrollbars if text overflows */
+  overflow-x: hidden; /* Prevent scrollbars if text overflows */
 }
 
 
 
 .stats {
   height: 60vh;
-  background-color: white;
-  margin-left: 2vw;
+  background-image: url('../mirror.png');
+  background-size: cover;
+  background-position: center; /* Centers the image within the container */
+  background-repeat: no-repeat;
 
-  width: 17.5%;
+  width: 20%;
+}
+
+.stats2{
+  padding: 25px;
+  margin-left: .5vw;
 }
 
 .stats h2 {
   margin: 1em;
+  color:rgb(182, 92, 182);
+  text-shadow: 2px 2px black;
+  text-decoration: underline;
+
 }
 
 .stats h3 {
   margin: 1em;
 }
 
+.kCount{
+  color:white;
+  text-shadow: 2px 2px black;
+}
+
 .silver {
   color: silver;
+  text-shadow: 2px 2px black;
 }
 
 .bronze {
   color: #cd7f32;
+  text-shadow: 2px 2px black;
 }
 
 .gold {
   color: gold;
+  text-shadow: 2px 2px black;
 }
 
 #noteField {
@@ -103,4 +144,48 @@ select {
   margin-top: 10%;
   border-radius: 1em;
   padding: 2em;
+}
+
+.line{
+  font-size: 17px ;
+}
+
+
+select{
+  background-color: #d2b48c;
+  padding:10px;
+  border-radius: 5px;
+  box-shadow: 2px 2px;
+
+
+
+}
+
+input{
+  background-color: #d2b48c;
+  padding:10px;
+  border-radius: 5px;
+  box-shadow: 2px 2px;
+}
+
+button{
+  background-color: #3b7830;
+  color:whitesmoke;
+  font-size: bold;
+  padding: 8px;
+  border-radius: 5px;
+  box-shadow: 2px 2px black;
+  width: 10vw;
+
+}
+
+.sorter{
+  background-image: url('../searcher.png');
+  padding: 20px;
+  border-radius: 5px;
+  font-size: 18px;
+  box-shadow: 9px 9px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

@@ -57,7 +57,7 @@ async function load(
 
       // Check if the users has received any new koala's
       let newKoalas = compareKoalaLists(data.koalas, koalaList);
-      if (newKoalas.length != 0) {
+      if (newKoalas.length !== 0) {
         console.log("A NEW KOALA!!");
 
         for (let i = 0; i < newKoalas.length; i++) {
@@ -403,16 +403,19 @@ function App() {
       </Modal>
       <div className="tableBody">
         <div className="stats">
-          <h2>{username}</h2>
-          <h3>Koala Count: {numKoalas}</h3>
+        <div className='stats2'>
+          <h2>Stats For: {username}</h2>
+          <h3 class='kCount'>Koala Count: {numKoalas}</h3>
           <h3 className="silver">Applications: {numApps}</h3>
           <h3 className="bronze">Interviews: {numInterviews}</h3>
           <h3 className="gold">Offers: {numOffers}</h3>
           <br></br>
-          <h3>New Koalas:</h3>
+          <h3 className="kCount">New Koalas:</h3>
+          </div>
+
         </div>
         <div className="table">
-          <h4>
+          <h4 class='sorter'>
             <span className="line">
               Status:{" "}
               <select
@@ -479,9 +482,9 @@ function App() {
                   )
                   .map((item) => (
                     <tr>
+                      
                       <td>{item.company}</td>
                       <td>
-                        <a href={item.link} target="_blank" rel="noreferrer">
                         <a href={item.link} target="_blank" rel="noreferrer">
                           {item.position}
                         </a>

@@ -21,11 +21,11 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
-  padding: 35px;
+  padding: 45px;
   padding-top: 13vh;
   padding-bottom:10vh;
 
-  background-image: url("../lgbg3.png");
+  background-image: url("../lgBg2.png");
   background-size: cover;
   border-radius: 8px;
   box-shadow: 0 15px 20px rgba(0, 0, 0, 0.4);

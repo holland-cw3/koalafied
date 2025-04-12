@@ -19,7 +19,6 @@ async function login(username, password) {
     if (response.ok) {
       const res = await response.json();
       localStorage.setItem("token", res.token);
-      alert(localStorage.getItem("token"));
       window.location.href = "/";
     } else {
       alert("Login Failed: Username or Password is incorrect");
@@ -106,9 +105,6 @@ export default function Login() {
           Login
         </Button>
 
-        <div>
-          Don't Have an Account? <a href="/register">Register here</a>
-        </div>
         <div>
           Don't Have an Account? <a href="/register">Register here</a>
         </div>
