@@ -2,8 +2,8 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 
 import Home from "./pages/main";
-import Register from "./pages/login";
-import Login from "./pages/login2";
+import Register from "./pages/register";
+import Login from "./pages/login";
 
 
 import Leaderboard from "./pages/leaderboard";

@@ -112,7 +112,7 @@ app.post("/addApplication", (request, response) => {
 app.post("/updateStatus", (request, response) => {
   const post_data = request.body;
 
-  const token = req.headers.authorization.split(" ")[1];
+  const token = request.headers.authorization.split(" ")[1];
   verifyJWT(token);
 
   updateStatus(
@@ -128,13 +128,20 @@ app.post("/updateStatus", (request, response) => {
 app.post("/updateNotes", (request, response) => {
   const post_data = request.body;
 
-  const token = req.headers.authorization.split(" ")[1];
+  const token = request.headers.authorization.split(" ")[1];
   verifyJWT(token);
 
-  updateNotes(post_data.user, post_data.notes);
+  const decodedToken = jwt.verify(token, JWT_SECRET);
+  const id = decodedToken.username;
+
+  updateNotes(id, post_data.notes);
+
+  console.log('hi')
 
   response.send("Success");
 });
+
+
 
 /// db operations
 
@@ -299,14 +306,16 @@ async function updateNotes(user, notes) {
   try {
     await client.connect();
 
-    // DO PASSWORD/SESSION CHECK
-
-    // find that user and update the notes
     const result = await client
       .db(databaseAndCollection.db)
       .collection(databaseAndCollection.collection)
-      .updateOne({ username: user }, { notes: notes });
+      .updateOne(
+        { username: user },
+        { $set: { notes: notes } } // <-- fix here
+      );
+    
   } catch (e) {
     console.error(e);
   } 
 }
+

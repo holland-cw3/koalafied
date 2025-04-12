@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 
 async function login(username, password) {
   try {
-    const response = await fetch("http://localhost:5001/createAccount", {
+    const response = await fetch("http://localhost:5001/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -30,8 +30,8 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent default form submission
-    login(username, password); // Call the login function
+    e.preventDefault(); 
+    login(username, password); 
   };
 
   return (
@@ -60,7 +60,7 @@ export default function Login() {
           Login
         </Button>
 
-        <div>Don't Have an Account? Register here</div>
+        <div>Don't Have an Account? <a href='/register'>Register here</a></div>
       </form>
     </div>
   );

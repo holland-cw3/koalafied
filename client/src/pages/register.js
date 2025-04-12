@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 
 async function login(username, password) {
   try {
-    const response = await fetch("http://localhost:5001/login", {
+    const response = await fetch("http://localhost:5001/createAccount", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -37,7 +37,7 @@ export default function Login() {
   return (
     <div className="container">
       <form className="loginForm" onSubmit={handleSubmit}>
-        <h1>Koala-fied Login</h1>
+        <h1>Koala-fied Register</h1>
 
         <TextField
           id="outlined-basic"
@@ -57,10 +57,11 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <Button variant="contained" type="submit">
-          Login
+          Register
         </Button>
 
-        <div>Don't Have an Account? Register here</div>
+        <div>Already Have an Account? <a href='/login'>Login here</a></div>
+
       </form>
     </div>
   );

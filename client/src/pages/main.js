@@ -70,6 +70,37 @@ async function submitNewApp(setApps) {
   }
 }
 
+async function saveNotes(setNotes){
+  const token = localStorage.getItem("token");
+  let notes = document.getElementById("noteField").value;
+
+  try {
+    const response = await fetch("http://localhost:5001/updateNotes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+       notes: notes,
+     
+      }),
+    });
+
+    if (response.ok) {
+      // const data = await response.json();
+      // console.log(data.applications);
+      // setNotes(data.applications);
+      return;
+    } else {
+      alert("User not authenticated");
+    }
+  } catch (error) {
+    console.error("Error submitting data:", error);
+  }
+}
+
+
 function App() {
   if (!localStorage.getItem("token")) {
     window.location.href = "/login";
@@ -122,12 +153,7 @@ function App() {
     );
   }
 
-  // Connect to backend
-  function saveNotes() {
-    let notes = document.getElementById("noteField").value;
-
-    console.log("Notes: " + notes);
-  }
+  
 
   switch (selectedSorting) {
     case "oldest":
