@@ -1,7 +1,8 @@
 
 body{
   width: 100%;
-  background-color: darkgreen;
+  background-image: url('./bg.png');
+  background-size: contain;
 
 }
 
