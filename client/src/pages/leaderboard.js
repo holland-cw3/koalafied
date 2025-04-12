@@ -12,6 +12,21 @@ function Leaderboard() {
       { username: "user3", numApps: 2, points: 40 },
       { username: "user5", numApps: 1, points: 20 },
       { username: "user2", numApps: 5, points: 100 },
+      { username: "user6", numApps: 3, points: 95 },
+      { username: "user9", numApps: 4, points: 35 },
+      { username: "user7", numApps: 2, points: 65 },
+      { username: "user8", numApps: 1, points: 80 },
+      { username: "user10", numApps: 5, points: 75 },
+      { username: "user1", numApps: 3, points: 80 },
+      { username: "user4", numApps: 4, points: 60 },
+      { username: "user3", numApps: 2, points: 40 },
+      { username: "user5", numApps: 1, points: 20 },
+      { username: "user2", numApps: 5, points: 100 },
+      { username: "user6", numApps: 3, points: 95 },
+      { username: "user9", numApps: 4, points: 35 },
+      { username: "user7", numApps: 2, points: 65 },
+      { username: "user8", numApps: 1, points: 80 },
+      { username: "user10", numApps: 5, points: 75 },
     ];
     const sortedData = testData.sort((a, b) => b.points - a.points); // Sort by points descending
     setUsers(sortedData);
@@ -27,28 +42,29 @@ function Leaderboard() {
   // }, []);
 
   return (
-    <><h2>Leaderboard 🏆</h2><div className="leaderboard">
-      <li>
-        <ol>
-          {users.map((user, i) => {
+    <div className="leaderboard">
+      <h2>Leaderboard 🏆</h2>
+      <ol>
+        {users
+          .sort((a, b) => b.points - a.points) // optional: keep it sorted by points
+          .slice(0, 10) // cap to top 10
+          .map((user, i) => {
             let rankDisplay = "";
             if (i === 0) rankDisplay = "🥇";
             else if (i === 1) rankDisplay = "🥈";
             else if (i === 2) rankDisplay = "🥉";
             else rankDisplay = `${i + 1}`;
-
             return (
               <li key={i} className="fade-in">
                 <span className="rank">{rankDisplay}</span>
                 <span className="user">{user.username}</span>
+                <span className="apps">{user.numApps} applications </span>
                 <span className="points">{user.points} pts</span>
               </li>
             );
           })}
-        </ol>
-      </li>
-    </div></>
-
+      </ol>
+    </div>
 
     // <table>
     //   <thead>
