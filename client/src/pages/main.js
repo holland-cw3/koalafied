@@ -39,6 +39,17 @@ async function load(
       if (data.notes != "") {
         document.getElementById("noteField").value = data.notes;
       }
+
+      setTimeout(() => {
+        let applications = data.applications;
+        for (let i = 0; i < applications.length; i++) {
+          let item = applications[i];
+          document.getElementById(
+            "status_" + item.company + item.position
+          ).value = item.status;
+        }
+      }, 300);
+
       return;
     } else {
       alert("User not authenticated");
@@ -312,7 +323,14 @@ function App() {
                   const success = await submitNewApp();
                   if (success) {
                     await new Promise((res) => setTimeout(res, 300)); // short delay
-                    await load(setApps);
+                    await load(
+                      setApps,
+                      setUsername,
+                      setNumKoalas,
+                      setNumApps,
+                      setNumInterviews,
+                      setNumOffers
+                    );
                     handleClose();
                   }
                 }}
@@ -420,11 +438,20 @@ function App() {
                           <option value="Rejected">Rejected</option>
                         </select>
                         <button
-                          onClick={() => {
+                          onClick={async () => {
                             updateStatus(
                               item.company,
                               item.position,
                               "status_" + item.company + item.position
+                            );
+                            await new Promise((res) => setTimeout(res, 300)); // short delay
+                            await load(
+                              setApps,
+                              setUsername,
+                              setNumKoalas,
+                              setNumApps,
+                              setNumInterviews,
+                              setNumOffers
                             );
                           }}
                         >
