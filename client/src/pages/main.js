@@ -1,13 +1,45 @@
 import Footer from "../components/footer";
 import Header from "../components/header";
 import React, { useState } from "react";
+import { useEffect } from "react";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 import "../CSS/main.css";
 
+async function load(setApps) {
+  const token = localStorage.getItem("token");
+
+  try {
+    const response = await fetch("http://localhost:5000/viewApplications", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data.applications);
+      setApps(data.applications);
+      return;
+    } else {
+      alert("User not authenticated");
+    }
+  } catch (error) {
+    console.error("Error submitting data:", error);
+  }
+}
+
+
+
 function App() {
+  if (!localStorage.getItem("token")) {
+    window.location.href = "/login";
+  }
+
   // States for stats
   // Load this data from the server
   // When loading in user's notes used doc get el by id to add notes in
@@ -106,6 +138,12 @@ function App() {
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
       );
   }
+
+  const [apps, setApps] = useState([])
+
+  useEffect(() => {
+    load(setApps);
+  }, []);
 
   return (
     <div className="App">
