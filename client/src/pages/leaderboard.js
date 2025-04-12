@@ -27,33 +27,56 @@ function Leaderboard() {
   // }, []);
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Rank</th>
-          <th>Username</th>
-          <th># of Applications</th>
-          <th>Points</th>
-        </tr>
-      </thead>
-      <tbody>
-        {users.map((user, i) => {
-          let medal = "";
-          if (i === 0) medal = "🥇";
-          else if (i === 1) medal = "🥈";
-          else if (i === 2) medal = "🥉";
+    <><h2>Leaderboard 🏆</h2><div className="leaderboard">
+      <li>
+        <ol>
+          {users.map((user, i) => {
+            let rankDisplay = "";
+            if (i === 0) rankDisplay = "🥇";
+            else if (i === 1) rankDisplay = "🥈";
+            else if (i === 2) rankDisplay = "🥉";
+            else rankDisplay = `${i + 1}`;
 
-          return (
-            <tr key={i} className="fade-in">
-              <td>{medal || i + 1}</td>
-              <td>{user.username}</td>
-              <td>{user.numApps}</td>
-              <td>{user.points}</td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+            return (
+              <li key={i} className="fade-in">
+                <span className="rank">{rankDisplay}</span>
+                <span className="user">{user.username}</span>
+                <span className="points">{user.points} pts</span>
+              </li>
+            );
+          })}
+        </ol>
+      </li>
+    </div></>
+
+
+    // <table>
+    //   <thead>
+    //     <tr>
+    //       <th>Rank</th>
+    //       <th>Username</th>
+    //       <th># of Applications</th>
+    //       <th>Points</th>
+    //     </tr>
+    //   </thead>
+    //   <tbody>
+    //     {users.map((user, i) => {
+    //       let medal = "";
+    //       if (i === 0) medal = "🥇";
+    //       else if (i === 1) medal = "🥈";
+    //       else if (i === 2) medal = "🥉";
+
+    //       return (
+    //         <tr key={i} className="fade-in">
+    //           <td>{medal || i + 1}</td>
+    //           <td>{user.username}</td>
+    //           <td>{user.numApps}</td>
+    //           <td>{user.points}</td>
+    //         </tr>
+    //       );
+    //     })}
+    //   </tbody>
+    // </table>
   );
 }
 
