@@ -1,23 +1,28 @@
-h2 {
-  text-align: center;
-  font-family: sans-serif;
-  color: #333;
-  margin-top: 1rem;
+body {
+    height: 100vh; /* full viewport height */
+  }
+  
+.leaderboard {
+  width: 50%;
+  margin: 2rem auto;
+  padding: 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center; /* centers the header */
 }
 
-.leaderboard {
-    border-radius: 15px;
-    margin-bottom: 5%;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.leaderboard h2 {
+  font-family: sans-serif;
+  color: #333;
+  margin-bottom: 1rem;
 }
 
 .leaderboard ol {
-  list-style: none; /* Remove default 1., 2., etc. */
+  list-style: none;
   padding: 0;
   margin: 0;
+  text-align: left; /* keep list items aligned left */
 }
 
 .leaderboard li {
@@ -25,24 +30,31 @@ h2 {
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  background: white;
+  background: #f9f9f9;
   border-radius: 8px;
   margin: 8px 0;
   font-size: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  width: 50%;
+  transition: transform 0.2s;
+  gap: 1rem; /* optional spacing between items */
+}
+
+.leaderboard li span {
+  flex: 1; /* makes all spans take up equal space */
+  text-align: center;
 }
 
 .leaderboard li:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .rank {
   font-weight: bold;
-  margin-right: 1rem;
-  width: 2.5rem;
-  text-align: center;
+}
+
+.apps {
+  font-weight: 600;
+  color: #333;
 }
 
 .user {
