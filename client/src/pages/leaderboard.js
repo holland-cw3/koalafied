@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import '../CSS/leaderboard.css'
+
 
 function Leaderboard() {
   const [users, setUsers] = useState([]);
@@ -17,6 +19,7 @@ function Leaderboard() {
           <th>Username</th>
           <th>Rank</th>
           <th># of Applications</th>
+          <th>Points</th>
         </tr>
       </thead>
       <tbody>
@@ -26,6 +29,7 @@ function Leaderboard() {
             <td>{user.username}</td>
             <td>{user.rank}</td>
             <td>{user.numApps}</td>
+            <td>{user.points}</td>
           </tr>
         ))}
       </tbody>
