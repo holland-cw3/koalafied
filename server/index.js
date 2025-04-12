@@ -63,6 +63,21 @@ app.post("/createAccount", (request, response) => {
   });
 });
 
+app.post("/login", async (request, response) => {
+  const post_data = request.body;
+
+  const result = await login(post_data.username, post_data.password);
+
+  if (!result.success) {
+    return response.status(400).json({ message: result.message });
+  }
+
+  response.json({
+    message: "Login successful",
+    token: result.token,
+  });
+});
+
 app.get("/viewApplications", (request, response) => {
   const token = request.headers.authorization.split(" ")[1];
   verifyJWT(token);
@@ -122,6 +137,43 @@ app.post("/updateNotes", (request, response) => {
 });
 
 /// db operations
+
+async function login(username, password) {
+  try {
+    await client.connect();
+
+
+    const collection = client
+      .db(databaseAndCollection.db)
+      .collection(databaseAndCollection.collection);
+
+    const user = await collection.findOne({ username: username });
+
+    if (!user) {
+      console.error("User not found");
+      return { success: false, message: "User not found" }; 
+    }
+
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      console.error("Invalid password");
+      return { success: false, message: "Invalid password" }; 
+    }
+
+    const payload = { username: user.username };
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+
+    console.log("Login successful");
+    return { success: true, token: token }; 
+  } catch (e) {
+    console.error("Error during login:", e);
+    return { success: false, message: "Error during login" }; 
+  }
+}
+
+
 
 async function createAccount(username, password) {
   try {
