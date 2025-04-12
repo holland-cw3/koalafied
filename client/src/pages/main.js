@@ -14,11 +14,14 @@ async function load(
   setNumKoalas,
   setNumApps,
   setNumInterviews,
-  setNumOffers
+  setNumOffers,
+  setKoalaList,
+  koalaList
 ) {
   const token = localStorage.getItem("token");
 
   try {
+    // const response = await fetch("https://koala-fied-3.onrender.com/viewApplications", {
     const response = await fetch("http://localhost:5001/viewApplications", {
       method: "GET",
       headers: {
@@ -32,13 +35,33 @@ async function load(
       setApps(data.applications);
       setUsername(data.username);
       // Replace with length of list of koalas
-      setNumKoalas(0);
+      setNumKoalas(data.koalas.length);
       setNumApps(data.numApps);
       setNumInterviews(data.numInterviews);
       setNumOffers(data.numOffers);
-      if (data.notes != "") {
+
+      // Check if the users has received any new koala's
+      // If koalaList was never initialized ignore it
+      if (koalaList != data.koalas && koalaList != []) {
+        console.log("A NEW KOALA!!");
+      }
+
+      setKoalaList(data.koalas);
+
+      if (data.notes !== "") {
         document.getElementById("noteField").value = data.notes;
       }
+
+      setTimeout(() => {
+        let applications = data.applications;
+        for (let i = 0; i < applications.length; i++) {
+          let item = applications[i];
+          document.getElementById(
+            "status_" + item.company + item.position
+          ).value = item.status;
+        }
+      }, 300);
+
       return;
     } else {
       alert("User not authenticated");
@@ -58,20 +81,24 @@ async function submitNewApp(setApps) {
   const token = localStorage.getItem("token");
 
   try {
-    const response = await fetch("http://localhost:5001/addApplication", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        company: company,
-        position: position,
-        link: link,
-        date: date,
-        status: status,
-      }),
-    });
+    const response = await fetch(
+      // "https://koala-fied-3.onrender.com/addApplication",
+      "http://localhost:5001/addApplication",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          company: company,
+          position: position,
+          link: link,
+          date: date,
+          status: status,
+        }),
+      }
+    );
 
     if (response.ok) {
       return true;
@@ -90,16 +117,20 @@ async function saveNotes(setNotes) {
   let notes = document.getElementById("noteField").value;
 
   try {
-    const response = await fetch("http://localhost:5001/updateNotes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        notes: notes,
-      }),
-    });
+    const response = await fetch(
+      // "https://koala-fied-3.onrender.com/updateNotes",
+      "http://localhost:5001/updateNotes",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          notes: notes,
+        }),
+      }
+    );
 
     if (response.ok) {
       // const data = await response.json();
@@ -120,15 +151,12 @@ function App() {
   }
 
   // States for stats
-  // Load this data from the server
-  // When loading in user's notes used doc get el by id to add notes in
-  // State wont allow editing
   const [username, setUsername] = useState("User");
   const [numKoalas, setNumKoalas] = useState(0);
+  const [koalaList, setKoalaList] = useState([]);
   const [numApps, setNumApps] = useState(0);
   const [numInterviews, setNumInterviews] = useState(0);
   const [numOffers, setNumOffers] = useState(0);
-  const [notes, setNotes] = useState("");
 
   // States for table
   const [selectedSorting, setSelectedSorting] = useState("newest");
@@ -157,19 +185,23 @@ function App() {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch("http://localhost:5001/updateStatus", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          user: username,
-          company: company,
-          position: position,
-          status: newStatus,
-        }),
-      });
+      const response = await fetch(
+        // "https://koala-fied-3.onrender.com/updateStatus",
+        "http://localhost:5001/updateStatus",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            user: username,
+            company: company,
+            position: position,
+            status: newStatus,
+          }),
+        }
+      );
 
       if (response.ok) {
         return true;
@@ -213,7 +245,9 @@ function App() {
       setNumKoalas,
       setNumApps,
       setNumInterviews,
-      setNumOffers
+      setNumOffers,
+      setKoalaList,
+      koalaList
     );
   }, []);
 
@@ -312,7 +346,16 @@ function App() {
                   const success = await submitNewApp();
                   if (success) {
                     await new Promise((res) => setTimeout(res, 300)); // short delay
-                    await load(setApps);
+                    await load(
+                      setApps,
+                      setUsername,
+                      setNumKoalas,
+                      setNumApps,
+                      setNumInterviews,
+                      setNumOffers,
+                      setKoalaList,
+                      koalaList
+                    );
                     handleClose();
                   }
                 }}
@@ -404,7 +447,7 @@ function App() {
                     <tr>
                       <td>{item.company}</td>
                       <td>
-                        <a href={item.link} target="_blank">
+                        <a href={item.link} target="_blank" rel="noreferrer">
                           {item.position}
                         </a>
                       </td>
@@ -420,11 +463,22 @@ function App() {
                           <option value="Rejected">Rejected</option>
                         </select>
                         <button
-                          onClick={() => {
+                          onClick={async () => {
                             updateStatus(
                               item.company,
                               item.position,
                               "status_" + item.company + item.position
+                            );
+                            await new Promise((res) => setTimeout(res, 300)); // short delay
+                            await load(
+                              setApps,
+                              setUsername,
+                              setNumKoalas,
+                              setNumApps,
+                              setNumInterviews,
+                              setNumOffers,
+                              setKoalaList,
+                              koalaList
                             );
                           }}
                         >

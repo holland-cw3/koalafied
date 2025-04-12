@@ -1,0 +1,14 @@
+{
+  "koalas": [
+    {
+      "filename": "koala1.jpg",
+      "name": "Basic Koala",
+      "description": "Just a chill guy looking to get hired"
+    },
+    {
+      "filename": "koala2.jpg",
+      "name": "Offer Koala",
+      "description": "The actual goat, good work dog"
+    }
+  ]
+}

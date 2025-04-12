@@ -215,6 +215,7 @@ async function createAccount(username, password) {
       points: 0,
       notes: "",
       applications: [],
+      koalas: [],
     };
 
     // Make sure username/email isnt already used

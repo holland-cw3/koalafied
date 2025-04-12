@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 
 async function login(username, password) {
   try {
+    // const response = await fetch("https://koala-fied-3.onrender.com/login", {
     const response = await fetch("http://localhost:5001/login", {
       method: "POST",
       headers: {
@@ -30,8 +31,8 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const handleSubmit = (e) => {
-    e.preventDefault(); 
-    login(username, password); 
+    e.preventDefault();
+    login(username, password);
   };
 
   return (
@@ -56,11 +57,20 @@ export default function Login() {
           type="password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button variant="contained" type="submit" sx={{backgroundColor:'green'}}>
+        <Button
+          variant="contained"
+          type="submit"
+          sx={{
+            backgroundColor: "green",
+            boxShadow: "0 4px 10px rgb(1, 30, 7)",
+          }}
+        >
           Login
         </Button>
 
-        <div>Don't Have an Account? <a href='/register'>Register here</a></div>
+        <div>
+          Don't Have an Account? <a href="/register">Register here</a>
+        </div>
       </form>
     </div>
   );
