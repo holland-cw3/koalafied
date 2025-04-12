@@ -7,13 +7,14 @@ function Leaderboard() {
 
   useEffect(() => {
     const testData = [
-      { username: "user1", rank: 1, numApps: 5, points: 100 },
-      { username: "user2", rank: 2, numApps: 3, points: 80 },
-      { username: "user3", rank: 3, numApps: 4, points: 60 },
-      { username: "user4", rank: 4, numApps: 2, points: 40 },
-      { username: "user5", rank: 5, numApps: 1, points: 20 },
+      { username: "user1", numApps: 3, points: 80 },
+      { username: "user4", numApps: 4, points: 60 },
+      { username: "user3", numApps: 2, points: 40 },
+      { username: "user5", numApps: 1, points: 20 },
+      { username: "user2", numApps: 5, points: 100 },
     ];
-    setUsers(testData);
+    const sortedData = testData.sort((a, b) => b.points - a.points); // Sort by points descending
+    setUsers(sortedData);
   }, []);
 
   // const [users, setUsers] = useState([]);
@@ -29,22 +30,28 @@ function Leaderboard() {
     <table>
       <thead>
         <tr>
-          <th>Username</th>
           <th>Rank</th>
+          <th>Username</th>
           <th># of Applications</th>
           <th>Points</th>
         </tr>
       </thead>
       <tbody>
-        {users.map((user, i) => (
-          <tr key={i}>
-            {/* <td>{i + 1}</td> */}
-            <td>{user.username}</td>
-            <td>{user.rank}</td>
-            <td>{user.numApps}</td>
-            <td>{user.points}</td>
-          </tr>
-        ))}
+        {users.map((user, i) => {
+          let medal = "";
+          if (i === 0) medal = "🥇";
+          else if (i === 1) medal = "🥈";
+          else if (i === 2) medal = "🥉";
+
+          return (
+            <tr key={i} className="fade-in">
+              <td>{medal || i + 1}</td>
+              <td>{user.username}</td>
+              <td>{user.numApps}</td>
+              <td>{user.points}</td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );
