@@ -33,7 +33,7 @@ async function load(setApps) {
   }
 }
 
-async function submitNewApp() {
+async function submitNewApp(setApps) {
   let company = document.getElementById("company").value;
   let position = document.getElementById("position").value;
   let link = document.getElementById("link").value;
@@ -59,7 +59,7 @@ async function submitNewApp() {
     });
 
     if (response.ok) {
-      
+      load(setApps);
       return;
     } else {
       alert("User not authenticated");
@@ -99,6 +99,9 @@ function App() {
   // State for modal
   const [open, setOpen] = useState(false);
 
+  const [apps, setApps] = useState([]);
+  let ApplicationList = apps
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -109,22 +112,6 @@ function App() {
 
   // list of user's applications
   // Get this from mongo db
-  let ApplicationList = [
-    {
-      company: "GeoCam",
-      position: "SWE Intern",
-      link: "https://geocam.app/link",
-      date: "4/19/2025",
-      status: "Applied",
-    },
-    {
-      company: "Club Running",
-      position: "Webmaster",
-      link: "https://umdclubrunning.com",
-      date: "4/05/2025",
-      status: "Interviewed",
-    },
-  ];
 
   function updateStatus(company, position, selectId) {
     // Replace this with function to update the position status using the express endpoint
@@ -167,7 +154,8 @@ function App() {
       );
   }
 
-  const [apps, setApps] = useState([]);
+  
+
 
   useEffect(() => {
     load(setApps);
@@ -264,7 +252,11 @@ function App() {
 
               <button
                 type="submit"
-                onClick={submitNewApp}
+                onClick={() => {
+                  submitNewApp(setApps)
+                  
+                
+                }}
                 className="line bg-blue-500 text-white px-4 py-2 rounded"
               >
                 Submit
