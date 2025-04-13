@@ -10,49 +10,49 @@
       "id": "applicationKoala1",
       "filename": "applicationKoala1.png",
       "name": "Application Koala 1",
-      "description": "for 10 apps"
+      "description": "10 apps! You are on the right track! Maybe one of them will be the one but in the meantime, keep applying!"
     },
     {
       "id": "applicationKoala2",
       "filename": "applicationKoala2.png",
       "name": "Application Koala 2",
-      "description": "for 25 apps"
+      "description": "25 apps! Koalas make tree-mendous climbers! Keep going up!"
     },
     {
       "id": "applicationKoala3",
       "filename": "applicationKoala3.png",
       "name": "Application Koala 3",
-      "description": "for 50 apps"
+      "description": "50 apps! OHHH WE'RE HALFWAY THERE! OH-OH, LIVIN ON A PRAYER! KEEP APPLYING YOU'LL MAKE IT, I SWEAR!"
     },
     {
       "id": "applicationKoala4",
       "filename": "applicationKoala4.png",
       "name": "Application Koala 4",
-      "description": "for 100 apps"
+      "description": "100 APPS! YOU DID IT! YOU'RE A LEGEND! YOU'RE A ROCKSTAR! YOU'RE A KOALASTAR! KOALASTARS KEEP APPLYING! KOALASTARS GET HIRED!"
     },
     {
       "id": "interviewKoala1",
-      "filename": "interviewKoala1.png",
+      "filename": "basicKoala.png",
       "name": "Interview Koala 1",
-      "description": "for 1 interview"
+      "description": "Your First Interview! Keep calm and Koala on!"
     },
     {
       "id": "interviewKoala2",
       "filename": "interviewKoala2.png",
       "name": "Interview Koala 2",
-      "description": "for 5 interviews"
+      "description": "5 Interviews! Here's a little koala Haiku! Soft eucalyptus, Dreaming trees cradle my rest, Stillness conquers storms. Let the calm and resilience of the koala inspire you to carry on. 🐨"
     },
     {
       "id": "interviewKoala3",
       "filename": "interviewKoala3.png",
       "name": "Interview Koala 3",
-      "description": "for 10 interviews"
+      "description": "10 interviews! Go ahead and show them you're KOALAFIED for the job!"
     },
     {
       "id": "offerKoala",
       "filename": "basicKoala.png",
       "name": "Offer Koala",
-      "description": "for an offer, congradulations!"
+      "description": "OMG YOU DID IT! YOU REALLY DID IT! NOT A LOT OF PEOPLE DO IT BUT YOU DID IT! DO YOU EVEN KNOW WHAT YOU'VE DONE! YOU JUST KOALAFIED FOR THE JOB! CONGRATS! King Koala is so proud of you!"
     }
   ]
 }
