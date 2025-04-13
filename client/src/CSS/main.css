@@ -218,10 +218,12 @@ button {
   padding: 20px;
   border-radius: 5px;
   font-size: 18px;
-  box-shadow: 9px 9px;
+  box-shadow: 9px 9px black;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  color: white;
+  text-shadow: 2px 2px black;
 }
 
 .koalas p {
@@ -342,13 +344,13 @@ button {
   box-shadow: 4px 4px black;
 }
 
-.QuestTitle{
+.QuestTitle {
   text-shadow: 3px 3px black;
   color: green;
   margin-bottom: -10px;
 }
 
-.statNotes.over{
+.statNotes.over {
   max-height: 5vh;
   overflow-y: scroll;
 }
