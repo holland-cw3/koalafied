@@ -4,6 +4,10 @@ import { useEffect } from "react";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
+
+import profile from "../images/profile.png";
 
 import "../CSS/main.css";
 const globalKoalaList = require("../koalas/koalas.json").koalas;
@@ -442,7 +446,7 @@ function App() {
           filename: koala.filename,
           elemId: koala.id + "-" + i,
           leftPos: Math.random() * 1000,
-          bottomPos: Math.random() * 10,
+          topPos: Math.random() * 10,
           direction: Math.random() < 0.5 ? "left" : "right",
           zIndex: Math.random() * 100 + 50,
           src: require("../koalas/" + koala.filename),
@@ -545,7 +549,6 @@ function App() {
         koalaObjList,
         statusTimeout,
         "update status"
-        // koalaListChanged
       );
 
       if (response.ok) {
@@ -809,19 +812,18 @@ function App() {
       )}
 
       <div className="tableBody">
-        <div className="stats">
-          <div className="stats2">
-            <h2>
-              <span class="underline">Stats For:</span>
-              <span class="us">{username}</span>
-            </h2>
-            <h3 class="kCount">Koala Count: {numKoalas}</h3>
-            <h3 className="silver">Applications: {numApps}</h3>
-            <h3 className="bronze">Interviews: {numInterviews}</h3>
-            <h3 className="gold">Offers: {numOffers}</h3>
-            <h3 className="kCount">New Koalas:</h3>
+        <div className="notes">
+          <div class="stats">
+            <h2>Hello, {username}</h2>
+            <div class="statNotes">
+              <h3 class="bronze">Applications - {numApps}</h3>
+              <h3 class="silver">Interviews - {numInterviews}</h3>
+              <h3 class="gold">Offer(s) - {numOffers}</h3>
+              <h3 class="kCount">Koala(s) - {numKoalas}</h3>
+            </div>
           </div>
         </div>
+
         <div className="table">
           <h4 class="sorter">
             <span className="line">
@@ -862,7 +864,7 @@ function App() {
               Add Application
             </button>
           </h4>
-          <div className="appTable overflow-x-auto max-w-full">
+          <div className="appTable ">
             {apps.length > 0 ? (
               <table className="table-auto apps">
                 <thead>
