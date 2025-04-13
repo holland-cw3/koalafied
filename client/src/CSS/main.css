@@ -236,11 +236,14 @@ button {
 .appTable {
   height: 45vh;
   overflow: scroll;
-
 }
 
 .statusSelect {
   max-width: 46%;
+}
+
+.koalaDesPic {
+  width: 10vw;
 }
 
 ::-webkit-scrollbar {
