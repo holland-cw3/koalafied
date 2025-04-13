@@ -776,12 +776,25 @@ function App() {
       <div className="tableBody">
         <div className="notes">
           <div class="stats">
-            <h2>Hello, {username}</h2>
+            <h2>Hello, {username}!</h2>
             <div class="statNotes">
               <h3 class="bronze">Applications - {numApps}</h3>
               <h3 class="silver">Interviews - {numInterviews}</h3>
               <h3 class="gold">Offer(s) - {numOffers}</h3>
               <h3 class="kCount">Koala(s) - {numKoalas}</h3>
+              
+            </div>
+            <h4 className='QuestTitle'>Quests:</h4>
+            <div class="statNotes over">
+              
+              {10 - numApps <= 0 ? <></>: <h3 class="bronze">Apply to {10 - numApps} Jobs</h3>}
+              {25 - numApps <= 0 ? <></>: <h3 class="bronze">Apply to {25 - numApps} Jobs</h3>}
+              {50 - numApps <= 0 ? <></>: <h3 class="bronze">Apply to {50 - numApps} Jobs</h3>}
+              {100 - numApps <= 0 ? <></>: <h3 class="bronze">Apply to {100 - numApps} Jobs</h3>}
+              {1 - numInterviews <= 0 ? <></>: <h3 class="silver">Get Your First Interview!</h3>}
+              {5 - numInterviews <= 0 ? <></>: <h3 class="silver">Have {5 - numInterviews} Interviews</h3>}
+              {10 - numInterviews <= 0 ? <></>: <h3 class="silver">Have {10 - numInterviews} Interviews</h3>}
+              {1 - numOffers <= 0 ? <></>: <h3 class="gold">Scure Your First Offer!</h3>}
             </div>
           </div>
         </div>
