@@ -598,7 +598,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
+      <Header isHomePage={true} />
       <Modal
         open={open}
         onClose={handleClose}
@@ -792,9 +792,8 @@ function App() {
               <h3 class="silver">Interviews - {numInterviews}</h3>
               <h3 class="gold">Offer(s) - {numOffers}</h3>
               <h3 class="kCount">Koala(s) - {numKoalas}</h3>
-              
             </div>
-            <h4 className='QuestTitle'>Quests:</h4>
+            <h4 className="QuestTitle">Quests:</h4>
             <div class="statNotes over">
               
               {10 - numApps <= 0 ? <></>: <h3 class="bronze">Apply to {10 - numApps} Jobs <img src={p1} alt='prof' class='prof'></img></h3>}

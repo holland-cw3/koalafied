@@ -1,5 +1,6 @@
 body {
-  height: 100vh; /* full viewport height */
+  height: 100vh;
+  overflow: hidden;
 }
 
 .home-btn {
@@ -26,7 +27,7 @@ a {
 .leaderboard {
   width: 50%;
   margin: 2rem auto;
-  margin-top: 5rem;
+  margin-top: 2rem;
   padding: 1rem;
   background: tan;
   border-radius: 12px;
