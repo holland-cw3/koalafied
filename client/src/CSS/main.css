@@ -11,6 +11,7 @@
   margin-right: 2vw;
   margin-left: 2vw;
   margin-top: -1vh;
+
 }
 
 thead {
@@ -22,6 +23,9 @@ thead {
 
 .apps {
   background-image: url("../images/tbbg.png");
+  box-shadow: 9px 9px;
+  border-radius: 3px;
+
 }
 
 table tbody tr {
@@ -241,4 +245,19 @@ button {
 
 ::-webkit-scrollbar {
   display: none;
+}
+
+
+.noApps{
+  width: 100%;
+  background-image: url('../images/searcher.png');
+  filter: brightness(0.5);
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+  height: 45vh;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }

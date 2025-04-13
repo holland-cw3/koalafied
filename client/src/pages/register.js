@@ -22,8 +22,6 @@ async function login(username, password) {
     if (response.ok) {
       const res = await response.json();
       localStorage.setItem("token", res.token);
-      alert('success')
-      alert(localStorage.getItem("token"));
       window.location.href = "/";
     } else {
       alert('Error: Username Already Exists');

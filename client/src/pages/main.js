@@ -643,6 +643,7 @@ function App() {
             </button>
           </h4>
           <div className="appTable overflow-x-auto max-w-full">
+            {(apps.length > 0 ?
             <table className="table-auto apps">
               <thead>
                 <tr>
@@ -706,7 +707,11 @@ function App() {
                     </tr>
                   ))}
               </tbody>
-            </table>
+            </table> : <div class='noApps'>
+          
+            Nothing to see here! Start Applying!
+            
+            </div>)}
           </div>
         </div>
         <div className="notes">
