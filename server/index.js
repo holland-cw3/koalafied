@@ -99,11 +99,22 @@ function verifyJWT(token) {
 
 //  Endpoints
 
-app.post("/createAccount", (request, response) => {
+app.post("/createAccount", async (request, response) => {
   const post_data = request.body;
 
-  createAccount(post_data.username, post_data.password);
+  const res = await createAccount(post_data.username, post_data.password);
 
+  if (res === 0){
+    console.error('username exists')
+    return response.status(401).json({
+      success: false,
+      message: "Error! Username Already Exists",
+    });
+    
+  }
+
+  console.error('movin')
+  
   const payload = {
     username: post_data.username,
   };
@@ -249,12 +260,24 @@ async function createAccount(username, password) {
     };
 
     // Make sure username/email isnt already used
+    const collection = client
+    .db(databaseAndCollection.db)
+    .collection(databaseAndCollection.collection);
+
+    const userA = await collection.findOne({ username: username });
+
+    if (userA) {
+      return 0;
+    }
+
 
     // Add user to the database
     const res = await client
       .db(databaseAndCollection.db)
       .collection(databaseAndCollection.collection)
       .insertOne(user);
+
+    return 1;
   } catch (e) {
     console.error(e);
   }
