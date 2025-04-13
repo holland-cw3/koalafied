@@ -618,16 +618,18 @@ function App() {
           <Box
             sx={{
               position: "absolute",
-              top: "25%",
-              left: "22.5%",
-              width: "50%",
-              bgcolor: "background.paper",
+              top: "18%",
+              left: "33.5%",
+              width: "27%",
+              bgcolor: "#9f7e53",
               boxShadow: 24,
               p: 4,
               borderRadius: 2,
+              border:'1px solid black'
             }}
           >
-            <div className="flex justify-between items-center mb-4">
+            <div class='newKoala'>
+              <div class='modalHeader'>
               {newKoala ? (
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                   New Koala Unlockled!
@@ -639,14 +641,22 @@ function App() {
               )}
               <button
                 onClick={handleClose}
-                className="text-gray-500 hover:text-black text-xl font-bold"
+                className="closeModalBtn"
                 aria-label="Close"
               >
                 &times;
               </button>
+              </div>
               <h3>{koalaName}</h3>
+              <div class='kDesc'>
+              
+              <div class='centerr'>
+              <img src={koalaImage} className="koalaDesPic" alt='koala'></img>
               <p>{koalaDesc}</p>
-              <img src={koalaImage} className="koalaDesPic"></img>
+
+              </div>
+              </div>
+             
             </div>
           </Box>
         )}
@@ -707,6 +717,7 @@ function App() {
             </button>
           </h4>
           <div className="appTable overflow-x-auto max-w-full">
+            {(apps.length > 0 ?
             <table className="table-auto apps">
               <thead>
                 <tr>
@@ -770,7 +781,11 @@ function App() {
                     </tr>
                   ))}
               </tbody>
-            </table>
+            </table> : <div class='noApps'>
+          
+            Nothing to see here! Start Applying!
+            
+            </div>)}
           </div>
         </div>
         <div className="notes">

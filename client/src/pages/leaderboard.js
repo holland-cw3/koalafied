@@ -48,7 +48,7 @@ function Leaderboard() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5001/api/leaderboard")
+    fetch("https://koala-fied-3.onrender.com/api/leaderboard")
       .then((res) => res.json())
       .then((data) => {
         const sorted = data.sort((a, b) => b.points - a.points);
