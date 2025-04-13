@@ -680,6 +680,7 @@ function App() {
                   variant="outlined"
                   fullWidth
                   sx={{ mb: 1 }}
+                  className="hideOutline"
                   InputProps={{
                     style: {
                       backgroundColor: "#d2b48c",
@@ -698,6 +699,8 @@ function App() {
                   fullWidth
                   required
                   sx={{ mb: 1 }}
+                  className="hideOutline"
+                  value={date}
                   InputLabelProps={{
                     shrink: true, // Ensures the label stays above the input
                   }}
@@ -839,15 +842,65 @@ function App() {
             </div>
             <h4 className="QuestTitle">Quests:</h4>
             <div class="statNotes over">
-              
-              {10 - numApps <= 0 ? <></>: <h3 class="bronze">Apply to {10 - numApps} Jobs <img src={p1} alt='prof' class='prof'></img></h3>}
-              {25 - numApps <= 0 ? <></>: <h3 class="bronze">Apply to {25 - numApps} Jobs <img src={p2} alt='prof' class='prof'></img></h3>}
-              {50 - numApps <= 0 ? <></>: <h3 class="bronze">Apply to {50 - numApps} Jobs <img src={p3} alt='prof' class='prof'></img></h3>}
-              {100 - numApps <= 0 ? <></>: <h3 class="bronze">Apply to {100 - numApps} Jobs <img src={p4} alt='prof' class='prof'></img></h3>}
-              {1 - numInterviews <= 0 ? <></>: <h3 class="silver">Your First Interview! <img src={p5} alt='prof' class='prof'></img></h3>}
-              {5 - numInterviews <= 0 ? <></>: <h3 class="silver">Have {5 - numInterviews} Interviews <img src={p6} alt='prof' class='prof'></img></h3>}
-              {10 - numInterviews <= 0 ? <></>: <h3 class="silver">Have {10 - numInterviews} Interviews <img src={p7} alt='prof' class='prof'></img></h3>}
-              <h3 class="gold">Secure An Offer! <img src={p8} alt='prof' class='prof'></img></h3>
+              {10 - numApps <= 0 ? (
+                <></>
+              ) : (
+                <h3 class="bronze">
+                  Apply to {10 - numApps} Jobs{" "}
+                  <img src={p1} alt="prof" class="prof"></img>
+                </h3>
+              )}
+              {25 - numApps <= 0 ? (
+                <></>
+              ) : (
+                <h3 class="bronze">
+                  Apply to {25 - numApps} Jobs{" "}
+                  <img src={p2} alt="prof" class="prof"></img>
+                </h3>
+              )}
+              {50 - numApps <= 0 ? (
+                <></>
+              ) : (
+                <h3 class="bronze">
+                  Apply to {50 - numApps} Jobs{" "}
+                  <img src={p3} alt="prof" class="prof"></img>
+                </h3>
+              )}
+              {100 - numApps <= 0 ? (
+                <></>
+              ) : (
+                <h3 class="bronze">
+                  Apply to {100 - numApps} Jobs{" "}
+                  <img src={p4} alt="prof" class="prof"></img>
+                </h3>
+              )}
+              {1 - numInterviews <= 0 ? (
+                <></>
+              ) : (
+                <h3 class="silver">
+                  Your First Interview!{" "}
+                  <img src={p5} alt="prof" class="prof"></img>
+                </h3>
+              )}
+              {5 - numInterviews <= 0 ? (
+                <></>
+              ) : (
+                <h3 class="silver">
+                  Have {5 - numInterviews} Interviews{" "}
+                  <img src={p6} alt="prof" class="prof"></img>
+                </h3>
+              )}
+              {10 - numInterviews <= 0 ? (
+                <></>
+              ) : (
+                <h3 class="silver">
+                  Have {10 - numInterviews} Interviews{" "}
+                  <img src={p7} alt="prof" class="prof"></img>
+                </h3>
+              )}
+              <h3 class="gold">
+                Secure An Offer! <img src={p8} alt="prof" class="prof"></img>
+              </h3>
             </div>
           </div>
         </div>
