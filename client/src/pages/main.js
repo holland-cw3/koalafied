@@ -116,7 +116,8 @@ async function load(
           handleOpenNewKoala(
             newKoala.name,
             newKoala.description,
-            newKoala.filename
+            newKoala.filename,
+            true
           );
 
           console.log(
@@ -248,6 +249,7 @@ function App() {
   const [koalaName, setKoalaName] = useState("");
   const [koalaDesc, setKoalaDesc] = useState("");
   const [koalaImage, setKoalaImage] = useState("");
+  const [newKoala, setNewKoala] = useState(true);
 
   const [apps, setApps] = useState([]);
 
@@ -320,17 +322,19 @@ function App() {
     setModalAddingApp(true);
   };
 
-  const handleOpenNewKoala = (name, desc, filename) => {
+  const handleOpenNewKoala = (name, desc, filename, isNewKoala) => {
     setOpen(true);
     setModalAddingApp(false);
     setKoalaName(name);
     setKoalaDesc(desc);
+    setNewKoala(isNewKoala);
     setKoalaImage(koalaImages[filename]);
   };
 
   const handleClose = () => {
     setOpen(false);
     setModalAddingApp(true);
+    setNewKoala(true);
   };
 
   // list of user's applications
@@ -589,9 +593,15 @@ function App() {
             }}
           >
             <div className="flex justify-between items-center mb-4">
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                New Koala Unlockled!
-              </Typography>
+              {newKoala ? (
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                  New Koala Unlockled!
+                </Typography>
+              ) : (
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                  Your Koala!
+                </Typography>
+              )}
               <button
                 onClick={handleClose}
                 className="text-gray-500 hover:text-black text-xl font-bold"
@@ -749,7 +759,7 @@ function App() {
                   zIndex: item.zIndex,
                 }}
                 onClick={() =>
-                  handleOpenNewKoala(item.name, item.desc, item.filename)
+                  handleOpenNewKoala(item.name, item.desc, item.filename, false)
                 }
               ></img>
             ))}
