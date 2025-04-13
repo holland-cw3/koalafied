@@ -16,7 +16,6 @@ import p6 from "../images/profiles/interviewKoala2Prof.png";
 import p7 from "../images/profiles/interviewKoala3Prof.png";
 import p8 from "../images/profiles/offerKoalaProf.png";
 
-
 import "../CSS/main.css";
 const globalKoalaList = require("../koalas/koalas.json").koalas;
 
@@ -610,90 +609,135 @@ function App() {
           <Box
             sx={{
               position: "absolute",
-              top: "25%",
-              left: "22.5%",
-              width: "50%",
-              height: "40vh",
-              bgcolor: "background.paper",
-              display: "flex",
-              flexDirection: "column",
-
+              top: "13%",
+              left: "33.5%",
+              width: "27%",
+              bgcolor: "#9f7e53",
               boxShadow: 24,
               p: 4,
               borderRadius: 2,
+              border: "1px solid black",
             }}
           >
-            <div className="flex justify-between items-center mb-4">
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                Add A New Application
-              </Typography>
-              <button
-                onClick={handleClose}
-                className="text-gray-500 hover:text-black text-xl font-bold"
-                aria-label="Close"
-              >
-                &times;
-              </button>
+            <div className="flex justify-center items-center mb-4">
+              <div class="modalHeader">
+                <Typography
+                  id="modal-modal-title"
+                  variant="h6"
+                  component="h2"
+                  className="text-gray-700 font-bold"
+                >
+                  Add A New Application
+                </Typography>
+
+                <button
+                  onClick={handleClose}
+                  className="closeModalBtn"
+                  aria-label="Close"
+                >
+                  &times;
+                </button>
+              </div>
 
               {/* form inputs here */}
               <div id="modal-modal-description">
-                <div className="line mb-2">
-                  <label htmlFor="company">Company:</label>
-                  <input
-                    type="text"
-                    id="company"
-                    className="w-full p-2 border rounded"
-                    required
-                  />
-                </div>
+                <TextField
+                  id="company"
+                  label="Company"
+                  variant="outlined"
+                  fullWidth
+                  required
+                  sx={{ mb: 1 }}
+                  InputProps={{
+                    style: {
+                      backgroundColor: "#d2b48c",
+                      padding: "10px",
+                      borderRadius: "5px",
+                      boxShadow: "2px 2px",
+                    },
+                  }}
+                />
 
-                <div className="line mb-2">
-                  <label htmlFor="position">Position:</label>
-                  <input
-                    type="text"
-                    id="position"
-                    className="w-full p-2 border rounded"
-                    required
-                  />
-                </div>
+                <TextField
+                  id="position"
+                  label="Position"
+                  variant="outlined"
+                  fullWidth
+                  required
+                  sx={{ mb: 1 }}
+                  InputProps={{
+                    style: {
+                      backgroundColor: "#d2b48c",
+                      padding: "10px",
+                      borderRadius: "5px",
+                      boxShadow: "2px 2px",
+                    },
+                  }}
+                />
+                <TextField
+                  id="link"
+                  label="Link"
+                  variant="outlined"
+                  fullWidth
+                  sx={{ mb: 1 }}
+                  InputProps={{
+                    style: {
+                      backgroundColor: "#d2b48c",
+                      padding: "10px",
+                      borderRadius: "5px",
+                      boxShadow: "2px 2px",
+                    },
+                  }}
+                />
 
-                <div className="line mb-2">
-                  <label htmlFor="link">Link:</label>
-                  <input
-                    type="url"
-                    id="link"
-                    className="w-full p-2 border rounded"
-                  />
-                </div>
+                <TextField
+                  id="date"
+                  label="Date"
+                  type="date"
+                  variant="outlined"
+                  fullWidth
+                  required
+                  sx={{ mb: 1 }}
+                  InputLabelProps={{
+                    shrink: true, // Ensures the label stays above the input
+                  }}
+                  InputProps={{
+                    style: {
+                      backgroundColor: "#d2b48c",
+                      padding: "10px",
+                      borderRadius: "5px",
+                      boxShadow: "2px 2px",
+                    },
+                  }}
+                />
 
-                <div className="line mb-2">
-                  <label htmlFor="date">Date:</label>
-                  <input
-                    type="date"
-                    id="date"
-                    value={date}
-                    className="w-full p-2 border rounded"
-                    required
-                  />
-                </div>
-
-                <div className="line mb-4">
-                  <label htmlFor="status">Status:</label>
-                  <select
-                    id="status"
-                    className="w-full p-2 border rounded"
-                    defaultValue="Applied"
-                    required
-                  >
-                    <option value="Applied">Applied</option>
-                    <option value="Interviewed">Interviewed</option>
-                    <option value="Offered">Offered</option>
-                    <option value="Rejected">Rejected</option>
-                  </select>
-                </div>
+                <TextField
+                  id="status"
+                  label="Status"
+                  variant="outlined"
+                  select
+                  fullWidth
+                  defaultValue="Applied"
+                  required
+                  sx={{ mb: 1 }}
+                  InputProps={{
+                    style: {
+                      backgroundColor: "#d2b48c",
+                      padding: "10px",
+                      borderRadius: "5px",
+                      boxShadow: "2px 2px",
+                    },
+                  }}
+                >
+                  <MenuItem value="Applied">Applied</MenuItem>
+                  <MenuItem value="Interviewed">Interviewed</MenuItem>
+                  <MenuItem value="Offered">Offered</MenuItem>
+                  <MenuItem value="Rejected">Rejected</MenuItem>
+                </TextField>
 
                 <button
                   type="submit"
+                  class="loginBtn"
                   onClick={async () => {
                     const success = await submitNewApp();
                     if (success) {
@@ -784,9 +828,9 @@ function App() {
       <div className="tableBody">
         <div className="notes">
           <div class="stats">
-           <div class='rowS'>
-           <h2>Hello, {username}!</h2> 
-            </div> 
+            <div class="rowS">
+              <h2>Hello, {username}!</h2>
+            </div>
             <div class="statNotes">
               <h3 class="bronze">Applications - {numApps}</h3>
               <h3 class="silver">Interviews - {numInterviews}</h3>
@@ -795,15 +839,70 @@ function App() {
             </div>
             <h4 className="QuestTitle">Quests:</h4>
             <div class="statNotes over">
-              
-              {10 - numApps <= 0 ? <></>: <h3 class="bronze">Apply to {10 - numApps} Jobs <img src={p1} alt='prof' class='prof'></img></h3>}
-              {25 - numApps <= 0 ? <></>: <h3 class="bronze">Apply to {25 - numApps} Jobs <img src={p2} alt='prof' class='prof'></img></h3>}
-              {50 - numApps <= 0 ? <></>: <h3 class="bronze">Apply to {50 - numApps} Jobs <img src={p3} alt='prof' class='prof'></img></h3>}
-              {100 - numApps <= 0 ? <></>: <h3 class="bronze">Apply to {100 - numApps} Jobs <img src={p4} alt='prof' class='prof'></img></h3>}
-              {1 - numInterviews <= 0 ? <></>: <h3 class="silver">Your First Interview! <img src={p5} alt='prof' class='prof'></img></h3>}
-              {5 - numInterviews <= 0 ? <></>: <h3 class="silver">Have {5 - numInterviews} Interviews <img src={p6} alt='prof' class='prof'></img></h3>}
-              {10 - numInterviews <= 0 ? <></>: <h3 class="silver">Have {10 - numInterviews} Interviews <img src={p7} alt='prof' class='prof'></img></h3>}
-              {1 - numOffers <= 0 ? <></>: <h3 class="gold">Scure Your First Offer! <img src={p8} alt='prof' class='prof'></img></h3>}
+              {10 - numApps <= 0 ? (
+                <></>
+              ) : (
+                <h3 class="bronze">
+                  Apply to {10 - numApps} Jobs{" "}
+                  <img src={p1} alt="prof" class="prof"></img>
+                </h3>
+              )}
+              {25 - numApps <= 0 ? (
+                <></>
+              ) : (
+                <h3 class="bronze">
+                  Apply to {25 - numApps} Jobs{" "}
+                  <img src={p2} alt="prof" class="prof"></img>
+                </h3>
+              )}
+              {50 - numApps <= 0 ? (
+                <></>
+              ) : (
+                <h3 class="bronze">
+                  Apply to {50 - numApps} Jobs{" "}
+                  <img src={p3} alt="prof" class="prof"></img>
+                </h3>
+              )}
+              {100 - numApps <= 0 ? (
+                <></>
+              ) : (
+                <h3 class="bronze">
+                  Apply to {100 - numApps} Jobs{" "}
+                  <img src={p4} alt="prof" class="prof"></img>
+                </h3>
+              )}
+              {1 - numInterviews <= 0 ? (
+                <></>
+              ) : (
+                <h3 class="silver">
+                  Your First Interview!{" "}
+                  <img src={p5} alt="prof" class="prof"></img>
+                </h3>
+              )}
+              {5 - numInterviews <= 0 ? (
+                <></>
+              ) : (
+                <h3 class="silver">
+                  Have {5 - numInterviews} Interviews{" "}
+                  <img src={p6} alt="prof" class="prof"></img>
+                </h3>
+              )}
+              {10 - numInterviews <= 0 ? (
+                <></>
+              ) : (
+                <h3 class="silver">
+                  Have {10 - numInterviews} Interviews{" "}
+                  <img src={p7} alt="prof" class="prof"></img>
+                </h3>
+              )}
+              {1 - numOffers <= 0 ? (
+                <></>
+              ) : (
+                <h3 class="gold">
+                  Scure Your First Offer!{" "}
+                  <img src={p8} alt="prof" class="prof"></img>
+                </h3>
+              )}
             </div>
           </div>
         </div>
