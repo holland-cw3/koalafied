@@ -706,7 +706,7 @@ function App() {
                   required
                   sx={{ mb: 1 }}
                   className="hideOutline"
-                  value={date}
+                  defaultValue={date}
                   InputLabelProps={{
                     shrink: true, // Ensures the label stays above the input
                   }}
