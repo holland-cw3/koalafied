@@ -91,7 +91,6 @@ td {
   padding-left: 50px;
   padding-right: 50px;
 
-
   box-sizing: border-box;
   overflow-x: hidden;
 }
@@ -101,8 +100,6 @@ td {
   width: 19%;
 }
 
-
-
 .stats h2 {
   font-size: 17px;
   color: rgb(182, 92, 182);
@@ -111,7 +108,7 @@ td {
   flex-direction: column;
 }
 
-.stats h2  {
+.stats h2 {
   text-decoration: none !important;
   text-shadow: 2px 2px rgb(30, 96, 2);
   font-size: 25px;
@@ -254,10 +251,9 @@ button {
 }
 
 .appTable {
-  height: 38vh;
+  height: 42vh;
   overflow: scroll;
   box-shadow: 9px 9px;
-
 }
 
 .statusSelect {
@@ -331,7 +327,7 @@ button {
   align-items: center;
 }
 
-.statNotes{
+.statNotes {
   background-color: rgba(0, 0, 0, 0.5);
   padding-top: 10px;
 
@@ -339,7 +335,7 @@ button {
   border-radius: 5px;
 }
 
-.loginBtn{
+.loginBtn {
   background-color: green;
   width: 100%;
   border: none;

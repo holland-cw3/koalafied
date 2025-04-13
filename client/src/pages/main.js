@@ -12,13 +12,7 @@ import profile from "../images/profile.png";
 import "../CSS/main.css";
 const globalKoalaList = require("../koalas/koalas.json").koalas;
 
-function animateKoalas(
-  koalaObjList,
-  koalaTimeoutRef,
-  handleClose,
-  setKoalaFalling,
-  fallingKoalasRef
-) {
+function animateKoalas(koalaObjList, koalaTimeoutRef, handleClose) {
   // console.log("Animating!");
   // console.log(koalaObjList.length);
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -80,8 +74,6 @@ function animateKoalas(
         if (koala.isDragging) {
           koala.isDragging = false;
           koala.isFalling = true;
-          fallingKoalasRef.current.add(koala.id);
-          setKoalaFalling(true);
         }
       });
 
@@ -106,11 +98,6 @@ function animateKoalas(
         koala.bottomPos = 5;
         koala.velocityY = 0;
         koala.isFalling = false;
-        fallingKoalasRef.current.delete(koala.id);
-
-        if (fallingKoalasRef.current.size === 0) {
-          setKoalaFalling(false);
-        }
       }
 
       elem.style.bottom = `${koala.bottomPos}px`;
@@ -147,6 +134,7 @@ function animateKoalas(
             koala.bottomPos += Math.random() * 2 - 1;
             koala.bottomPos = clamp(koala.bottomPos, 5, 10);
             elem.style.bottom = `${koala.bottomPos}px`;
+            elem.style.zIndex = 10000000 - koala.bottomPos;
           }
 
           let doRotation = Math.random() * 10 >= 3;
@@ -178,13 +166,7 @@ function animateKoalas(
 
   clearTimeout(koalaTimeoutRef.current);
   koalaTimeoutRef.current = setTimeout(() => {
-    animateKoalas(
-      koalaObjList,
-      koalaTimeoutRef,
-      handleClose,
-      setKoalaFalling,
-      fallingKoalasRef
-    );
+    animateKoalas(koalaObjList, koalaTimeoutRef, handleClose);
   }, 100);
 }
 
@@ -392,7 +374,6 @@ function App() {
   const [koalaDesc, setKoalaDesc] = useState("");
   const [koalaImage, setKoalaImage] = useState("");
   const [newKoala, setNewKoala] = useState(true);
-  const [koalaFalling, setKoalaFalling] = useState(false);
 
   const [apps, setApps] = useState([]);
 
@@ -406,8 +387,6 @@ function App() {
 
   const today = new Date().toISOString().split("T")[0];
   const [date, setDate] = useState(today);
-
-  const fallingKoalasRef = useRef(new Set());
 
   function setKoalaListHelp(newList) {
     setKoalaList(newList);
@@ -468,23 +447,11 @@ function App() {
     if (newKoalas.length > 0) {
       setKoalaObjList((prev) => {
         const combined = [...prev, ...newKoalas];
-        animateKoalas(
-          combined,
-          koalaTimeout,
-          handleClose,
-          setKoalaFalling,
-          fallingKoalasRef
-        );
+        animateKoalas(combined, koalaTimeout, handleClose);
         return combined;
       });
     } else {
-      animateKoalas(
-        koalaObjList,
-        koalaTimeout,
-        handleClose,
-        setKoalaFalling,
-        fallingKoalasRef
-      );
+      animateKoalas(koalaObjList, koalaTimeout, handleClose);
     }
   }, [koalaList, koalaObjList]);
 
@@ -624,193 +591,188 @@ function App() {
   return (
     <div className="App">
       <Header />
-      {koalaFalling ? (
-        <span></span>
-      ) : (
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          {modalAddingApp ? (
-            // Display the add application modal
-            <Box
-              sx={{
-                position: "absolute",
-                top: "25%",
-                left: "22.5%",
-                width: "50%",
-                height: "40vh",
-                bgcolor: "background.paper",
-                display: "flex",
-                flexDirection: "column",
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        {modalAddingApp ? (
+          // Display the add application modal
+          <Box
+            sx={{
+              position: "absolute",
+              top: "25%",
+              left: "22.5%",
+              width: "50%",
+              height: "40vh",
+              bgcolor: "background.paper",
+              display: "flex",
+              flexDirection: "column",
 
-                boxShadow: 24,
-                p: 4,
-                borderRadius: 2,
-              }}
-            >
-              <div className="flex justify-between items-center mb-4">
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                  Add A New Application
-                </Typography>
+              boxShadow: 24,
+              p: 4,
+              borderRadius: 2,
+            }}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Add A New Application
+              </Typography>
+              <button
+                onClick={handleClose}
+                className="text-gray-500 hover:text-black text-xl font-bold"
+                aria-label="Close"
+              >
+                &times;
+              </button>
+
+              {/* form inputs here */}
+              <div id="modal-modal-description">
+                <div className="line mb-2">
+                  <label htmlFor="company">Company:</label>
+                  <input
+                    type="text"
+                    id="company"
+                    className="w-full p-2 border rounded"
+                    required
+                  />
+                </div>
+
+                <div className="line mb-2">
+                  <label htmlFor="position">Position:</label>
+                  <input
+                    type="text"
+                    id="position"
+                    className="w-full p-2 border rounded"
+                    required
+                  />
+                </div>
+
+                <div className="line mb-2">
+                  <label htmlFor="link">Link:</label>
+                  <input
+                    type="url"
+                    id="link"
+                    className="w-full p-2 border rounded"
+                  />
+                </div>
+
+                <div className="line mb-2">
+                  <label htmlFor="date">Date:</label>
+                  <input
+                    type="date"
+                    id="date"
+                    value={date}
+                    className="w-full p-2 border rounded"
+                    required
+                  />
+                </div>
+
+                <div className="line mb-4">
+                  <label htmlFor="status">Status:</label>
+                  <select
+                    id="status"
+                    className="w-full p-2 border rounded"
+                    defaultValue="Applied"
+                    required
+                  >
+                    <option value="Applied">Applied</option>
+                    <option value="Interviewed">Interviewed</option>
+                    <option value="Offered">Offered</option>
+                    <option value="Rejected">Rejected</option>
+                  </select>
+                </div>
+
+                <button
+                  type="submit"
+                  onClick={async () => {
+                    const success = await submitNewApp();
+                    if (success) {
+                      handleClose();
+                      await new Promise((res) => setTimeout(res, 300)); // short delay
+                      await load(
+                        setApps,
+                        setUsername,
+                        setNumKoalas,
+                        setNumApps,
+                        setNumInterviews,
+                        setNumOffers,
+                        setKoalaListHelp,
+                        koalaList,
+                        handleOpenNewKoala,
+                        koalaTimeout,
+                        koalaObjList,
+                        statusTimeout,
+                        "submit app"
+                        // koalaListChanged
+                      );
+                    }
+                  }}
+                  className="line bg-blue-500 text-white px-4 py-2 rounded"
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+          </Box>
+        ) : (
+          // Display the new koala modal
+          <Box
+            sx={{
+              position: "absolute",
+              top: "18%",
+              left: "33.5%",
+              width: "27%",
+              bgcolor: "#9f7e53",
+              boxShadow: 24,
+              p: 4,
+              borderRadius: 2,
+              border: "1px solid black",
+            }}
+          >
+            <div class="newKoala">
+              <div class="modalHeader">
+                {newKoala ? (
+                  <Typography
+                    id="modal-modal-title"
+                    variant="h6"
+                    component="h2"
+                  >
+                    New Koala Unlockled!
+                  </Typography>
+                ) : (
+                  <Typography
+                    id="modal-modal-title"
+                    variant="h6"
+                    component="h2"
+                  >
+                    Your Koala!
+                  </Typography>
+                )}
                 <button
                   onClick={handleClose}
-                  className="text-gray-500 hover:text-black text-xl font-bold"
+                  className="closeModalBtn"
                   aria-label="Close"
                 >
                   &times;
                 </button>
-
-                {/* form inputs here */}
-                <div id="modal-modal-description">
-                  <div className="line mb-2">
-                    <label htmlFor="company">Company:</label>
-                    <input
-                      type="text"
-                      id="company"
-                      className="w-full p-2 border rounded"
-                      required
-                    />
-                  </div>
-
-                  <div className="line mb-2">
-                    <label htmlFor="position">Position:</label>
-                    <input
-                      type="text"
-                      id="position"
-                      className="w-full p-2 border rounded"
-                      required
-                    />
-                  </div>
-
-                  <div className="line mb-2">
-                    <label htmlFor="link">Link:</label>
-                    <input
-                      type="url"
-                      id="link"
-                      className="w-full p-2 border rounded"
-                    />
-                  </div>
-
-                  <div className="line mb-2">
-                    <label htmlFor="date">Date:</label>
-                    <input
-                      type="date"
-                      id="date"
-                      value={date}
-                      className="w-full p-2 border rounded"
-                      required
-                    />
-                  </div>
-
-                  <div className="line mb-4">
-                    <label htmlFor="status">Status:</label>
-                    <select
-                      id="status"
-                      className="w-full p-2 border rounded"
-                      defaultValue="Applied"
-                      required
-                    >
-                      <option value="Applied">Applied</option>
-                      <option value="Interviewed">Interviewed</option>
-                      <option value="Offered">Offered</option>
-                      <option value="Rejected">Rejected</option>
-                    </select>
-                  </div>
-
-                  <button
-                    type="submit"
-                    onClick={async () => {
-                      const success = await submitNewApp();
-                      if (success) {
-                        handleClose();
-                        await new Promise((res) => setTimeout(res, 300)); // short delay
-                        await load(
-                          setApps,
-                          setUsername,
-                          setNumKoalas,
-                          setNumApps,
-                          setNumInterviews,
-                          setNumOffers,
-                          setKoalaListHelp,
-                          koalaList,
-                          handleOpenNewKoala,
-                          koalaTimeout,
-                          koalaObjList,
-                          statusTimeout,
-                          "submit app"
-                          // koalaListChanged
-                        );
-                      }
-                    }}
-                    className="line bg-blue-500 text-white px-4 py-2 rounded"
-                  >
-                    Submit
-                  </button>
+              </div>
+              <h3>{koalaName}</h3>
+              <div class="kDesc">
+                <div class="centerr">
+                  <img
+                    src={koalaImage}
+                    className="koalaDesPic"
+                    alt="koala"
+                  ></img>
+                  <p>{koalaDesc}</p>
                 </div>
               </div>
-            </Box>
-          ) : (
-            // Display the new koala modal
-            <Box
-              sx={{
-                position: "absolute",
-                top: "18%",
-                left: "33.5%",
-                width: "27%",
-                bgcolor: "#9f7e53",
-                boxShadow: 24,
-                p: 4,
-                borderRadius: 2,
-                border: "1px solid black",
-              }}
-            >
-              <div class="newKoala">
-                <div class="modalHeader">
-                  {newKoala ? (
-                    <Typography
-                      id="modal-modal-title"
-                      variant="h6"
-                      component="h2"
-                    >
-                      New Koala Unlockled!
-                    </Typography>
-                  ) : (
-                    <Typography
-                      id="modal-modal-title"
-                      variant="h6"
-                      component="h2"
-                    >
-                      Your Koala!
-                    </Typography>
-                  )}
-                  <button
-                    onClick={handleClose}
-                    className="closeModalBtn"
-                    aria-label="Close"
-                  >
-                    &times;
-                  </button>
-                </div>
-                <h3>{koalaName}</h3>
-                <div class="kDesc">
-                  <div class="centerr">
-                    <img
-                      src={koalaImage}
-                      className="koalaDesPic"
-                      alt="koala"
-                    ></img>
-                    <p>{koalaDesc}</p>
-                  </div>
-                </div>
-              </div>
-            </Box>
-          )}
-        </Modal>
-      )}
-
+            </div>
+          </Box>
+        )}
+      </Modal>
       <div className="tableBody">
         <div className="notes">
           <div class="stats">
