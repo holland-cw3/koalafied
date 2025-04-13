@@ -91,14 +91,14 @@ td {
   flex-direction: column;
 }
 
-.stats h2 .us{
+.stats h2 .us {
   text-decoration: none !important;
   text-shadow: 2px 2px white;
-  
+
   color: black;
 }
 
-.underline{
+.underline {
   text-decoration: underline;
 }
 
@@ -209,7 +209,7 @@ button {
 
 .koalaSprite {
   position: absolute;
-  width: 5em;
+  width: 8em;
 }
 
 .footer {
@@ -217,15 +217,14 @@ button {
   bottom: 0;
   left: 0;
   width: 100%;
-  background-image: url('../images/ground.png');
-  
+  background-image: url("../images/ground.png");
+
   text-align: center;
   height: 14vh;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.mdal{
+.mdal {
   display: flex;
   flex-direction: column;
 }
-

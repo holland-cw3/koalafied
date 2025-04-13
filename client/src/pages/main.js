@@ -10,8 +10,8 @@ import "../CSS/main.css";
 const globalKoalaList = require("../koalas/koalas.json").koalas;
 
 function animateKoalas(koalaObjList, koalaTimeoutRef) {
-  console.log("Animating!");
-  console.log(koalaObjList.length);
+  // console.log("Animating!");
+  // console.log(koalaObjList.length);
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
   koalaObjList.forEach((koala) => {
@@ -34,11 +34,11 @@ function animateKoalas(koalaObjList, koalaTimeoutRef) {
     elem.style.left = `${koala.leftPos}px`;
 
     // Update vertical position
-    koala.topPos += Math.random() * 5 - 2.5;
-    koala.topPos = clamp(koala.topPos, 5, 10);
-    elem.style.top = `${koala.topPos}px`;
+    koala.bottomPos += Math.random() * 5 - 2.5;
+    koala.bottomPos = clamp(koala.bottomPos, 5, 10);
+    elem.style.bottom = `${koala.bottomPos}px`;
 
-    elem.style.transform = "rotate(" + (Math.random() * 5 - 2.5) + ")";
+    elem.style.transform = "rotate(" + (Math.random() * 8 - 4) + "deg)";
   });
 
   clearTimeout(koalaTimeoutRef.current);
@@ -281,7 +281,7 @@ function App() {
           filename: "../koalas/" + koala.filename,
           elemId: koala.id + "-" + i,
           leftPos: Math.random() * 1000,
-          topPos: Math.random() * 10,
+          bottomPos: Math.random() * 10,
           direction: Math.random() < 0.5 ? "left" : "right",
           src: require("../koalas/" + koala.filename),
         });
@@ -722,7 +722,7 @@ function App() {
                 className="koalaSprite"
                 src={item.src}
                 alt={item.name}
-                style={{ left: item.leftPos, top: item.topPos }}
+                style={{ left: item.leftPos, bottom: item.bottomPos }}
               ></img>
             ))}
           </div>
