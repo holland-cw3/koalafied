@@ -65,7 +65,7 @@ function animateKoalas(
           koala.bottomPos = clamp(
             koala.originalBottomPos + deltaY * -1,
             0,
-            window.innerHeight - 100
+            window.innerHeight
           ); // up is +bottom
 
           elem.style.left = `${koala.leftPos}px`;
@@ -446,7 +446,7 @@ function App() {
           filename: koala.filename,
           elemId: koala.id + "-" + i,
           leftPos: Math.random() * 1000,
-          topPos: Math.random() * 10,
+          bottomPos: Math.random() * 10 + 10,
           direction: Math.random() < 0.5 ? "left" : "right",
           zIndex: Math.random() * 100 + 50,
           src: require("../koalas/" + koala.filename),
