@@ -84,8 +84,21 @@ td {
 
 .stats h2 {
   margin: 1em;
+  font-size: 17px;
   color: rgb(182, 92, 182);
   text-shadow: 2px 2px black;
+  display: flex;
+  flex-direction: column;
+}
+
+.stats h2 .us{
+  text-decoration: none !important;
+  text-shadow: 2px 2px white;
+  
+  color: black;
+}
+
+.underline{
   text-decoration: underline;
 }
 
@@ -97,6 +110,7 @@ td {
 
 .stats h3 {
   margin: 1em;
+  font-size: 17px;
 }
 
 .kCount {
@@ -203,8 +217,15 @@ button {
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: black;
+  background-image: url('../images/ground.png');
+  
   text-align: center;
-  height: 15vh;
+  height: 14vh;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
+
+.mdal{
+  display: flex;
+  flex-direction: column;
+}
+

@@ -3,7 +3,9 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: black;
+    background-image: url('../images/forest.png');
+    background-color: white;
+    background-size: cover;
     text-align: center;
     padding: 9vh; 
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);

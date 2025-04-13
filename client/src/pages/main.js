@@ -448,8 +448,15 @@ function App() {
               top: "25%",
               left: "22.5%",
               width: "50%",
+<<<<<<< HEAD
+              height: "40vh",
               bgcolor: "background.paper",
               display: "flex",
+              flexDirection:'column',
+=======
+              bgcolor: "background.paper",
+              display: "flex",
+>>>>>>> 61df470c6f42bc01e954da11f1f52154b4d2178b
 
               boxShadow: 24,
               p: 4,
@@ -469,7 +476,7 @@ function App() {
               </button>
 
               {/* form inputs here */}
-              <div id="modal-modal-description">
+              <div id="mdal">
                 <div className="line mb-2">
                   <label htmlFor="company">Company:</label>
                   <input
@@ -591,17 +598,32 @@ function App() {
       <div className="tableBody">
         <div className="stats">
           <div className="stats2">
+<<<<<<< HEAD
+            <h2>
+              <span class="underline">Stats For:</span>
+              <span class="us">{username}</span>
+            </h2>
+            <h3 class="kCount">Koala Count: {numKoalas}</h3>
+            <h3 className="silver">Applications: {numApps}</h3>
+            <h3 className="bronze">Interviews: {numInterviews}</h3>
+            <h3 className="gold">Offers: {numOffers}</h3>
+=======
             <h2>Stats For: {username}</h2>
             <h3 className="kCount">Koala Count: {numKoalas}</h3>
             <h3 className="silver">Applications: {numApps}</h3>
             <h3 className="bronze">Interviews: {numInterviews}</h3>
             <h3 className="gold">Offers: {numOffers}</h3>
             <br></br>
+>>>>>>> 61df470c6f42bc01e954da11f1f52154b4d2178b
             <h3 className="kCount">New Koalas:</h3>
           </div>
         </div>
         <div className="table">
+<<<<<<< HEAD
+          <h4 class="sorter">
+=======
           <h4 className="sorter">
+>>>>>>> 61df470c6f42bc01e954da11f1f52154b4d2178b
             <span className="line">
               Status:{" "}
               <select
@@ -642,6 +664,88 @@ function App() {
           </h4>
           {/* Displaying records table based on filters */}
           <div className="overflow-x-auto max-w-full">
+<<<<<<< HEAD
+            {apps.length > 0 ? (
+              <table className="table-auto apps">
+                <thead>
+                  <tr>
+                    <th>Company</th>
+                    <th>Position</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {apps
+                    .filter(
+                      (item) =>
+                        (searchVal === "" ||
+                          item.company
+                            .toLowerCase()
+                            .includes(searchVal.toLowerCase()) ||
+                          item.position
+                            .toLowerCase()
+                            .includes(searchVal.toLowerCase())) &&
+                        (statusVal === "all" || statusVal === item.status)
+                    )
+                    .map((item) => (
+                      <tr key={`${item.company}-${item.position}`}>
+                        <td>{item.company}</td>
+                        <td>
+                          <a
+                            href={item.linkString}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {item.position}
+                          </a>
+                        </td>
+                        <td>{item.date}</td>
+                        <td>
+                          <select
+                            id={"status_" + item.company + item.position}
+                            defaultValue={item.status}
+                          >
+                            <option value="Applied">Applied</option>
+                            <option value="Interviewed">Interviewed</option>
+                            <option value="Offered">Offered</option>
+                            <option value="Rejected">Rejected</option>
+                          </select>
+                          <button
+                            onClick={async () => {
+                              updateStatus(
+                                item.company,
+                                item.position,
+                                "status_" + item.company + item.position
+                              );
+                              await new Promise((res) => setTimeout(res, 300)); // short delay
+                              await load(
+                                setApps,
+                                setUsername,
+                                setNumKoalas,
+                                setNumApps,
+                                setNumInterviews,
+                                setNumOffers,
+                                setKoalaList,
+                                koalaList,
+                                handleOpenNewKoala,
+                                koalaTimeout,
+                                koalaObjList
+                              );
+                            }}
+                            className="updateBtn"
+                          >
+                            Update
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            ) : (
+              <></> // Message when there are no applications
+            )}
+=======
             <table className="table-auto apps">
               <thead>
                 <tr>
@@ -705,6 +809,7 @@ function App() {
                   ))}
               </tbody>
             </table>
+>>>>>>> 61df470c6f42bc01e954da11f1f52154b4d2178b
           </div>
         </div>
         <div className="notes">
