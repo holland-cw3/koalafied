@@ -12,7 +12,7 @@ import "../CSS/leaderboard.css";
 import searcher from "../images/searcher.png";
 const headerStyle = {
   backgroundImage: `url(${searcher})`,
-}
+};
 
 function Leaderboard() {
   const [users, setUsers] = useState([]);
@@ -29,7 +29,6 @@ function Leaderboard() {
 
   return (
     <>
-      
       <div className="home-btn" style={headerStyle}>
         <a href="/">Home</a>
       </div>
