@@ -9,26 +9,42 @@ import Typography from "@mui/material/Typography";
 import "../CSS/main.css";
 const globalKoalaList = require("../koalas/koalas.json").koalas;
 
-function animateKoalas(koalaObjList, koalaTimeout) {
-  for (let i = 0; i < koalaObjList.length; i++) {
-    let koala = koalaObjList[i];
+function animateKoalas(koalaObjList, koalaTimeoutRef) {
+  console.log("Animating!");
+  console.log(koalaObjList.length);
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
-    // Use direction to choose where to move, go to a negative amount off screen and flip direction
-    koala.topPos += Math.random() * 10 - 5;
-    if (koala.topPos > 10) koala.topPos = 10;
-    if (koala.topPos < 5) koala.topPos = 5;
-    document.getElementById(koala.elemId).style.top = koala.top + "px";
+  koalaObjList.forEach((koala) => {
+    const elem = document.getElementById(koala.elemId);
+    if (!elem) return;
 
-    koala.leftPos += Math.random() * 100 - 50;
-    if (koala.leftPos > 100) koala.leftPos = 100;
-    if (koala.leftPos < 5) koala.leftPos = 5;
-    document.getElementById(koala.elemId).style.left = koala.leftPos + "px";
-  }
+    const directionMultiplier = koala.direction === "left" ? -1 : 1;
 
-  clearTimeout(koalaTimeout);
-  koalaTimeout = setTimeout(() => {
-    animateKoalas(koalaObjList, koalaTimeout);
-  }, 10000);
+    // Update horizontal position
+    koala.leftPos += Math.random() * 25 * directionMultiplier;
+    koala.leftPos = clamp(koala.leftPos, 5, 1000);
+    // if at one end flip direction
+    if (koala.leftPos == 1000 || koala.leftPos == 5) {
+      if (koala.direction === "right") {
+        koala.direction = "left";
+      } else {
+        koala.direction = "right";
+      }
+    }
+    elem.style.left = `${koala.leftPos}px`;
+
+    // Update vertical position
+    koala.topPos += Math.random() * 5 - 2.5;
+    koala.topPos = clamp(koala.topPos, 5, 10);
+    elem.style.top = `${koala.topPos}px`;
+
+    elem.style.transform = "rotate(" + (Math.random() * 8 - 4) + "deg)";
+  });
+
+  clearTimeout(koalaTimeoutRef.current);
+  koalaTimeoutRef.current = setTimeout(() => {
+    animateKoalas(koalaObjList, koalaTimeoutRef);
+  }, 500);
 }
 
 function compareKoalaLists(newList, oldList) {
@@ -55,14 +71,14 @@ async function load(
   setNumApps,
   setNumInterviews,
   setNumOffers,
-  setKoalaList,
+  setKoalaListHelp,
   koalaList,
   handleOpenNewKoala,
   koalaTimeout,
   koalaObjList,
   statusTimeout,
-  printStr,
-  koalaListChanged
+  printStr
+  // koalaListChanged
 ) {
   const token = localStorage.getItem("token");
 
@@ -101,11 +117,9 @@ async function load(
             "I just unlocked the " + newKoala.name + ", " + newKoala.description
           );
         }
-
-        koalaListChanged();
       }
 
-      setKoalaList(data.koalas);
+      setKoalaListHelp(data.koalas);
 
       if (data.notes !== "") {
         document.getElementById("noteField").value = data.notes;
@@ -113,22 +127,17 @@ async function load(
 
       console.log("Origin: " + printStr);
 
-      // clearTimeout(statusTimeout);
-      // statusTimeout = setTimeout(() => {
-      let applications = data.applications;
-      for (let i = 0; i < applications.length; i++) {
-        let item = applications[i];
-        document.getElementById(
-          "status_" + item.company + item.position
-        ).value = item.status;
-        console.log("Changing status");
-      }
-      // }, 300);
-
-      clearTimeout(koalaTimeout);
-      koalaTimeout = setTimeout(() => {
-        animateKoalas(koalaObjList, koalaTimeout);
-      }, 10000);
+      clearTimeout(statusTimeout);
+      statusTimeout = setTimeout(() => {
+        let applications = data.applications;
+        for (let i = 0; i < applications.length; i++) {
+          let item = applications[i];
+          document.getElementById(
+            "status_" + item.company + item.position
+          ).value = item.status;
+          console.log("Changing status");
+        }
+      }, 300);
 
       return;
     } else {
@@ -218,29 +227,6 @@ function App() {
     window.location.href = "/login";
   }
 
-  function koalaListChanged() {
-    if (koalaList.length !== koalaObjList.length) {
-      for (let i = 0; i < koalaList.length; i++) {
-        let koala = getKoalaById(koalaList[i]);
-        if (!inKoalaList(koala.id, koalaObjList))
-          setKoalaObjList([
-            ...koalaObjList,
-            {
-              id: koala.id,
-              desc: koala.description,
-              name: koala.name,
-              filename: "../koalas/" + koala.filename,
-              elemId: koala.id + i,
-              leftPos: 0,
-              topPos: 0,
-              direction: "left",
-              src: require("../koalas/" + koala.filename),
-            },
-          ]);
-      }
-    }
-  }
-
   function inKoalaList(id, list) {
     for (let i = 0; i < list.length; i++) {
       if (list[i].id === id) return true;
@@ -270,10 +256,48 @@ function App() {
   const [numInterviews, setNumInterviews] = useState(0);
   const [numOffers, setNumOffers] = useState(0);
 
+  function setKoalaListHelp(newList) {
+    setKoalaList(newList);
+    // // koalaListChanged();
+  }
+
   const [koalaObjList, setKoalaObjList] = useState([]);
 
   let koalaTimeout = useRef(null);
   let statusTimeout = useRef(null);
+
+  useEffect(() => {
+    const newKoalas = [];
+
+    koalaList.forEach((koalaId, i) => {
+      const koala = getKoalaById(koalaId);
+
+      if (!koalaObjList.some((k) => k.id === koala.id)) {
+        console.log("Adding koala!");
+        newKoalas.push({
+          id: koala.id,
+          desc: koala.description,
+          name: koala.name,
+          filename: "../koalas/" + koala.filename,
+          elemId: koala.id + "-" + i,
+          leftPos: Math.random() * 1000,
+          topPos: Math.random() * 10,
+          direction: Math.random() < 0.5 ? "left" : "right",
+          src: require("../koalas/" + koala.filename),
+        });
+      }
+    });
+
+    if (newKoalas.length > 0) {
+      setKoalaObjList((prev) => {
+        const combined = [...prev, ...newKoalas];
+        animateKoalas(combined, koalaTimeout);
+        return combined;
+      });
+    } else {
+      animateKoalas(koalaObjList, koalaTimeout);
+    }
+  }, [koalaList, koalaObjList]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -327,14 +351,14 @@ function App() {
         setNumApps,
         setNumInterviews,
         setNumOffers,
-        setKoalaList,
+        setKoalaListHelp,
         koalaList,
         handleOpenNewKoala,
         koalaTimeout,
         koalaObjList,
         statusTimeout,
-        "update status",
-        koalaListChanged
+        "update status"
+        // koalaListChanged
       );
 
       if (response.ok) {
@@ -357,16 +381,20 @@ function App() {
       setNumApps,
       setNumInterviews,
       setNumOffers,
-      setKoalaList,
+      setKoalaListHelp,
       koalaList,
       handleOpenNewKoala,
       koalaTimeout,
       koalaObjList,
       statusTimeout,
-      "top level",
-      koalaListChanged
+      "top level"
+      // koalaListChanged
     );
   }, []);
+
+  useEffect(() => {
+    // // koalaListChanged();
+  }, [koalaList]);
 
   switch (selectedSorting) {
     case "oldest":
@@ -420,8 +448,15 @@ function App() {
               top: "25%",
               left: "22.5%",
               width: "50%",
+<<<<<<< HEAD
+              height: "40vh",
               bgcolor: "background.paper",
               display: "flex",
+              flexDirection:'column',
+=======
+              bgcolor: "background.paper",
+              display: "flex",
+>>>>>>> 61df470c6f42bc01e954da11f1f52154b4d2178b
 
               boxShadow: 24,
               p: 4,
@@ -441,7 +476,7 @@ function App() {
               </button>
 
               {/* form inputs here */}
-              <div id="modal-modal-description">
+              <div id="mdal">
                 <div className="line mb-2">
                   <label htmlFor="company">Company:</label>
                   <input
@@ -510,14 +545,14 @@ function App() {
                         setNumApps,
                         setNumInterviews,
                         setNumOffers,
-                        setKoalaList,
+                        setKoalaListHelp,
                         koalaList,
                         handleOpenNewKoala,
                         koalaTimeout,
                         koalaObjList,
                         statusTimeout,
-                        "submit app",
-                        koalaListChanged
+                        "submit app"
+                        // koalaListChanged
                       );
                     }
                   }}
@@ -563,17 +598,32 @@ function App() {
       <div className="tableBody">
         <div className="stats">
           <div className="stats2">
+<<<<<<< HEAD
+            <h2>
+              <span class="underline">Stats For:</span>
+              <span class="us">{username}</span>
+            </h2>
+            <h3 class="kCount">Koala Count: {numKoalas}</h3>
+            <h3 className="silver">Applications: {numApps}</h3>
+            <h3 className="bronze">Interviews: {numInterviews}</h3>
+            <h3 className="gold">Offers: {numOffers}</h3>
+=======
             <h2>Stats For: {username}</h2>
             <h3 className="kCount">Koala Count: {numKoalas}</h3>
             <h3 className="silver">Applications: {numApps}</h3>
             <h3 className="bronze">Interviews: {numInterviews}</h3>
             <h3 className="gold">Offers: {numOffers}</h3>
             <br></br>
+>>>>>>> 61df470c6f42bc01e954da11f1f52154b4d2178b
             <h3 className="kCount">New Koalas:</h3>
           </div>
         </div>
         <div className="table">
+<<<<<<< HEAD
+          <h4 class="sorter">
+=======
           <h4 className="sorter">
+>>>>>>> 61df470c6f42bc01e954da11f1f52154b4d2178b
             <span className="line">
               Status:{" "}
               <select
@@ -614,6 +664,88 @@ function App() {
           </h4>
           {/* Displaying records table based on filters */}
           <div className="overflow-x-auto max-w-full">
+<<<<<<< HEAD
+            {apps.length > 0 ? (
+              <table className="table-auto apps">
+                <thead>
+                  <tr>
+                    <th>Company</th>
+                    <th>Position</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {apps
+                    .filter(
+                      (item) =>
+                        (searchVal === "" ||
+                          item.company
+                            .toLowerCase()
+                            .includes(searchVal.toLowerCase()) ||
+                          item.position
+                            .toLowerCase()
+                            .includes(searchVal.toLowerCase())) &&
+                        (statusVal === "all" || statusVal === item.status)
+                    )
+                    .map((item) => (
+                      <tr key={`${item.company}-${item.position}`}>
+                        <td>{item.company}</td>
+                        <td>
+                          <a
+                            href={item.linkString}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {item.position}
+                          </a>
+                        </td>
+                        <td>{item.date}</td>
+                        <td>
+                          <select
+                            id={"status_" + item.company + item.position}
+                            defaultValue={item.status}
+                          >
+                            <option value="Applied">Applied</option>
+                            <option value="Interviewed">Interviewed</option>
+                            <option value="Offered">Offered</option>
+                            <option value="Rejected">Rejected</option>
+                          </select>
+                          <button
+                            onClick={async () => {
+                              updateStatus(
+                                item.company,
+                                item.position,
+                                "status_" + item.company + item.position
+                              );
+                              await new Promise((res) => setTimeout(res, 300)); // short delay
+                              await load(
+                                setApps,
+                                setUsername,
+                                setNumKoalas,
+                                setNumApps,
+                                setNumInterviews,
+                                setNumOffers,
+                                setKoalaList,
+                                koalaList,
+                                handleOpenNewKoala,
+                                koalaTimeout,
+                                koalaObjList
+                              );
+                            }}
+                            className="updateBtn"
+                          >
+                            Update
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            ) : (
+              <></> // Message when there are no applications
+            )}
+=======
             <table className="table-auto apps">
               <thead>
                 <tr>
@@ -677,6 +809,7 @@ function App() {
                   ))}
               </tbody>
             </table>
+>>>>>>> 61df470c6f42bc01e954da11f1f52154b4d2178b
           </div>
         </div>
         <div className="notes">
