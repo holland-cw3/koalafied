@@ -113,7 +113,11 @@ async function load(
         for (let i = 0; i < newKoalas.length; i++) {
           let newKoala = getKoalaById(newKoalas[i]);
 
-          handleOpenNewKoala(newKoala.name, newKoala.description);
+          handleOpenNewKoala(
+            newKoala.name,
+            newKoala.description,
+            newKoala.filename
+          );
 
           console.log(
             "I just unlocked the " + newKoala.name + ", " + newKoala.description
@@ -242,7 +246,8 @@ function App() {
   const [modalAddingApp, setModalAddingApp] = useState(true);
 
   const [koalaName, setKoalaName] = useState("");
-  const [koalaDesc, setkoalaDesc] = useState("");
+  const [koalaDesc, setKoalaDesc] = useState("");
+  const [koalaImage, setKoalaImage] = useState("");
 
   const [apps, setApps] = useState([]);
 
@@ -257,6 +262,18 @@ function App() {
   function setKoalaListHelp(newList) {
     setKoalaList(newList);
     // // koalaListChanged();
+  }
+
+  const koalaImages = importAll(
+    require.context("../koalas", false, /\.(png|jpe?g|svg)$/)
+  );
+
+  function importAll(r) {
+    let images = {};
+    r.keys().forEach((key) => {
+      images[key.replace("./", "")] = r(key);
+    });
+    return images;
   }
 
   const [koalaObjList, setKoalaObjList] = useState([]);
@@ -276,7 +293,7 @@ function App() {
           id: koala.id,
           desc: koala.description,
           name: koala.name,
-          filename: "../koalas/" + koala.filename,
+          filename: koala.filename,
           elemId: koala.id + "-" + i,
           leftPos: Math.random() * 1000,
           bottomPos: Math.random() * 10,
@@ -303,11 +320,12 @@ function App() {
     setModalAddingApp(true);
   };
 
-  const handleOpenNewKoala = (name, desc) => {
+  const handleOpenNewKoala = (name, desc, filename) => {
     setOpen(true);
     setModalAddingApp(false);
     setKoalaName(name);
-    setkoalaDesc(desc);
+    setKoalaDesc(desc);
+    setKoalaImage(koalaImages[filename]);
   };
 
   const handleClose = () => {
@@ -582,7 +600,8 @@ function App() {
                 &times;
               </button>
               <h3>{koalaName}</h3>
-              <h4>{koalaDesc}</h4>
+              <p>{koalaDesc}</p>
+              <img src={koalaImage} className="koalaDesPic"></img>
             </div>
           </Box>
         )}
@@ -729,6 +748,9 @@ function App() {
                   bottom: item.bottomPos,
                   zIndex: item.zIndex,
                 }}
+                onClick={() =>
+                  handleOpenNewKoala(item.name, item.desc, item.filename)
+                }
               ></img>
             ))}
           </div>

@@ -19,7 +19,7 @@ body {
   text-shadow: 1px 1px 0 #000;
   width: 5%;
   height: 5%;
-  margin-top: 33px
+  margin-top: 33px;
 }
 
 a {
@@ -39,7 +39,7 @@ a {
 
 .leaderboard h2 {
   font-family: sans-serif;
-  color: black;
+  color: white;
   text-shadow: 1px 1px 0 #000;
   margin-bottom: 1rem;
 }
