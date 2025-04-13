@@ -17,33 +17,66 @@ function animateKoalas(koalaObjList, koalaTimeoutRef) {
     const elem = document.getElementById(koala.elemId);
     if (!elem) return;
 
-    const directionMultiplier = koala.direction === "left" ? -1 : 1;
+    if (koala.sleepTime <= 0) {
+      let shouldSleep = koala.walkTime <= 0;
 
-    // Update horizontal position
-    koala.leftPos += Math.random() * 25 * directionMultiplier;
-    koala.leftPos = clamp(koala.leftPos, 5, 1000);
-    // if at one end flip direction
-    if (koala.leftPos === 1000 || koala.leftPos === 5) {
-      if (koala.direction === "right") {
-        koala.direction = "left";
+      if (shouldSleep) {
+        koala.sleepTime = Math.random() * 50 + 10;
       } else {
-        koala.direction = "right";
+        const directionMultiplier = koala.direction === "left" ? -1 : 1;
+
+        // Update horizontal position
+        koala.leftPos += Math.random() * 4 * directionMultiplier;
+        koala.leftPos = clamp(koala.leftPos, 5, 1000);
+        // if at one end flip direction
+        if (koala.leftPos === 1000 || koala.leftPos === 5) {
+          if (koala.direction === "right") {
+            koala.direction = "left";
+          } else {
+            koala.direction = "right";
+          }
+        }
+        elem.style.left = `${koala.leftPos}px`;
+
+        // Update vertical position
+        let doUpDown = Math.random() * 10 >= 5;
+        if (doUpDown) {
+          koala.bottomPos += Math.random() * 2 - 1;
+          koala.bottomPos = clamp(koala.bottomPos, 5, 10);
+          elem.style.bottom = `${koala.bottomPos}px`;
+        }
+
+        let doRotation = Math.random() * 10 >= 3;
+        if (doRotation)
+          elem.style.transform = "rotate(" + (Math.random() * 4 - 2) + "deg)";
+
+        koala.walkTime--;
       }
+    } else {
+      koala.sleepTime--;
+
+      if (koala.sleepTime <= 0) {
+        koala.walkTime = Math.random() * 150 + 25;
+        let changeDirection = Math.random() * 100 > 90;
+        if (changeDirection) {
+          if (koala.direction === "left") {
+            koala.direction = "right";
+          } else {
+            koala.direction = "left";
+          }
+        }
+      }
+
+      let doRotation = Math.random() * 10 >= 8;
+      if (doRotation)
+        elem.style.transform = "rotate(" + (Math.random() * 4 - 2) + "deg)";
     }
-    elem.style.left = `${koala.leftPos}px`;
-
-    // Update vertical position
-    koala.bottomPos += Math.random() * 5 - 2.5;
-    koala.bottomPos = clamp(koala.bottomPos, 5, 10);
-    elem.style.bottom = `${koala.bottomPos}px`;
-
-    elem.style.transform = "rotate(" + (Math.random() * 8 - 4) + "deg)";
   });
 
   clearTimeout(koalaTimeoutRef.current);
   koalaTimeoutRef.current = setTimeout(() => {
     animateKoalas(koalaObjList, koalaTimeoutRef);
-  }, 500);
+  }, 100);
 }
 
 function compareKoalaLists(newList, oldList) {
@@ -302,6 +335,8 @@ function App() {
           direction: Math.random() < 0.5 ? "left" : "right",
           zIndex: Math.random() * 100 + 50,
           src: require("../koalas/" + koala.filename),
+          sleepTime: 0,
+          walkTime: Math.random() * 150 + 50,
         });
       }
     });
