@@ -12,9 +12,15 @@ import profile from "../images/profile.png";
 import "../CSS/main.css";
 const globalKoalaList = require("../koalas/koalas.json").koalas;
 
-function animateKoalas(koalaObjList, koalaTimeoutRef) {
-  console.log("Animating!");
-  console.log(koalaObjList.length);
+function animateKoalas(
+  koalaObjList,
+  koalaTimeoutRef,
+  handleClose,
+  setKoalaFalling,
+  fallingKoalasRef
+) {
+  // console.log("Animating!");
+  // console.log(koalaObjList.length);
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
   koalaObjList.forEach((koala) => {
@@ -32,30 +38,50 @@ function animateKoalas(koalaObjList, koalaTimeoutRef) {
 
       elem.addEventListener("mousedown", (e) => {
         koala.isDragging = true;
+        koala.wasDragged = false;
         koala.dragStartX = e.clientX;
+        koala.dragStartY = e.clientY;
         koala.originalLeftPos = koala.leftPos;
-        // Prevent text/image dragging
+        koala.originalBottomPos = koala.bottomPos;
+        koala.velocityY = 0;
+        koala.isFalling = false;
         e.preventDefault();
       });
 
       document.addEventListener("mousemove", (e) => {
         if (koala.isDragging) {
           const deltaX = e.clientX - koala.dragStartX;
+          const deltaY = e.clientY - koala.dragStartY;
+
+          if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
+            koala.wasDragged = true;
+          }
+
           koala.leftPos = clamp(
             koala.originalLeftPos + deltaX,
             -50,
             window.innerWidth
           );
+          koala.bottomPos = clamp(
+            koala.originalBottomPos + deltaY * -1,
+            0,
+            window.innerHeight
+          ); // up is +bottom
+
           elem.style.left = `${koala.leftPos}px`;
+          elem.style.bottom = `${koala.bottomPos}px`;
 
-          // Shake vertically
-          const shakeOffset = Math.random() * 4 - 2; // range: [-2, 2]
-          const newBottom = clamp(koala.bottomPos + shakeOffset, 0, 20);
-          elem.style.bottom = `${newBottom}px`;
-
-          // Fast rotation while dragging
-          const rotation = Math.random() * 20 - 10; // more dramatic: -10 to +10 degrees
+          const rotation = Math.random() * 20 - 10;
           elem.style.transform = `rotate(${rotation}deg)`;
+        }
+      });
+
+      document.addEventListener("mouseup", () => {
+        if (koala.isDragging) {
+          koala.isDragging = false;
+          koala.isFalling = true;
+          fallingKoalasRef.current.add(koala.id);
+          setKoalaFalling(true);
         }
       });
 
@@ -71,68 +97,94 @@ function animateKoalas(koalaObjList, koalaTimeoutRef) {
     // Stop animation if hovered
     if (koala.hovered) return;
 
-    if (koala.sleepTime <= 0) {
-      let shouldSleep = koala.walkTime <= 0;
+    if (koala.isFalling) {
+      // Simulate gravity
+      koala.velocityY -= 0.5; // gravity acceleration (tweak as needed)
+      koala.bottomPos += koala.velocityY;
 
-      if (shouldSleep) {
-        koala.sleepTime = Math.random() * 50 + 10;
+      if (koala.bottomPos <= 5) {
+        koala.bottomPos = 5;
+        koala.velocityY = 0;
+        koala.isFalling = false;
+        fallingKoalasRef.current.delete(koala.id);
+
+        if (fallingKoalasRef.current.size === 0) {
+          setKoalaFalling(false);
+        }
+      }
+
+      elem.style.bottom = `${koala.bottomPos}px`;
+      elem.style.transform = `rotate(${Math.random() * 10 - 5}deg)`;
+      return; // skip normal movement while falling
+    } else {
+      if (koala.sleepTime <= 0) {
+        let shouldSleep = koala.walkTime <= 0;
+
+        if (shouldSleep) {
+          koala.sleepTime = Math.random() * 50 + 10;
+        } else {
+          const directionMultiplier = koala.direction === "left" ? -1 : 1;
+
+          // Update horizontal position
+          koala.leftPos += Math.random() * 4 * directionMultiplier;
+          koala.leftPos = clamp(koala.leftPos, -200, window.innerWidth + 200);
+          // if at one end flip direction
+          if (
+            koala.leftPos === window.innerWidth + 200 ||
+            koala.leftPos === -200
+          ) {
+            if (koala.direction === "right") {
+              koala.direction = "left";
+            } else {
+              koala.direction = "right";
+            }
+          }
+          elem.style.left = `${koala.leftPos}px`;
+
+          // Update vertical position
+          let doUpDown = Math.random() * 10 >= 5;
+          if (doUpDown) {
+            koala.bottomPos += Math.random() * 2 - 1;
+            koala.bottomPos = clamp(koala.bottomPos, 5, 10);
+            elem.style.bottom = `${koala.bottomPos}px`;
+          }
+
+          let doRotation = Math.random() * 10 >= 3;
+          if (doRotation)
+            elem.style.transform = "rotate(" + (Math.random() * 4 - 2) + "deg)";
+
+          koala.walkTime--;
+        }
       } else {
-        const directionMultiplier = koala.direction === "left" ? -1 : 1;
+        koala.sleepTime--;
 
-        // Update horizontal position
-        koala.leftPos += Math.random() * 4 * directionMultiplier;
-        koala.leftPos = clamp(koala.leftPos, -200, window.innerWidth + 200);
-        // if at one end flip direction
-        if (
-          koala.leftPos === window.innerWidth + 200 ||
-          koala.leftPos === -200
-        ) {
-          if (koala.direction === "right") {
-            koala.direction = "left";
-          } else {
-            koala.direction = "right";
+        if (koala.sleepTime <= 0) {
+          koala.walkTime = Math.random() * 150 + 25;
+          let changeDirection = Math.random() * 100 > 90;
+          if (changeDirection) {
+            if (koala.direction === "left") {
+              koala.direction = "right";
+            } else {
+              koala.direction = "left";
+            }
           }
         }
-        elem.style.left = `${koala.leftPos}px`;
-
-        // Update vertical position
-        let doUpDown = Math.random() * 10 >= 5;
-        if (doUpDown) {
-          koala.bottomPos += Math.random() * 2 - 1;
-          koala.bottomPos = clamp(koala.bottomPos, 5, 10);
-          elem.style.bottom = `${koala.bottomPos}px`;
-        }
-
-        let doRotation = Math.random() * 10 >= 3;
+        let doRotation = Math.random() * 10 >= 8;
         if (doRotation)
           elem.style.transform = "rotate(" + (Math.random() * 4 - 2) + "deg)";
-
-        koala.walkTime--;
       }
-    } else {
-      koala.sleepTime--;
-
-      if (koala.sleepTime <= 0) {
-        koala.walkTime = Math.random() * 150 + 25;
-        let changeDirection = Math.random() * 100 > 90;
-        if (changeDirection) {
-          if (koala.direction === "left") {
-            koala.direction = "right";
-          } else {
-            koala.direction = "left";
-          }
-        }
-      }
-
-      let doRotation = Math.random() * 10 >= 8;
-      if (doRotation)
-        elem.style.transform = "rotate(" + (Math.random() * 4 - 2) + "deg)";
     }
   });
 
   clearTimeout(koalaTimeoutRef.current);
   koalaTimeoutRef.current = setTimeout(() => {
-    animateKoalas(koalaObjList, koalaTimeoutRef);
+    animateKoalas(
+      koalaObjList,
+      koalaTimeoutRef,
+      handleClose,
+      setKoalaFalling,
+      fallingKoalasRef
+    );
   }, 100);
 }
 
@@ -340,6 +392,7 @@ function App() {
   const [koalaDesc, setKoalaDesc] = useState("");
   const [koalaImage, setKoalaImage] = useState("");
   const [newKoala, setNewKoala] = useState(true);
+  const [koalaFalling, setKoalaFalling] = useState(false);
 
   const [apps, setApps] = useState([]);
 
@@ -353,6 +406,8 @@ function App() {
 
   const today = new Date().toISOString().split("T")[0];
   const [date, setDate] = useState(today);
+
+  const fallingKoalasRef = useRef(new Set());
 
   function setKoalaListHelp(newList) {
     setKoalaList(newList);
@@ -391,7 +446,7 @@ function App() {
           filename: koala.filename,
           elemId: koala.id + "-" + i,
           leftPos: Math.random() * 1000,
-          topPos: Math.random() * 10,
+          bottomPos: Math.random() * 10 + 10,
           direction: Math.random() < 0.5 ? "left" : "right",
           zIndex: Math.random() * 100 + 50,
           src: require("../koalas/" + koala.filename),
@@ -401,6 +456,11 @@ function App() {
           isDragging: false,
           dragStartX: 0,
           originalLeftPos: 0,
+          dragStartY: 0,
+          originalBottomPos: 0,
+          velocityY: 0,
+          isFalling: false,
+          wasDragged: false,
         });
       }
     });
@@ -408,11 +468,23 @@ function App() {
     if (newKoalas.length > 0) {
       setKoalaObjList((prev) => {
         const combined = [...prev, ...newKoalas];
-        animateKoalas(combined, koalaTimeout);
+        animateKoalas(
+          combined,
+          koalaTimeout,
+          handleClose,
+          setKoalaFalling,
+          fallingKoalasRef
+        );
         return combined;
       });
     } else {
-      animateKoalas(koalaObjList, koalaTimeout);
+      animateKoalas(
+        koalaObjList,
+        koalaTimeout,
+        handleClose,
+        setKoalaFalling,
+        fallingKoalasRef
+      );
     }
   }, [koalaList, koalaObjList]);
 
@@ -552,222 +624,192 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        {modalAddingApp ? (
-          // Display the add application modal
-          <Box
-            sx={{
-              position: "absolute",
-              top: "10%",
-              left: "33.5%",
-              width: "27%",
-              bgcolor: "#9f7e53",
-              boxShadow: 24,
-              p: 4,
-              borderRadius: 2,
-              border: "1px solid black",
-            }}
-          >
-            <div class="modalHeader">
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                Add A New Application
-              </Typography>
+      {koalaFalling ? (
+        <span></span>
+      ) : (
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          {modalAddingApp ? (
+            // Display the add application modal
+            <Box
+              sx={{
+                position: "absolute",
+                top: "25%",
+                left: "22.5%",
+                width: "50%",
+                height: "40vh",
+                bgcolor: "background.paper",
+                display: "flex",
+                flexDirection: "column",
 
-              <button
-                onClick={handleClose}
-                className="closeModalBtn"
-                aria-label="Close"
-              >
-                &times;
-              </button>
-            </div>
-            {/* {form inputs here} */}
-            <div id="modal-modal-description">
-              <TextField
-                id="company"
-                label="Company"
-                variant="outlined"
-                fullWidth
-                required
-                sx={{ mb: 1 }}
-                InputProps={{
-                  style: {
-                    backgroundColor: "#d2b48c",
-                    padding: "10px",
-                    borderRadius: "5px",
-                    boxShadow: "2px 2px",
-                  },
-                }}
-              />
-
-              <TextField
-                id="position"
-                label="Position"
-                variant="outlined"
-                fullWidth
-                required
-                sx={{ mb: 1 }}
-                InputProps={{
-                  style: {
-                    backgroundColor: "#d2b48c",
-                    padding: "10px",
-                    borderRadius: "5px",
-                    boxShadow: "2px 2px",
-                  },
-                }}
-              />
-
-              <TextField
-                id="link"
-                label="Link"
-                variant="outlined"
-                fullWidth
-                sx={{
-                  mb: 1,
-                  "& .MuiOutlinedInput-root": {
-                    backgroundColor: "#d2b48c",
-                    padding: "10px",
-                    borderRadius: "5px",
-                    boxShadow: "2px 2px",
-                  },
-                }}
-              />
-
-              <TextField
-                id="date"
-                label="Date"
-                type="date"
-                variant="outlined"
-                fullWidth
-                required
-                sx={{ mb: 1 }}
-                InputLabelProps={{
-                  shrink: true, // Ensures the label stays above the input
-                }}
-                InputProps={{
-                  style: {
-                    backgroundColor: "#d2b48c",
-                    padding: "10px",
-                    borderRadius: "5px",
-                    boxShadow: "2px 2px",
-                  },
-                }}
-              />
-              <TextField
-                id="status"
-                label="Status"
-                variant="outlined"
-                select
-                fullWidth
-                defaultValue="Applied"
-                required
-                sx={{ mb: 1 }}
-                InputProps={{
-                  style: {
-                    backgroundColor: "#d2b48c",
-                    padding: "10px",
-                    borderRadius: "5px",
-                    boxShadow: "2px 2px",
-                  },
-                }}
-              >
-                <MenuItem value="Applied">Applied</MenuItem>
-                <MenuItem value="Interviewed">Interviewed</MenuItem>
-                <MenuItem value="Offered">Offered</MenuItem>
-                <MenuItem value="Rejected">Rejected</MenuItem>
-              </TextField>
-              <button
-                type="submit"
-                class="loginBtn"
-                onClick={async () => {
-                  const success = await submitNewApp();
-                  if (success) {
-                    handleClose();
-                    await new Promise((res) => setTimeout(res, 300)); // short delay
-                    await load(
-                      setApps,
-                      setUsername,
-                      setNumKoalas,
-                      setNumApps,
-                      setNumInterviews,
-                      setNumOffers,
-                      setKoalaListHelp,
-                      koalaList,
-                      handleOpenNewKoala,
-                      koalaTimeout,
-                      koalaObjList,
-                      statusTimeout,
-                      "submit app"
-                      // koalaListChanged
-                    );
-                  }
-                }}
-              >
-                Submit
-              </button>
-            </div>
-          </Box>
-        ) : (
-          <Box
-            sx={{
-              position: "absolute",
-              top: "18%",
-              left: "33.5%",
-              width: "27%",
-              bgcolor: "#9f7e53",
-              boxShadow: 24,
-              p: 4,
-              borderRadius: 2,
-              border: "1px solid black",
-            }}
-          >
-            <div class="newKoala">
-              <div class="modalHeader">
-                {newKoala ? (
-                  <Typography
-                    id="modal-modal-title"
-                    variant="h6"
-                    component="h2"
-                  >
-                    New Koala Unlockled!
-                  </Typography>
-                ) : (
-                  <Typography
-                    id="modal-modal-title"
-                    variant="h6"
-                    component="h2"
-                  >
-                    Your Koala!
-                  </Typography>
-                )}
+                boxShadow: 24,
+                p: 4,
+                borderRadius: 2,
+              }}
+            >
+              <div className="flex justify-between items-center mb-4">
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                  Add A New Application
+                </Typography>
                 <button
                   onClick={handleClose}
-                  className="closeModalBtn"
+                  className="text-gray-500 hover:text-black text-xl font-bold"
                   aria-label="Close"
                 >
                   &times;
                 </button>
-              </div>
-              <h3>{koalaName}</h3>
-              <div class="kDesc">
-                <div class="centerr">
-                  <img
-                    src={koalaImage}
-                    className="koalaDesPic"
-                    alt="koala"
-                  ></img>
-                  <p>{koalaDesc}</p>
+
+                {/* form inputs here */}
+                <div id="modal-modal-description">
+                  <div className="line mb-2">
+                    <label htmlFor="company">Company:</label>
+                    <input
+                      type="text"
+                      id="company"
+                      className="w-full p-2 border rounded"
+                      required
+                    />
+                  </div>
+
+                  <div className="line mb-2">
+                    <label htmlFor="position">Position:</label>
+                    <input
+                      type="text"
+                      id="position"
+                      className="w-full p-2 border rounded"
+                      required
+                    />
+                  </div>
+
+                  <div className="line mb-2">
+                    <label htmlFor="link">Link:</label>
+                    <input
+                      type="url"
+                      id="link"
+                      className="w-full p-2 border rounded"
+                    />
+                  </div>
+
+                  <div className="line mb-2">
+                    <label htmlFor="date">Date:</label>
+                    <input
+                      type="date"
+                      id="date"
+                      value={date}
+                      className="w-full p-2 border rounded"
+                      required
+                    />
+                  </div>
+
+                  <div className="line mb-4">
+                    <label htmlFor="status">Status:</label>
+                    <select
+                      id="status"
+                      className="w-full p-2 border rounded"
+                      defaultValue="Applied"
+                      required
+                    >
+                      <option value="Applied">Applied</option>
+                      <option value="Interviewed">Interviewed</option>
+                      <option value="Offered">Offered</option>
+                      <option value="Rejected">Rejected</option>
+                    </select>
+                  </div>
+
+                  <button
+                    type="submit"
+                    onClick={async () => {
+                      const success = await submitNewApp();
+                      if (success) {
+                        handleClose();
+                        await new Promise((res) => setTimeout(res, 300)); // short delay
+                        await load(
+                          setApps,
+                          setUsername,
+                          setNumKoalas,
+                          setNumApps,
+                          setNumInterviews,
+                          setNumOffers,
+                          setKoalaListHelp,
+                          koalaList,
+                          handleOpenNewKoala,
+                          koalaTimeout,
+                          koalaObjList,
+                          statusTimeout,
+                          "submit app"
+                          // koalaListChanged
+                        );
+                      }
+                    }}
+                    className="line bg-blue-500 text-white px-4 py-2 rounded"
+                  >
+                    Submit
+                  </button>
                 </div>
               </div>
-            </div>
-          </Box>
-        )}
-      </Modal>
+            </Box>
+          ) : (
+            // Display the new koala modal
+            <Box
+              sx={{
+                position: "absolute",
+                top: "18%",
+                left: "33.5%",
+                width: "27%",
+                bgcolor: "#9f7e53",
+                boxShadow: 24,
+                p: 4,
+                borderRadius: 2,
+                border: "1px solid black",
+              }}
+            >
+              <div class="newKoala">
+                <div class="modalHeader">
+                  {newKoala ? (
+                    <Typography
+                      id="modal-modal-title"
+                      variant="h6"
+                      component="h2"
+                    >
+                      New Koala Unlockled!
+                    </Typography>
+                  ) : (
+                    <Typography
+                      id="modal-modal-title"
+                      variant="h6"
+                      component="h2"
+                    >
+                      Your Koala!
+                    </Typography>
+                  )}
+                  <button
+                    onClick={handleClose}
+                    className="closeModalBtn"
+                    aria-label="Close"
+                  >
+                    &times;
+                  </button>
+                </div>
+                <h3>{koalaName}</h3>
+                <div class="kDesc">
+                  <div class="centerr">
+                    <img
+                      src={koalaImage}
+                      className="koalaDesPic"
+                      alt="koala"
+                    ></img>
+                    <p>{koalaDesc}</p>
+                  </div>
+                </div>
+              </div>
+            </Box>
+          )}
+        </Modal>
+      )}
 
       <div className="tableBody">
         <div className="notes">
