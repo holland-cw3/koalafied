@@ -47,7 +47,6 @@ td {
   position: relative;
   height: 70vh;
   width: 25%;
-  margin-left: 1vw;
 
   box-sizing: border-box;
 }
@@ -98,6 +97,7 @@ td {
 .stats {
   height: 62vh;
   width: 19%;
+  margin-left: 1vw;
 }
 
 .stats h2 {
