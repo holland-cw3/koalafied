@@ -5,13 +5,15 @@ import { useEffect } from "react";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 
 import "../CSS/main.css";
 const globalKoalaList = require("../koalas/koalas.json").koalas;
 
 function animateKoalas(koalaObjList, koalaTimeoutRef) {
-  // console.log("Animating!");
-  // console.log(koalaObjList.length);
+  console.log("Animating!");
+  console.log(koalaObjList.length);
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
   koalaObjList.forEach((koala) => {
@@ -34,11 +36,11 @@ function animateKoalas(koalaObjList, koalaTimeoutRef) {
     elem.style.left = `${koala.leftPos}px`;
 
     // Update vertical position
-    koala.bottomPos += Math.random() * 5 - 2.5;
-    koala.bottomPos = clamp(koala.bottomPos, 5, 10);
-    elem.style.bottom = `${koala.bottomPos}px`;
+    koala.topPos += Math.random() * 5 - 2.5;
+    koala.topPos = clamp(koala.topPos, 5, 10);
+    elem.style.top = `${koala.topPos}px`;
 
-    elem.style.transform = "rotate(" + (Math.random() * 8 - 4) + "deg)";
+    elem.style.transform = "rotate(" + (Math.random() * 5 - 2.5) + ")";
   });
 
   clearTimeout(koalaTimeoutRef.current);
@@ -281,7 +283,7 @@ function App() {
           filename: "../koalas/" + koala.filename,
           elemId: koala.id + "-" + i,
           leftPos: Math.random() * 1000,
-          bottomPos: Math.random() * 10,
+          topPos: Math.random() * 10,
           direction: Math.random() < 0.5 ? "left" : "right",
           src: require("../koalas/" + koala.filename),
         });
@@ -449,111 +451,147 @@ function App() {
               left: "22.5%",
               width: "50%",
               bgcolor: "background.paper",
-              display: "flex",
+              // display: "flex",
 
               boxShadow: 24,
               p: 4,
               borderRadius: 2,
             }}
           >
-            <div className="flex justify-between items-center mb-4">
-              <Typography id="modal-modal-title" variant="h6" component="h2">
+            <div className="flex justify-center items-center mb-4">
+              <Typography
+                id="modal-modal-title"
+                variant="h6"
+                component="h2"
+                className="text-gray-700 font-bold"
+              >
                 Add A New Application
               </Typography>
-              <button
-                onClick={handleClose}
-                className="text-gray-500 hover:text-black text-xl font-bold"
-                aria-label="Close"
+            </div>
+            {/* {form inputs here} */}
+            <div id="modal-modal-description">
+              <TextField
+                id="company"
+                label="Company"
+                variant="outlined"
+                fullWidth
+                required
+                sx={{ mb: 1 }}
+                InputProps={{
+                  style: {
+                    backgroundColor: "#d2b48c",
+                    padding: "10px",
+                    borderRadius: "5px",
+                    boxShadow: "2px 2px",
+                  },
+                }}
+              />
+
+              <TextField
+                id="position"
+                label="Position"
+                variant="outlined"
+                fullWidth
+                required
+                sx={{ mb: 1 }}
+                InputProps={{
+                  style: {
+                    backgroundColor: "#d2b48c",
+                    padding: "10px",
+                    borderRadius: "5px",
+                    boxShadow: "2px 2px",
+                  },
+                }}
+              />
+
+              <TextField
+                id="link"
+                label="Link"
+                variant="outlined"
+                fullWidth
+                sx={{ mb: 1 }}
+                InputProps={{
+                  style: {
+                    backgroundColor: "#d2b48c",
+                    padding: "10px",
+                    borderRadius: "5px",
+                    boxShadow: "2px 2px",
+                  },
+                }}
+              />
+
+              <TextField
+                id="date"
+                label="Date"
+                type="date"
+                variant="outlined"
+                fullWidth
+                required
+                sx={{ mb: 1 }}
+                InputLabelProps={{
+                  shrink: true, // Ensures the label stays above the input
+                }}
+                InputProps={{
+                  style: {
+                    backgroundColor: "#d2b48c",
+                    padding: "10px",
+                    borderRadius: "5px",
+                    boxShadow: "2px 2px",
+                  },
+                }}
+              />
+              <TextField
+                id="status"
+                label="Status"
+                variant="outlined"
+                select
+                fullWidth
+                defaultValue="Applied"
+                required
+                sx={{ mb: 1 }}
+                InputProps={{
+                  style: {
+                    backgroundColor: "#d2b48c",
+                    padding: "10px",
+                    borderRadius: "5px",
+                    boxShadow: "2px 2px",
+                  },
+                }}
               >
-                &times;
+                <MenuItem value="Applied">Applied</MenuItem>
+                <MenuItem value="Interviewed">Interviewed</MenuItem>
+                <MenuItem value="Offered">Offered</MenuItem>
+                <MenuItem value="Rejected">Rejected</MenuItem>
+              </TextField>
+              <button
+                type="submit"
+                onClick={async () => {
+                  const success = await submitNewApp();
+                  if (success) {
+                    handleClose();
+                    await new Promise((res) => setTimeout(res, 300)); // short delay
+                    await load(
+                      setApps,
+                      setUsername,
+                      setNumKoalas,
+                      setNumApps,
+                      setNumInterviews,
+                      setNumOffers,
+                      setKoalaListHelp,
+                      koalaList,
+                      handleOpenNewKoala,
+                      koalaTimeout,
+                      koalaObjList,
+                      statusTimeout,
+                      "submit app"
+                      // koalaListChanged
+                    );
+                  }
+                }}
+                className="line bg-blue-500 text-white px-4 py-2 rounded"
+              >
+                Submit
               </button>
-
-              {/* form inputs here */}
-              <div id="modal-modal-description">
-                <div className="line mb-2">
-                  <label htmlFor="company">Company:</label>
-                  <input
-                    type="text"
-                    id="company"
-                    className="w-full p-2 border rounded"
-                    required
-                  />
-                </div>
-
-                <div className="line mb-2">
-                  <label htmlFor="position">Position:</label>
-                  <input
-                    type="text"
-                    id="position"
-                    className="w-full p-2 border rounded"
-                    required
-                  />
-                </div>
-
-                <div className="line mb-2">
-                  <label htmlFor="link">Link:</label>
-                  <input
-                    type="url"
-                    id="link"
-                    className="w-full p-2 border rounded"
-                  />
-                </div>
-
-                <div className="line mb-2">
-                  <label htmlFor="date">Date:</label>
-                  <input
-                    type="date"
-                    id="date"
-                    className="w-full p-2 border rounded"
-                    required
-                  />
-                </div>
-
-                <div className="line mb-4">
-                  <label htmlFor="status">Status:</label>
-                  <select
-                    id="status"
-                    className="w-full p-2 border rounded"
-                    defaultValue="Applied"
-                    required
-                  >
-                    <option value="Applied">Applied</option>
-                    <option value="Interviewed">Interviewed</option>
-                    <option value="Offered">Offered</option>
-                    <option value="Rejected">Rejected</option>
-                  </select>
-                </div>
-
-                <button
-                  type="submit"
-                  onClick={async () => {
-                    const success = await submitNewApp();
-                    if (success) {
-                      handleClose();
-                      await new Promise((res) => setTimeout(res, 300)); // short delay
-                      await load(
-                        setApps,
-                        setUsername,
-                        setNumKoalas,
-                        setNumApps,
-                        setNumInterviews,
-                        setNumOffers,
-                        setKoalaListHelp,
-                        koalaList,
-                        handleOpenNewKoala,
-                        koalaTimeout,
-                        koalaObjList,
-                        statusTimeout,
-                        "submit app"
-                        // koalaListChanged
-                      );
-                    }
-                  }}
-                  className="line bg-blue-500 text-white px-4 py-2 rounded"
-                >
-                  Submit
-                </button>
-              </div>
             </div>
           </Box>
         ) : (
@@ -722,7 +760,7 @@ function App() {
                 className="koalaSprite"
                 src={item.src}
                 alt={item.name}
-                style={{ left: item.leftPos, bottom: item.bottomPos }}
+                style={{ left: item.leftPos, top: item.topPos }}
               ></img>
             ))}
           </div>
