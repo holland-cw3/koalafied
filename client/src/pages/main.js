@@ -37,6 +37,8 @@ function animateKoalas(koalaObjList, koalaTimeoutRef) {
     koala.topPos += Math.random() * 5 - 2.5;
     koala.topPos = clamp(koala.topPos, 5, 10);
     elem.style.top = `${koala.topPos}px`;
+
+    elem.style.transform = "rotate(" + (Math.random() * 8 - 4) + "deg)";
   });
 
   clearTimeout(koalaTimeoutRef.current);
