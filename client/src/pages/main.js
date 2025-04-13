@@ -9,26 +9,32 @@ import Typography from "@mui/material/Typography";
 import "../CSS/main.css";
 const globalKoalaList = require("../koalas/koalas.json").koalas;
 
-function animateKoalas(koalaObjList, koalaTimeout) {
-  for (let i = 0; i < koalaObjList.length; i++) {
-    let koala = koalaObjList[i];
+function animateKoalas(koalaObjList, koalaTimeoutRef) {
+  console.log("Animating!");
+  console.log(koalaObjList.length);
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
-    // Use direction to choose where to move, go to a negative amount off screen and flip direction
+  koalaObjList.forEach((koala) => {
+    const elem = document.getElementById(koala.elemId);
+    if (!elem) return;
+
+    const directionMultiplier = koala.direction === "left" ? -1 : 1;
+
+    // Update horizontal position
+    koala.leftPos += Math.random() * 50 * directionMultiplier;
+    koala.leftPos = clamp(koala.leftPos, 5, 1000);
+    elem.style.left = `${koala.leftPos}px`;
+
+    // Update vertical position
     koala.topPos += Math.random() * 10 - 5;
-    if (koala.topPos > 10) koala.topPos = 10;
-    if (koala.topPos < 5) koala.topPos = 5;
-    document.getElementById(koala.elemId).style.top = koala.top + "px";
+    koala.topPos = clamp(koala.topPos, 5, 10);
+    elem.style.top = `${koala.topPos}px`;
+  });
 
-    koala.leftPos += Math.random() * 100 - 50;
-    if (koala.leftPos > 100) koala.leftPos = 100;
-    if (koala.leftPos < 5) koala.leftPos = 5;
-    document.getElementById(koala.elemId).style.left = koala.leftPos + "px";
-  }
-
-  clearTimeout(koalaTimeout);
-  koalaTimeout = setTimeout(() => {
-    animateKoalas(koalaObjList, koalaTimeout);
-  }, 10000);
+  clearTimeout(koalaTimeoutRef.current);
+  koalaTimeoutRef.current = setTimeout(() => {
+    animateKoalas(koalaObjList, koalaTimeoutRef);
+  }, 1000);
 }
 
 function compareKoalaLists(newList, oldList) {
@@ -55,14 +61,14 @@ async function load(
   setNumApps,
   setNumInterviews,
   setNumOffers,
-  setKoalaList,
+  setKoalaListHelp,
   koalaList,
   handleOpenNewKoala,
   koalaTimeout,
   koalaObjList,
   statusTimeout,
-  printStr,
-  koalaListChanged
+  printStr
+  // koalaListChanged
 ) {
   const token = localStorage.getItem("token");
 
@@ -101,11 +107,9 @@ async function load(
             "I just unlocked the " + newKoala.name + ", " + newKoala.description
           );
         }
-
-        koalaListChanged();
       }
 
-      setKoalaList(data.koalas);
+      setKoalaListHelp(data.koalas);
 
       if (data.notes !== "") {
         document.getElementById("noteField").value = data.notes;
@@ -113,22 +117,17 @@ async function load(
 
       console.log("Origin: " + printStr);
 
-      // clearTimeout(statusTimeout);
-      // statusTimeout = setTimeout(() => {
-      let applications = data.applications;
-      for (let i = 0; i < applications.length; i++) {
-        let item = applications[i];
-        document.getElementById(
-          "status_" + item.company + item.position
-        ).value = item.status;
-        console.log("Changing status");
-      }
-      // }, 300);
-
-      clearTimeout(koalaTimeout);
-      koalaTimeout = setTimeout(() => {
-        animateKoalas(koalaObjList, koalaTimeout);
-      }, 10000);
+      clearTimeout(statusTimeout);
+      statusTimeout = setTimeout(() => {
+        let applications = data.applications;
+        for (let i = 0; i < applications.length; i++) {
+          let item = applications[i];
+          document.getElementById(
+            "status_" + item.company + item.position
+          ).value = item.status;
+          console.log("Changing status");
+        }
+      }, 300);
 
       return;
     } else {
@@ -218,29 +217,6 @@ function App() {
     window.location.href = "/login";
   }
 
-  function koalaListChanged() {
-    if (koalaList.length !== koalaObjList.length) {
-      for (let i = 0; i < koalaList.length; i++) {
-        let koala = getKoalaById(koalaList[i]);
-        if (!inKoalaList(koala.id, koalaObjList))
-          setKoalaObjList([
-            ...koalaObjList,
-            {
-              id: koala.id,
-              desc: koala.description,
-              name: koala.name,
-              filename: "../koalas/" + koala.filename,
-              elemId: koala.id + i,
-              leftPos: 0,
-              topPos: 0,
-              direction: "left",
-              src: require("../koalas/" + koala.filename),
-            },
-          ]);
-      }
-    }
-  }
-
   function inKoalaList(id, list) {
     for (let i = 0; i < list.length; i++) {
       if (list[i].id === id) return true;
@@ -270,10 +246,48 @@ function App() {
   const [numInterviews, setNumInterviews] = useState(0);
   const [numOffers, setNumOffers] = useState(0);
 
+  function setKoalaListHelp(newList) {
+    setKoalaList(newList);
+    // // koalaListChanged();
+  }
+
   const [koalaObjList, setKoalaObjList] = useState([]);
 
   let koalaTimeout = useRef(null);
   let statusTimeout = useRef(null);
+
+  useEffect(() => {
+    const newKoalas = [];
+
+    koalaList.forEach((koalaId, i) => {
+      const koala = getKoalaById(koalaId);
+
+      if (!koalaObjList.some((k) => k.id === koala.id)) {
+        console.log("Adding koala!");
+        newKoalas.push({
+          id: koala.id,
+          desc: koala.description,
+          name: koala.name,
+          filename: "../koalas/" + koala.filename,
+          elemId: koala.id + "-" + i,
+          leftPos: Math.random() * 1000,
+          topPos: Math.random() * 10,
+          direction: Math.random() < 0.5 ? "left" : "right",
+          src: require("../koalas/" + koala.filename),
+        });
+      }
+    });
+
+    if (newKoalas.length > 0) {
+      setKoalaObjList((prev) => {
+        const combined = [...prev, ...newKoalas];
+        animateKoalas(combined, koalaTimeout);
+        return combined;
+      });
+    } else {
+      animateKoalas(koalaObjList, koalaTimeout);
+    }
+  }, [koalaList, koalaObjList]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -327,14 +341,14 @@ function App() {
         setNumApps,
         setNumInterviews,
         setNumOffers,
-        setKoalaList,
+        setKoalaListHelp,
         koalaList,
         handleOpenNewKoala,
         koalaTimeout,
         koalaObjList,
         statusTimeout,
-        "update status",
-        koalaListChanged
+        "update status"
+        // koalaListChanged
       );
 
       if (response.ok) {
@@ -357,16 +371,20 @@ function App() {
       setNumApps,
       setNumInterviews,
       setNumOffers,
-      setKoalaList,
+      setKoalaListHelp,
       koalaList,
       handleOpenNewKoala,
       koalaTimeout,
       koalaObjList,
       statusTimeout,
-      "top level",
-      koalaListChanged
+      "top level"
+      // koalaListChanged
     );
   }, []);
+
+  useEffect(() => {
+    // // koalaListChanged();
+  }, [koalaList]);
 
   switch (selectedSorting) {
     case "oldest":
@@ -510,14 +528,14 @@ function App() {
                         setNumApps,
                         setNumInterviews,
                         setNumOffers,
-                        setKoalaList,
+                        setKoalaListHelp,
                         koalaList,
                         handleOpenNewKoala,
                         koalaTimeout,
                         koalaObjList,
                         statusTimeout,
-                        "submit app",
-                        koalaListChanged
+                        "submit app"
+                        // koalaListChanged
                       );
                     }
                   }}
