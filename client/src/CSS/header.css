@@ -50,7 +50,7 @@
     box-shadow: 5px 5px black;
 
     background-image: url("../images/searcher.png");
-    color: #d64949;
+    color: #d77878;
     text-shadow: 2px 2px black;
     font-weight: bold;
   }
@@ -85,7 +85,7 @@
   padding: 15px 15px;
 
   background-image: url("../images/searcher.png");
-  color: #8c73e4;
+  color: #a191db;
   text-shadow: 2px 2px black;
   font-weight: bold;
   border: none;

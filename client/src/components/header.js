@@ -7,16 +7,25 @@ function logout() {
   window.location.href = "/login";
 }
 
-export default function Header() {
+export default function Header({ isHomePage }) {
   return (
     <div className="header">
       <div className="header-left">
-        <button
-          className="leaderboard-button"
-          onClick={() => (window.location.href = "/leaderboard")}
-        >
-          Leaderboard
-        </button>
+        {isHomePage ? (
+          <button
+            className="leaderboard-button"
+            onClick={() => (window.location.href = "/leaderboard")}
+          >
+            Leaderboard
+          </button>
+        ) : (
+          <button
+            className="leaderboard-button"
+            onClick={() => (window.location.href = "/")}
+          >
+            Home
+          </button>
+        )}
       </div>
 
       <img className="logo" src={logo} alt="logo" />

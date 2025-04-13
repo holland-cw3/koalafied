@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Header from "../components/header";
 import "../CSS/leaderboard.css";
 // import treeVine from '../images/PixelatedTreeBranch.png';
 
@@ -28,10 +29,8 @@ function Leaderboard() {
   }, []);
 
   return (
-    <>
-      <div className="home-btn" style={headerStyle}>
-        <a href="/">Home</a>
-      </div>
+    <div className="App">
+      <Header isHomePage={false} />
       <div className="leaderboard" style={headerStyle}>
         <h2>Leaderboard 🏆</h2>
         <ol>
@@ -55,8 +54,7 @@ function Leaderboard() {
             })}
         </ol>
       </div>
-    </>
-
+    </div>
   );
 }
 
