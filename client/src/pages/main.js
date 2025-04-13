@@ -83,7 +83,7 @@ async function load(
 
   try {
     // const response = await fetch("https://koala-fied-3.onrender.com/viewApplications", {
-    const response = await fetch("http://localhost:5001/viewApplications", {
+    const response = await fetch("https://koala-fied-3.onrender.com/viewApplications", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -139,9 +139,7 @@ async function load(
       }, 300);
 
       return;
-    } else {
-      alert("User not authenticated");
-    }
+    } 
   } catch (error) {
     console.error("Error submitting data:", error);
   }
@@ -158,8 +156,7 @@ async function submitNewApp() {
 
   try {
     const response = await fetch(
-      // "https://koala-fied-3.onrender.com/addApplication",
-      "http://localhost:5001/addApplication",
+      "https://koala-fied-3.onrender.com/addApplication",
       {
         method: "POST",
         headers: {
@@ -194,8 +191,7 @@ async function saveNotes(setNotes) {
 
   try {
     const response = await fetch(
-      // "https://koala-fied-3.onrender.com/updateNotes",
-      "http://localhost:5001/updateNotes",
+       "https://koala-fied-3.onrender.com/updateNotes",
       {
         method: "POST",
         headers: {
@@ -326,8 +322,7 @@ function App() {
 
     try {
       const response = await fetch(
-        // "https://koala-fied-3.onrender.com/updateStatus",
-        "http://localhost:5001/updateStatus",
+        "https://koala-fied-3.onrender.com/updateStatus",
         {
           method: "POST",
           headers: {

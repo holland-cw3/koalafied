@@ -6,8 +6,7 @@ import logo from '../images/logo.png';
 
 async function login(username, password) {
   try {
-    // const response = await fetch("https://koala-fied-3.onrender.com/login", {
-    const response = await fetch("http://localhost:5001/login", {
+    const response = await fetch("https://koala-fied-3.onrender.com/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
