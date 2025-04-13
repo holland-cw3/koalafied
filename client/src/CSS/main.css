@@ -11,7 +11,6 @@
   margin-right: 2vw;
   margin-left: 2vw;
   margin-top: -1vh;
-
 }
 
 thead {
@@ -25,7 +24,6 @@ thead {
   background-image: url("../images/tbbg.png");
   box-shadow: 9px 9px;
   border-radius: 3px;
-
 }
 
 table tbody tr {
@@ -234,7 +232,7 @@ button {
 }
 
 .appTable {
-  height: 45vh;
+  height: 38vh;
   overflow: scroll;
 }
 
@@ -250,10 +248,9 @@ button {
   display: none;
 }
 
-
-.noApps{
+.noApps {
   width: 100%;
-  background-image: url('../images/searcher.png');
+  background-image: url("../images/searcher.png");
   filter: brightness(0.5);
   color: white;
   font-size: 30px;
@@ -265,48 +262,45 @@ button {
   justify-content: center;
 }
 
-.modalHeader{
+.modalHeader {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   font-weight: bold;
-  
 }
 
-.closeModalBtn{
+.closeModalBtn {
   background-color: red;
-  width: 2vw
+  width: 2vw;
 }
 
-.newKoala{
-  text-align: center ;
+.newKoala {
+  text-align: center;
   background-color: tan;
   color: black;
-  padding:10px;
+  padding: 10px;
   text-shadow: 2px 2px white;
   font-weight: bold;
   font-size: 15px;
 }
 
-.kDesc{
+.kDesc {
   display: flex;
   flex-direction: row;
   text-shadow: none;
   font-weight: normal;
 
- width: 100%;
- justify-content: center;
- align-content: center;
-
+  width: 100%;
+  justify-content: center;
+  align-content: center;
 }
 
-.kDesc p{
+.kDesc p {
   width: 89%;
-  font-weight: bold
+  font-weight: bold;
 }
 
-
-.centerr{
+.centerr {
   display: flex;
   flex-direction: column;
   align-items: center;

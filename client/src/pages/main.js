@@ -43,11 +43,22 @@ function animateKoalas(koalaObjList, koalaTimeoutRef) {
             window.innerWidth
           );
           elem.style.left = `${koala.leftPos}px`;
+
+          // Shake vertically
+          const shakeOffset = Math.random() * 4 - 2; // range: [-2, 2]
+          const newBottom = clamp(koala.bottomPos + shakeOffset, 0, 20);
+          elem.style.bottom = `${newBottom}px`;
+
+          // Fast rotation while dragging
+          const rotation = Math.random() * 20 - 10; // more dramatic: -10 to +10 degrees
+          elem.style.transform = `rotate(${rotation}deg)`;
         }
       });
 
       document.addEventListener("mouseup", () => {
         koala.isDragging = false;
+        elem.style.transform = "rotate(0deg)";
+        elem.style.bottom = `${koala.bottomPos}px`;
       });
 
       koala._eventsAttached = true;
