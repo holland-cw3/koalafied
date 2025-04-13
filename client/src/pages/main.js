@@ -1,4 +1,3 @@
-// import Footer from "../components/footer";
 import Header from "../components/header";
 import React, { useState, useRef } from "react";
 import { useEffect } from "react";
@@ -449,8 +448,10 @@ function App() {
               top: "25%",
               left: "22.5%",
               width: "50%",
+              height: "40vh",
               bgcolor: "background.paper",
               display: "flex",
+              flexDirection:'column',
 
               boxShadow: 24,
               p: 4,
@@ -592,17 +593,19 @@ function App() {
       <div className="tableBody">
         <div className="stats">
           <div className="stats2">
-            <h2>Stats For: {username}</h2>
-            <h3 className="kCount">Koala Count: {numKoalas}</h3>
+            <h2>
+              <span class="underline">Stats For:</span>
+              <span class="us">{username}</span>
+            </h2>
+            <h3 class="kCount">Koala Count: {numKoalas}</h3>
             <h3 className="silver">Applications: {numApps}</h3>
             <h3 className="bronze">Interviews: {numInterviews}</h3>
             <h3 className="gold">Offers: {numOffers}</h3>
-            <br></br>
             <h3 className="kCount">New Koalas:</h3>
           </div>
         </div>
         <div className="table">
-          <h4 className="sorter">
+          <h4 class="sorter">
             <span className="line">
               Status:{" "}
               <select
