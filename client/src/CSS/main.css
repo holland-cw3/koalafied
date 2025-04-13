@@ -264,3 +264,50 @@ button {
   flex-direction: column;
   justify-content: center;
 }
+
+.modalHeader{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-weight: bold;
+  
+}
+
+.closeModalBtn{
+  background-color: red;
+  width: 2vw
+}
+
+.newKoala{
+  text-align: center ;
+  background-color: tan;
+  color: black;
+  padding:10px;
+  text-shadow: 2px 2px white;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.kDesc{
+  display: flex;
+  flex-direction: row;
+  text-shadow: none;
+  font-weight: normal;
+
+ width: 100%;
+ justify-content: center;
+ align-content: center;
+
+}
+
+.kDesc p{
+  width: 89%;
+  font-weight: bold
+}
+
+
+.centerr{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
