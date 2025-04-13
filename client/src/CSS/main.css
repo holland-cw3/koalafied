@@ -138,7 +138,7 @@ td {
 }
 
 .kCount {
-  color: rgb(255, 0, 195);
+  color: rgb(220, 100, 190);
   text-shadow: 2px 2px black;
 }
 
@@ -344,4 +344,15 @@ button {
   width: 100%;
   border: none;
   box-shadow: 4px 4px black;
+}
+
+.QuestTitle{
+  text-shadow: 3px 3px black;
+  color: green;
+  margin-bottom: -10px;
+}
+
+.statNotes.over{
+  max-height: 5vh;
+  overflow-y: scroll;
 }
