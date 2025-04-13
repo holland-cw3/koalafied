@@ -241,3 +241,7 @@ button {
 .koalaDesPic {
   width: 10vw;
 }
+
+::-webkit-scrollbar {
+  display: none;
+}
