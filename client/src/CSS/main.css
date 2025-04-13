@@ -351,7 +351,6 @@ button {
   margin-bottom: -12px;
 }
 
-<<<<<<< HEAD
 .statNotes.over{
   padding-top:0;
   max-height:  10vh;
@@ -370,9 +369,3 @@ button {
   height: 20px;
   margin-left: 3px;
 }
-=======
-.statNotes.over {
-  max-height: 5vh;
-  overflow-y: scroll;
-}
->>>>>>> adbcd1b8e0c962970ac7c3020eccde32439c8500
