@@ -17,6 +17,45 @@ function animateKoalas(koalaObjList, koalaTimeoutRef) {
     const elem = document.getElementById(koala.elemId);
     if (!elem) return;
 
+    // Attach hover events once
+    if (!koala._eventsAttached) {
+      elem.addEventListener("mouseenter", () => {
+        koala.hovered = true;
+      });
+      elem.addEventListener("mouseleave", () => {
+        koala.hovered = false;
+      });
+
+      elem.addEventListener("mousedown", (e) => {
+        koala.isDragging = true;
+        koala.dragStartX = e.clientX;
+        koala.originalLeftPos = koala.leftPos;
+        // Prevent text/image dragging
+        e.preventDefault();
+      });
+
+      document.addEventListener("mousemove", (e) => {
+        if (koala.isDragging) {
+          const deltaX = e.clientX - koala.dragStartX;
+          koala.leftPos = clamp(
+            koala.originalLeftPos + deltaX,
+            -50,
+            window.innerWidth
+          );
+          elem.style.left = `${koala.leftPos}px`;
+        }
+      });
+
+      document.addEventListener("mouseup", () => {
+        koala.isDragging = false;
+      });
+
+      koala._eventsAttached = true;
+    }
+
+    // Stop animation if hovered
+    if (koala.hovered) return;
+
     if (koala.sleepTime <= 0) {
       let shouldSleep = koala.walkTime <= 0;
 
@@ -27,9 +66,12 @@ function animateKoalas(koalaObjList, koalaTimeoutRef) {
 
         // Update horizontal position
         koala.leftPos += Math.random() * 4 * directionMultiplier;
-        koala.leftPos = clamp(koala.leftPos, 5, 1000);
+        koala.leftPos = clamp(koala.leftPos, -200, window.innerWidth + 200);
         // if at one end flip direction
-        if (koala.leftPos === 1000 || koala.leftPos === 5) {
+        if (
+          koala.leftPos === window.innerWidth + 200 ||
+          koala.leftPos === -200
+        ) {
           if (koala.direction === "right") {
             koala.direction = "left";
           } else {
@@ -294,6 +336,9 @@ function App() {
   const [numInterviews, setNumInterviews] = useState(0);
   const [numOffers, setNumOffers] = useState(0);
 
+  const today = new Date().toISOString().split("T")[0];
+  const [date, setDate] = useState(today);
+
   function setKoalaListHelp(newList) {
     setKoalaList(newList);
     // // koalaListChanged();
@@ -337,6 +382,10 @@ function App() {
           src: require("../koalas/" + koala.filename),
           sleepTime: 0,
           walkTime: Math.random() * 150 + 50,
+          hovered: false,
+          isDragging: false,
+          dragStartX: 0,
+          originalLeftPos: 0,
         });
       }
     });
@@ -561,6 +610,7 @@ function App() {
                   <input
                     type="date"
                     id="date"
+                    value={date}
                     className="w-full p-2 border rounded"
                     required
                   />
@@ -625,38 +675,47 @@ function App() {
               boxShadow: 24,
               p: 4,
               borderRadius: 2,
-              border:'1px solid black'
+              border: "1px solid black",
             }}
           >
-            <div class='newKoala'>
-              <div class='modalHeader'>
-              {newKoala ? (
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                  New Koala Unlockled!
-                </Typography>
-              ) : (
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                  Your Koala!
-                </Typography>
-              )}
-              <button
-                onClick={handleClose}
-                className="closeModalBtn"
-                aria-label="Close"
-              >
-                &times;
-              </button>
+            <div class="newKoala">
+              <div class="modalHeader">
+                {newKoala ? (
+                  <Typography
+                    id="modal-modal-title"
+                    variant="h6"
+                    component="h2"
+                  >
+                    New Koala Unlockled!
+                  </Typography>
+                ) : (
+                  <Typography
+                    id="modal-modal-title"
+                    variant="h6"
+                    component="h2"
+                  >
+                    Your Koala!
+                  </Typography>
+                )}
+                <button
+                  onClick={handleClose}
+                  className="closeModalBtn"
+                  aria-label="Close"
+                >
+                  &times;
+                </button>
               </div>
               <h3>{koalaName}</h3>
-              <div class='kDesc'>
-              
-              <div class='centerr'>
-              <img src={koalaImage} className="koalaDesPic" alt='koala'></img>
-              <p>{koalaDesc}</p>
-
+              <div class="kDesc">
+                <div class="centerr">
+                  <img
+                    src={koalaImage}
+                    className="koalaDesPic"
+                    alt="koala"
+                  ></img>
+                  <p>{koalaDesc}</p>
+                </div>
               </div>
-              </div>
-             
             </div>
           </Box>
         )}
@@ -717,75 +776,74 @@ function App() {
             </button>
           </h4>
           <div className="appTable overflow-x-auto max-w-full">
-            {(apps.length > 0 ?
-            <table className="table-auto apps">
-              <thead>
-                <tr>
-                  <th>Company</th>
-                  <th>Position</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {apps
-                  .filter(
-                    (item) =>
-                      (searchVal === "" ||
-                        item.company
-                          .toLowerCase()
-                          .includes(searchVal.toLowerCase()) ||
-                        item.position
-                          .toLowerCase()
-                          .includes(searchVal.toLowerCase()) ||
-                        item.meet) &&
-                      (statusVal === "all" || statusVal === item.status)
-                  )
-                  .map((item) => (
-                    <tr>
-                      <td>{item.company}</td>
-                      <td>
-                        <a
-                          href={item.linkString}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {item.position}
-                        </a>
-                      </td>
-                      <td>{item.date}</td>
-                      <td>
-                        <select
-                          id={"status_" + item.company + item.position}
-                          defaultValue={item.status}
-                          className="statusSelect"
-                        >
-                          <option value="Applied">Applied</option>
-                          <option value="Interviewed">Interviewed</option>
-                          <option value="Offered">Offer</option>
-                          <option value="Rejected">Rejected</option>
-                        </select>
-                        <button
-                          onClick={async () => {
-                            updateStatus(
-                              item.company,
-                              item.position,
-                              "status_" + item.company + item.position
-                            );
-                          }}
-                          class="updateBtn"
-                        >
-                          Update
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table> : <div class='noApps'>
-          
-            Nothing to see here! Start Applying!
-            
-            </div>)}
+            {apps.length > 0 ? (
+              <table className="table-auto apps">
+                <thead>
+                  <tr>
+                    <th>Company</th>
+                    <th>Position</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {apps
+                    .filter(
+                      (item) =>
+                        (searchVal === "" ||
+                          item.company
+                            .toLowerCase()
+                            .includes(searchVal.toLowerCase()) ||
+                          item.position
+                            .toLowerCase()
+                            .includes(searchVal.toLowerCase()) ||
+                          item.meet) &&
+                        (statusVal === "all" || statusVal === item.status)
+                    )
+                    .map((item) => (
+                      <tr>
+                        <td>{item.company}</td>
+                        <td>
+                          <a
+                            href={item.linkString}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {item.position}
+                          </a>
+                        </td>
+                        <td>{item.date}</td>
+                        <td>
+                          <select
+                            id={"status_" + item.company + item.position}
+                            defaultValue={item.status}
+                            className="statusSelect"
+                          >
+                            <option value="Applied">Applied</option>
+                            <option value="Interviewed">Interviewed</option>
+                            <option value="Offered">Offer</option>
+                            <option value="Rejected">Rejected</option>
+                          </select>
+                          <button
+                            onClick={async () => {
+                              updateStatus(
+                                item.company,
+                                item.position,
+                                "status_" + item.company + item.position
+                              );
+                            }}
+                            class="updateBtn"
+                          >
+                            Update
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            ) : (
+              <div class="noApps">Nothing to see here! Start Applying!</div>
+            )}
           </div>
         </div>
         <div className="notes">
