@@ -1,4 +1,3 @@
-// import Footer from "../components/footer";
 import Header from "../components/header";
 import React, { useState, useRef } from "react";
 import { useEffect } from "react";
@@ -20,33 +19,119 @@ function animateKoalas(koalaObjList, koalaTimeoutRef) {
     const elem = document.getElementById(koala.elemId);
     if (!elem) return;
 
-    const directionMultiplier = koala.direction === "left" ? -1 : 1;
+    // Attach hover events once
+    if (!koala._eventsAttached) {
+      elem.addEventListener("mouseenter", () => {
+        koala.hovered = true;
+      });
+      elem.addEventListener("mouseleave", () => {
+        koala.hovered = false;
+      });
 
-    // Update horizontal position
-    koala.leftPos += Math.random() * 25 * directionMultiplier;
-    koala.leftPos = clamp(koala.leftPos, 5, 1000);
-    // if at one end flip direction
-    if (koala.leftPos === 1000 || koala.leftPos === 5) {
-      if (koala.direction === "right") {
-        koala.direction = "left";
-      } else {
-        koala.direction = "right";
-      }
+      elem.addEventListener("mousedown", (e) => {
+        koala.isDragging = true;
+        koala.dragStartX = e.clientX;
+        koala.originalLeftPos = koala.leftPos;
+        // Prevent text/image dragging
+        e.preventDefault();
+      });
+
+      document.addEventListener("mousemove", (e) => {
+        if (koala.isDragging) {
+          const deltaX = e.clientX - koala.dragStartX;
+          koala.leftPos = clamp(
+            koala.originalLeftPos + deltaX,
+            -50,
+            window.innerWidth
+          );
+          elem.style.left = `${koala.leftPos}px`;
+
+          // Shake vertically
+          const shakeOffset = Math.random() * 4 - 2; // range: [-2, 2]
+          const newBottom = clamp(koala.bottomPos + shakeOffset, 0, 20);
+          elem.style.bottom = `${newBottom}px`;
+
+          // Fast rotation while dragging
+          const rotation = Math.random() * 20 - 10; // more dramatic: -10 to +10 degrees
+          elem.style.transform = `rotate(${rotation}deg)`;
+        }
+      });
+
+      document.addEventListener("mouseup", () => {
+        koala.isDragging = false;
+        elem.style.transform = "rotate(0deg)";
+        elem.style.bottom = `${koala.bottomPos}px`;
+      });
+
+      koala._eventsAttached = true;
     }
-    elem.style.left = `${koala.leftPos}px`;
 
-    // Update vertical position
-    koala.topPos += Math.random() * 5 - 2.5;
-    koala.topPos = clamp(koala.topPos, 5, 10);
-    elem.style.top = `${koala.topPos}px`;
+    // Stop animation if hovered
+    if (koala.hovered) return;
 
-    elem.style.transform = "rotate(" + (Math.random() * 5 - 2.5) + ")";
+    if (koala.sleepTime <= 0) {
+      let shouldSleep = koala.walkTime <= 0;
+
+      if (shouldSleep) {
+        koala.sleepTime = Math.random() * 50 + 10;
+      } else {
+        const directionMultiplier = koala.direction === "left" ? -1 : 1;
+
+        // Update horizontal position
+        koala.leftPos += Math.random() * 4 * directionMultiplier;
+        koala.leftPos = clamp(koala.leftPos, -200, window.innerWidth + 200);
+        // if at one end flip direction
+        if (
+          koala.leftPos === window.innerWidth + 200 ||
+          koala.leftPos === -200
+        ) {
+          if (koala.direction === "right") {
+            koala.direction = "left";
+          } else {
+            koala.direction = "right";
+          }
+        }
+        elem.style.left = `${koala.leftPos}px`;
+
+        // Update vertical position
+        let doUpDown = Math.random() * 10 >= 5;
+        if (doUpDown) {
+          koala.bottomPos += Math.random() * 2 - 1;
+          koala.bottomPos = clamp(koala.bottomPos, 5, 10);
+          elem.style.bottom = `${koala.bottomPos}px`;
+        }
+
+        let doRotation = Math.random() * 10 >= 3;
+        if (doRotation)
+          elem.style.transform = "rotate(" + (Math.random() * 4 - 2) + "deg)";
+
+        koala.walkTime--;
+      }
+    } else {
+      koala.sleepTime--;
+
+      if (koala.sleepTime <= 0) {
+        koala.walkTime = Math.random() * 150 + 25;
+        let changeDirection = Math.random() * 100 > 90;
+        if (changeDirection) {
+          if (koala.direction === "left") {
+            koala.direction = "right";
+          } else {
+            koala.direction = "left";
+          }
+        }
+      }
+
+      let doRotation = Math.random() * 10 >= 8;
+      if (doRotation)
+        elem.style.transform = "rotate(" + (Math.random() * 4 - 2) + "deg)";
+    }
   });
 
   clearTimeout(koalaTimeoutRef.current);
   koalaTimeoutRef.current = setTimeout(() => {
     animateKoalas(koalaObjList, koalaTimeoutRef);
-  }, 500);
+  }, 100);
 }
 
 function compareKoalaLists(newList, oldList) {
@@ -86,13 +171,16 @@ async function load(
 
   try {
     // const response = await fetch("https://koala-fied-3.onrender.com/viewApplications", {
-    const response = await fetch("http://localhost:5001/viewApplications", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      "https://koala-fied-3.onrender.com/viewApplications",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (response.ok) {
       const data = await response.json();
@@ -113,7 +201,12 @@ async function load(
         for (let i = 0; i < newKoalas.length; i++) {
           let newKoala = getKoalaById(newKoalas[i]);
 
-          handleOpenNewKoala(newKoala.name, newKoala.description);
+          handleOpenNewKoala(
+            newKoala.name,
+            newKoala.description,
+            newKoala.filename,
+            true
+          );
 
           console.log(
             "I just unlocked the " + newKoala.name + ", " + newKoala.description
@@ -142,8 +235,6 @@ async function load(
       }, 300);
 
       return;
-    } else {
-      alert("User not authenticated");
     }
   } catch (error) {
     console.error("Error submitting data:", error);
@@ -161,8 +252,7 @@ async function submitNewApp() {
 
   try {
     const response = await fetch(
-      // "https://koala-fied-3.onrender.com/addApplication",
-      "http://localhost:5001/addApplication",
+      "https://koala-fied-3.onrender.com/addApplication",
       {
         method: "POST",
         headers: {
@@ -197,8 +287,7 @@ async function saveNotes(setNotes) {
 
   try {
     const response = await fetch(
-      // "https://koala-fied-3.onrender.com/updateNotes",
-      "http://localhost:5001/updateNotes",
+      "https://koala-fied-3.onrender.com/updateNotes",
       {
         method: "POST",
         headers: {
@@ -246,7 +335,9 @@ function App() {
   const [modalAddingApp, setModalAddingApp] = useState(true);
 
   const [koalaName, setKoalaName] = useState("");
-  const [koalaDesc, setkoalaDesc] = useState("");
+  const [koalaDesc, setKoalaDesc] = useState("");
+  const [koalaImage, setKoalaImage] = useState("");
+  const [newKoala, setNewKoala] = useState(true);
 
   const [apps, setApps] = useState([]);
 
@@ -258,9 +349,24 @@ function App() {
   const [numInterviews, setNumInterviews] = useState(0);
   const [numOffers, setNumOffers] = useState(0);
 
+  const today = new Date().toISOString().split("T")[0];
+  const [date, setDate] = useState(today);
+
   function setKoalaListHelp(newList) {
     setKoalaList(newList);
     // // koalaListChanged();
+  }
+
+  const koalaImages = importAll(
+    require.context("../koalas", false, /\.(png|jpe?g|svg)$/)
+  );
+
+  function importAll(r) {
+    let images = {};
+    r.keys().forEach((key) => {
+      images[key.replace("./", "")] = r(key);
+    });
+    return images;
   }
 
   const [koalaObjList, setKoalaObjList] = useState([]);
@@ -280,12 +386,19 @@ function App() {
           id: koala.id,
           desc: koala.description,
           name: koala.name,
-          filename: "../koalas/" + koala.filename,
+          filename: koala.filename,
           elemId: koala.id + "-" + i,
           leftPos: Math.random() * 1000,
           topPos: Math.random() * 10,
           direction: Math.random() < 0.5 ? "left" : "right",
+          zIndex: Math.random() * 100 + 50,
           src: require("../koalas/" + koala.filename),
+          sleepTime: 0,
+          walkTime: Math.random() * 150 + 50,
+          hovered: false,
+          isDragging: false,
+          dragStartX: 0,
+          originalLeftPos: 0,
         });
       }
     });
@@ -306,16 +419,19 @@ function App() {
     setModalAddingApp(true);
   };
 
-  const handleOpenNewKoala = (name, desc) => {
+  const handleOpenNewKoala = (name, desc, filename, isNewKoala) => {
     setOpen(true);
     setModalAddingApp(false);
     setKoalaName(name);
-    setkoalaDesc(desc);
+    setKoalaDesc(desc);
+    setNewKoala(isNewKoala);
+    setKoalaImage(koalaImages[filename]);
   };
 
   const handleClose = () => {
     setOpen(false);
     setModalAddingApp(true);
+    setNewKoala(true);
   };
 
   // list of user's applications
@@ -328,8 +444,7 @@ function App() {
 
     try {
       const response = await fetch(
-        // "https://koala-fied-3.onrender.com/updateStatus",
-        "http://localhost:5001/updateStatus",
+        "https://koala-fied-3.onrender.com/updateStatus",
         {
           method: "POST",
           headers: {
@@ -450,8 +565,10 @@ function App() {
               top: "25%",
               left: "22.5%",
               width: "50%",
+              height: "40vh",
               bgcolor: "background.paper",
-              // display: "flex",
+              display: "flex",
+              flexDirection: "column",
 
               boxShadow: 24,
               p: 4,
@@ -599,28 +716,54 @@ function App() {
           <Box
             sx={{
               position: "absolute",
-              top: "25%",
-              left: "22.5%",
-              width: "50%",
-              bgcolor: "background.paper",
+              top: "18%",
+              left: "33.5%",
+              width: "27%",
+              bgcolor: "#9f7e53",
               boxShadow: 24,
               p: 4,
               borderRadius: 2,
+              border: "1px solid black",
             }}
           >
-            <div className="flex justify-between items-center mb-4">
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                New Koala Unlockled!
-              </Typography>
-              <button
-                onClick={handleClose}
-                className="text-gray-500 hover:text-black text-xl font-bold"
-                aria-label="Close"
-              >
-                &times;
-              </button>
+            <div class="newKoala">
+              <div class="modalHeader">
+                {newKoala ? (
+                  <Typography
+                    id="modal-modal-title"
+                    variant="h6"
+                    component="h2"
+                  >
+                    New Koala Unlockled!
+                  </Typography>
+                ) : (
+                  <Typography
+                    id="modal-modal-title"
+                    variant="h6"
+                    component="h2"
+                  >
+                    Your Koala!
+                  </Typography>
+                )}
+                <button
+                  onClick={handleClose}
+                  className="closeModalBtn"
+                  aria-label="Close"
+                >
+                  &times;
+                </button>
+              </div>
               <h3>{koalaName}</h3>
-              <h4>{koalaDesc}</h4>
+              <div class="kDesc">
+                <div class="centerr">
+                  <img
+                    src={koalaImage}
+                    className="koalaDesPic"
+                    alt="koala"
+                  ></img>
+                  <p>{koalaDesc}</p>
+                </div>
+              </div>
             </div>
           </Box>
         )}
@@ -629,17 +772,19 @@ function App() {
       <div className="tableBody">
         <div className="stats">
           <div className="stats2">
-            <h2>Stats For: {username}</h2>
-            <h3 className="kCount">Koala Count: {numKoalas}</h3>
+            <h2>
+              <span class="underline">Stats For:</span>
+              <span class="us">{username}</span>
+            </h2>
+            <h3 class="kCount">Koala Count: {numKoalas}</h3>
             <h3 className="silver">Applications: {numApps}</h3>
             <h3 className="bronze">Interviews: {numInterviews}</h3>
             <h3 className="gold">Offers: {numOffers}</h3>
-            <br></br>
             <h3 className="kCount">New Koalas:</h3>
           </div>
         </div>
         <div className="table">
-          <h4 className="sorter">
+          <h4 class="sorter">
             <span className="line">
               Status:{" "}
               <select
@@ -678,71 +823,75 @@ function App() {
               Add Application
             </button>
           </h4>
-          {/* Displaying records table based on filters */}
-          <div className="overflow-x-auto max-w-full">
-            <table className="table-auto apps">
-              <thead>
-                <tr>
-                  <th>Company</th>
-                  <th>Position</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {apps
-                  .filter(
-                    (item) =>
-                      (searchVal === "" ||
-                        item.company
-                          .toLowerCase()
-                          .includes(searchVal.toLowerCase()) ||
-                        item.position
-                          .toLowerCase()
-                          .includes(searchVal.toLowerCase()) ||
-                        item.meet) &&
-                      (statusVal === "all" || statusVal === item.status)
-                  )
-                  .map((item) => (
-                    <tr>
-                      <td>{item.company}</td>
-                      <td>
-                        <a
-                          href={item.linkString}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {item.position}
-                        </a>
-                      </td>
-                      <td>{item.date}</td>
-                      <td>
-                        <select
-                          id={"status_" + item.company + item.position}
-                          defaultValue={item.status}
-                        >
-                          <option value="Applied">Applied</option>
-                          <option value="Interviewed">Interviewed</option>
-                          <option value="Offered">Offer</option>
-                          <option value="Rejected">Rejected</option>
-                        </select>
-                        <button
-                          onClick={async () => {
-                            updateStatus(
-                              item.company,
-                              item.position,
-                              "status_" + item.company + item.position
-                            );
-                          }}
-                          class="updateBtn"
-                        >
-                          Update
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
+          <div className="appTable overflow-x-auto max-w-full">
+            {apps.length > 0 ? (
+              <table className="table-auto apps">
+                <thead>
+                  <tr>
+                    <th>Company</th>
+                    <th>Position</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {apps
+                    .filter(
+                      (item) =>
+                        (searchVal === "" ||
+                          item.company
+                            .toLowerCase()
+                            .includes(searchVal.toLowerCase()) ||
+                          item.position
+                            .toLowerCase()
+                            .includes(searchVal.toLowerCase()) ||
+                          item.meet) &&
+                        (statusVal === "all" || statusVal === item.status)
+                    )
+                    .map((item) => (
+                      <tr>
+                        <td>{item.company}</td>
+                        <td>
+                          <a
+                            href={item.linkString}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {item.position}
+                          </a>
+                        </td>
+                        <td>{item.date}</td>
+                        <td>
+                          <select
+                            id={"status_" + item.company + item.position}
+                            defaultValue={item.status}
+                            className="statusSelect"
+                          >
+                            <option value="Applied">Applied</option>
+                            <option value="Interviewed">Interviewed</option>
+                            <option value="Offered">Offer</option>
+                            <option value="Rejected">Rejected</option>
+                          </select>
+                          <button
+                            onClick={async () => {
+                              updateStatus(
+                                item.company,
+                                item.position,
+                                "status_" + item.company + item.position
+                              );
+                            }}
+                            class="updateBtn"
+                          >
+                            Update
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            ) : (
+              <div class="noApps">Nothing to see here! Start Applying!</div>
+            )}
           </div>
         </div>
         <div className="notes">
@@ -760,7 +909,14 @@ function App() {
                 className="koalaSprite"
                 src={item.src}
                 alt={item.name}
-                style={{ left: item.leftPos, top: item.topPos }}
+                style={{
+                  left: item.leftPos,
+                  bottom: item.bottomPos,
+                  zIndex: item.zIndex,
+                }}
+                onClick={() =>
+                  handleOpenNewKoala(item.name, item.desc, item.filename, false)
+                }
               ></img>
             ))}
           </div>

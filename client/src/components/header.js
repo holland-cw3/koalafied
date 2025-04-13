@@ -4,7 +4,6 @@ import logo from '../images/logo.png';
 
 function logout(){
   localStorage.setItem('token', '')
-  alert("Successfully Logged Out");
   window.location.href = "/login";
 }
 

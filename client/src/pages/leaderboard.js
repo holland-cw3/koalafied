@@ -12,7 +12,7 @@ import "../CSS/leaderboard.css";
 import searcher from "../images/searcher.png";
 const headerStyle = {
   backgroundImage: `url(${searcher})`,
-}
+};
 
 function Leaderboard() {
   //temporary data for testing
@@ -48,7 +48,7 @@ function Leaderboard() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5001/api/leaderboard")
+    fetch("https://koala-fied-3.onrender.com/api/leaderboard")
       .then((res) => res.json())
       .then((data) => {
         const sorted = data.sort((a, b) => b.points - a.points);
@@ -59,7 +59,6 @@ function Leaderboard() {
 
   return (
     <>
-      
       <div className="home-btn" style={headerStyle}>
         <a href="/">Home</a>
       </div>

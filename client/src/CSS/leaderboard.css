@@ -4,22 +4,18 @@ body {
 
 .home-btn {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 45px;
+  left: 45px;
   background-color: white;
-  border: none;
-  color: red;
+  color: rgb(237, 59, 59);
   padding: 10px 20px;
-  text-align: center;
-  display: inline-block;
   font-size: 20px;
-  margin: 4px 2px;
+  font-weight: bold;
   cursor: pointer;
-  border-radius: 12px;
-  text-shadow: 1px 1px 0 #000;
-  width: 5%;
-  height: 5%;
-  margin-top: 33px
+  border: none;
+  border-radius: 5px;
+  box-shadow: 5px 5px black;
+  text-shadow: 2px 2px black;
 }
 
 a {
@@ -30,6 +26,7 @@ a {
 .leaderboard {
   width: 50%;
   margin: 2rem auto;
+  margin-top: 5rem;
   padding: 1rem;
   background: white;
   border-radius: 12px;
@@ -39,7 +36,7 @@ a {
 
 .leaderboard h2 {
   font-family: sans-serif;
-  color: black;
+  color: white;
   text-shadow: 1px 1px 0 #000;
   margin-bottom: 1rem;
 }
