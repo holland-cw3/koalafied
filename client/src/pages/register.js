@@ -9,7 +9,7 @@ import logo from '../images/logo.png';
 async function login(username, password) {
   try {
     const response = await fetch(
-      "https://koala-fied-3.onrender.com/createAccount",
+      "http://localhost:5001/createAccount",
       {
         method: "POST",
         headers: {
@@ -22,10 +22,12 @@ async function login(username, password) {
     if (response.ok) {
       const res = await response.json();
       localStorage.setItem("token", res.token);
+      alert('success')
       alert(localStorage.getItem("token"));
       window.location.href = "/";
     } else {
-      alert("Login Failed: Username or Password is incorrect");
+      alert('Error: Username Already Exists');
+
     }
   } catch (error) {
     console.error("Error submitting data:", error);
