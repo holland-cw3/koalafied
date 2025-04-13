@@ -83,13 +83,16 @@ async function load(
 
   try {
     // const response = await fetch("https://koala-fied-3.onrender.com/viewApplications", {
-    const response = await fetch("https://koala-fied-3.onrender.com/viewApplications", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      "https://koala-fied-3.onrender.com/viewApplications",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (response.ok) {
       const data = await response.json();
@@ -139,7 +142,7 @@ async function load(
       }, 300);
 
       return;
-    } 
+    }
   } catch (error) {
     console.error("Error submitting data:", error);
   }
@@ -191,7 +194,7 @@ async function saveNotes(setNotes) {
 
   try {
     const response = await fetch(
-       "https://koala-fied-3.onrender.com/updateNotes",
+      "https://koala-fied-3.onrender.com/updateNotes",
       {
         method: "POST",
         headers: {
@@ -446,7 +449,7 @@ function App() {
               height: "40vh",
               bgcolor: "background.paper",
               display: "flex",
-              flexDirection:'column',
+              flexDirection: "column",
 
               boxShadow: 24,
               p: 4,
@@ -639,8 +642,7 @@ function App() {
               Add Application
             </button>
           </h4>
-          {/* Displaying records table based on filters */}
-          <div className="overflow-x-auto max-w-full">
+          <div className="appTable overflow-x-auto max-w-full">
             <table className="table-auto apps">
               <thead>
                 <tr>
@@ -681,6 +683,7 @@ function App() {
                         <select
                           id={"status_" + item.company + item.position}
                           defaultValue={item.status}
+                          className="statusSelect"
                         >
                           <option value="Applied">Applied</option>
                           <option value="Interviewed">Interviewed</option>
