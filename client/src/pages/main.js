@@ -21,12 +21,20 @@ function animateKoalas(koalaObjList, koalaTimeoutRef) {
     const directionMultiplier = koala.direction === "left" ? -1 : 1;
 
     // Update horizontal position
-    koala.leftPos += Math.random() * 50 * directionMultiplier;
+    koala.leftPos += Math.random() * 25 * directionMultiplier;
     koala.leftPos = clamp(koala.leftPos, 5, 1000);
+    // if at one end flip direction
+    if (koala.leftPos == 1000 || koala.leftPos == 5) {
+      if (koala.direction === "right") {
+        koala.direction = "left";
+      } else {
+        koala.direction = "right";
+      }
+    }
     elem.style.left = `${koala.leftPos}px`;
 
     // Update vertical position
-    koala.topPos += Math.random() * 10 - 5;
+    koala.topPos += Math.random() * 5 - 2.5;
     koala.topPos = clamp(koala.topPos, 5, 10);
     elem.style.top = `${koala.topPos}px`;
   });
@@ -34,7 +42,7 @@ function animateKoalas(koalaObjList, koalaTimeoutRef) {
   clearTimeout(koalaTimeoutRef.current);
   koalaTimeoutRef.current = setTimeout(() => {
     animateKoalas(koalaObjList, koalaTimeoutRef);
-  }, 1000);
+  }, 500);
 }
 
 function compareKoalaLists(newList, oldList) {
