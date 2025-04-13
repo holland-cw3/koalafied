@@ -193,7 +193,12 @@ select {
   background-color: #d2b48c;
   padding: 10px;
   border-radius: 5px;
-  box-shadow: 2px 2px;
+  /* box-shadow: 2px 2px; */
+}
+
+.submitButton {
+  width: 50%;
+  margin-left: 25%;
 }
 
 input {

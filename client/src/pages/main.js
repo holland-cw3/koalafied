@@ -284,12 +284,14 @@ async function load(
   }
 }
 
-async function submitNewApp() {
+async function submitNewApp(status) {
   let company = document.getElementById("company").value;
   let position = document.getElementById("position").value;
   let link = document.getElementById("link").value;
   let date = document.getElementById("date").value;
-  let status = document.getElementById("status").value;
+  let statusVal = status;
+
+  console.log("Status is: " + statusVal);
 
   const token = localStorage.getItem("token");
 
@@ -307,12 +309,13 @@ async function submitNewApp() {
           position: position,
           link: link,
           date: date,
-          status: status,
+          status: statusVal,
         }),
       }
     );
 
     if (response.ok) {
+      await load();
       return true;
     } else {
       alert("User not authenticated");
@@ -372,6 +375,9 @@ function App() {
   const [selectedSorting, setSelectedSorting] = useState("newest");
   const [searchVal, setSearchVal] = useState("");
   const [statusVal, setStatusVal] = useState("all");
+
+  // for add app
+  const [status, setStatus] = useState("Applied");
 
   // State for modal
   const [open, setOpen] = useState(false);
@@ -720,7 +726,8 @@ function App() {
                   variant="outlined"
                   select
                   fullWidth
-                  defaultValue="Applied"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
                   required
                   sx={{ mb: 1 }}
                   InputProps={{
@@ -742,10 +749,10 @@ function App() {
                   type="submit"
                   class="loginBtn"
                   onClick={async () => {
-                    const success = await submitNewApp();
+                    const success = await submitNewApp(status);
                     if (success) {
                       handleClose();
-                      await new Promise((res) => setTimeout(res, 300)); // short delay
+                      await new Promise((res) => setTimeout(res, 500)); // short delay
                       await load(
                         setApps,
                         setUsername,
@@ -764,7 +771,7 @@ function App() {
                       );
                     }
                   }}
-                  className="line bg-blue-500 text-white px-4 py-2 rounded"
+                  className="submitButton line bg-blue-500 text-white px-4 py-2 rounded"
                 >
                   Submit
                 </button>
