@@ -5,6 +5,8 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
+import profile from "../images/profile.png";
+
 import "../CSS/main.css";
 const globalKoalaList = require("../koalas/koalas.json").koalas;
 
@@ -378,7 +380,6 @@ function App() {
         koalaObjList,
         statusTimeout,
         "update status"
-        // koalaListChanged
       );
 
       if (response.ok) {
@@ -579,7 +580,6 @@ function App() {
             </div>
           </Box>
         ) : (
-          // Display the new koala modal
           <Box
             sx={{
               position: "absolute",
@@ -590,57 +590,66 @@ function App() {
               boxShadow: 24,
               p: 4,
               borderRadius: 2,
-              border:'1px solid black'
+              border: "1px solid black",
             }}
           >
-            <div class='newKoala'>
-              <div class='modalHeader'>
-              {newKoala ? (
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                  New Koala Unlockled!
-                </Typography>
-              ) : (
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                  Your Koala!
-                </Typography>
-              )}
-              <button
-                onClick={handleClose}
-                className="closeModalBtn"
-                aria-label="Close"
-              >
-                &times;
-              </button>
+            <div class="newKoala">
+              <div class="modalHeader">
+                {newKoala ? (
+                  <Typography
+                    id="modal-modal-title"
+                    variant="h6"
+                    component="h2"
+                  >
+                    New Koala Unlockled!
+                  </Typography>
+                ) : (
+                  <Typography
+                    id="modal-modal-title"
+                    variant="h6"
+                    component="h2"
+                  >
+                    Your Koala!
+                  </Typography>
+                )}
+                <button
+                  onClick={handleClose}
+                  className="closeModalBtn"
+                  aria-label="Close"
+                >
+                  &times;
+                </button>
               </div>
               <h3>{koalaName}</h3>
-              <div class='kDesc'>
-              
-              <div class='centerr'>
-              <img src={koalaImage} className="koalaDesPic" alt='koala'></img>
-              <p>{koalaDesc}</p>
-
+              <div class="kDesc">
+                <div class="centerr">
+                  <img
+                    src={koalaImage}
+                    className="koalaDesPic"
+                    alt="koala"
+                  ></img>
+                  <p>{koalaDesc}</p>
+                </div>
               </div>
-              </div>
-             
             </div>
           </Box>
         )}
       </Modal>
 
       <div className="tableBody">
-        <div className="stats">
-          <div className="stats2">
-            <h2>
-              <span class="underline">Stats For:</span>
-              <span class="us">{username}</span>
-            </h2>
-            <h3 class="kCount">Koala Count: {numKoalas}</h3>
-            <h3 className="silver">Applications: {numApps}</h3>
-            <h3 className="bronze">Interviews: {numInterviews}</h3>
-            <h3 className="gold">Offers: {numOffers}</h3>
-            <h3 className="kCount">New Koalas:</h3>
+        <div className="notes">
+          <div class="stats">
+            <h2>Hello, {username}</h2>
+            <div class='statNotes'>
+            <h3 class="bronze">Applications - {numApps}</h3>
+            <h3 class="silver">Interviews - {numInterviews}</h3>
+            <h3 class="gold">Offer(s) - {numOffers}</h3>
+            <h3 class="kCount">Koala(s) - {numKoalas}</h3>
+            </div>
+           
           </div>
         </div>
+
         <div className="table">
           <h4 class="sorter">
             <span className="line">
@@ -682,75 +691,74 @@ function App() {
             </button>
           </h4>
           <div className="appTable overflow-x-auto max-w-full">
-            {(apps.length > 0 ?
-            <table className="table-auto apps">
-              <thead>
-                <tr>
-                  <th>Company</th>
-                  <th>Position</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {apps
-                  .filter(
-                    (item) =>
-                      (searchVal === "" ||
-                        item.company
-                          .toLowerCase()
-                          .includes(searchVal.toLowerCase()) ||
-                        item.position
-                          .toLowerCase()
-                          .includes(searchVal.toLowerCase()) ||
-                        item.meet) &&
-                      (statusVal === "all" || statusVal === item.status)
-                  )
-                  .map((item) => (
-                    <tr>
-                      <td>{item.company}</td>
-                      <td>
-                        <a
-                          href={item.linkString}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {item.position}
-                        </a>
-                      </td>
-                      <td>{item.date}</td>
-                      <td>
-                        <select
-                          id={"status_" + item.company + item.position}
-                          defaultValue={item.status}
-                          className="statusSelect"
-                        >
-                          <option value="Applied">Applied</option>
-                          <option value="Interviewed">Interviewed</option>
-                          <option value="Offered">Offer</option>
-                          <option value="Rejected">Rejected</option>
-                        </select>
-                        <button
-                          onClick={async () => {
-                            updateStatus(
-                              item.company,
-                              item.position,
-                              "status_" + item.company + item.position
-                            );
-                          }}
-                          class="updateBtn"
-                        >
-                          Update
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table> : <div class='noApps'>
-          
-            Nothing to see here! Start Applying!
-            
-            </div>)}
+            {apps.length > 0 ? (
+              <table className="table-auto apps">
+                <thead>
+                  <tr>
+                    <th>Company</th>
+                    <th>Position</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {apps
+                    .filter(
+                      (item) =>
+                        (searchVal === "" ||
+                          item.company
+                            .toLowerCase()
+                            .includes(searchVal.toLowerCase()) ||
+                          item.position
+                            .toLowerCase()
+                            .includes(searchVal.toLowerCase()) ||
+                          item.meet) &&
+                        (statusVal === "all" || statusVal === item.status)
+                    )
+                    .map((item) => (
+                      <tr>
+                        <td>{item.company}</td>
+                        <td>
+                          <a
+                            href={item.linkString}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {item.position}
+                          </a>
+                        </td>
+                        <td>{item.date}</td>
+                        <td>
+                          <select
+                            id={"status_" + item.company + item.position}
+                            defaultValue={item.status}
+                            className="statusSelect"
+                          >
+                            <option value="Applied">Applied</option>
+                            <option value="Interviewed">Interviewed</option>
+                            <option value="Offered">Offer</option>
+                            <option value="Rejected">Rejected</option>
+                          </select>
+                          <button
+                            onClick={async () => {
+                              updateStatus(
+                                item.company,
+                                item.position,
+                                "status_" + item.company + item.position
+                              );
+                            }}
+                            class="updateBtn"
+                          >
+                            Update
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            ) : (
+              <div class="noApps">Nothing to see here! Start Applying!</div>
+            )}
           </div>
         </div>
         <div className="notes">
