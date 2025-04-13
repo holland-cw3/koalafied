@@ -563,28 +563,28 @@ function App() {
           <Box
             sx={{
               position: "absolute",
-              top: "25%",
-              left: "22.5%",
-              width: "50%",
-              height: "40vh",
-              bgcolor: "background.paper",
-              display: "flex",
-              flexDirection: "column",
-
+              top: "10%",
+              left: "33.5%",
+              width: "27%",
+              bgcolor: "#9f7e53",
               boxShadow: 24,
               p: 4,
               borderRadius: 2,
+              border: "1px solid black",
             }}
           >
-            <div className="flex justify-center items-center mb-4">
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h2"
-                className="text-gray-700 font-bold"
-              >
+            <div class="modalHeader">
+              <Typography id="modal-modal-title" variant="h6" component="h2">
                 Add A New Application
               </Typography>
+
+              <button
+                onClick={handleClose}
+                className="closeModalBtn"
+                aria-label="Close"
+              >
+                &times;
+              </button>
             </div>
             {/* {form inputs here} */}
             <div id="modal-modal-description">
@@ -627,9 +627,9 @@ function App() {
                 label="Link"
                 variant="outlined"
                 fullWidth
-                sx={{ mb: 1 }}
-                InputProps={{
-                  style: {
+                sx={{
+                  mb: 1,
+                  "& .MuiOutlinedInput-root": {
                     backgroundColor: "#d2b48c",
                     padding: "10px",
                     borderRadius: "5px",
@@ -683,6 +683,7 @@ function App() {
               </TextField>
               <button
                 type="submit"
+                class="loginBtn"
                 onClick={async () => {
                   const success = await submitNewApp();
                   if (success) {
@@ -706,7 +707,6 @@ function App() {
                     );
                   }
                 }}
-                className="line bg-blue-500 text-white px-4 py-2 rounded"
               >
                 Submit
               </button>
@@ -773,13 +773,12 @@ function App() {
         <div className="notes">
           <div class="stats">
             <h2>Hello, {username}</h2>
-            <div class='statNotes'>
-            <h3 class="bronze">Applications - {numApps}</h3>
-            <h3 class="silver">Interviews - {numInterviews}</h3>
-            <h3 class="gold">Offer(s) - {numOffers}</h3>
-            <h3 class="kCount">Koala(s) - {numKoalas}</h3>
+            <div class="statNotes">
+              <h3 class="bronze">Applications - {numApps}</h3>
+              <h3 class="silver">Interviews - {numInterviews}</h3>
+              <h3 class="gold">Offer(s) - {numOffers}</h3>
+              <h3 class="kCount">Koala(s) - {numKoalas}</h3>
             </div>
-           
           </div>
         </div>
 
@@ -823,7 +822,7 @@ function App() {
               Add Application
             </button>
           </h4>
-          <div className="appTable overflow-x-auto max-w-full">
+          <div className="appTable ">
             {apps.length > 0 ? (
               <table className="table-auto apps">
                 <thead>
