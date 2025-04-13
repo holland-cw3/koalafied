@@ -47,6 +47,7 @@ export default function Login() {
           label="Username"
           variant="outlined"
           value={username}
+          required
           placeholder="Username"
           onChange={(e) => setUsername(e.target.value)}
           sx={{
@@ -69,6 +70,7 @@ export default function Login() {
           id="outlined-basic"
           label="Password"
           variant="outlined"
+          required
           value={password}
           placeholder="Password"
           type="password"
