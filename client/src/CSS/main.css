@@ -332,10 +332,9 @@ button {
 .statNotes {
   background-color: rgba(0, 0, 0, 0.5);
   padding-top: 6px;
-  
-  border-radius: 5px;
-    padding-bottom: 2px;
 
+  border-radius: 5px;
+  padding-bottom: 2px;
 }
 
 .loginBtn {
@@ -349,22 +348,23 @@ button {
   text-shadow: 3px 3px black;
   color: green;
   margin-bottom: -12px;
+  position: relative;
+  z-index: 1000;
 }
 
-.statNotes.over{
-  padding-top:0;
-  max-height:  10vh;
-  overflow-y: scroll;   
+.statNotes.over {
+  padding-top: 0;
+  max-height: 10vh;
+  overflow-y: scroll;
   padding-bottom: 13px;
-
 }
 
-.rowS{
+.rowS {
   display: flex;
   flex-direction: row;
 }
 
-.prof{
+.prof {
   width: 20px;
   height: 20px;
   margin-left: 3px;
