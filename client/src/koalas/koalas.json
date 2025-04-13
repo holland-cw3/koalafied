@@ -32,7 +32,7 @@
     },
     {
       "id": "interviewKoala1",
-      "filename": "basicKoala.png",
+      "filename": "interviewKoala1.png",
       "name": "Interview Koala 1",
       "description": "Your First Interview! Keep calm and Koala on!"
     },
@@ -50,7 +50,7 @@
     },
     {
       "id": "offerKoala",
-      "filename": "basicKoala.png",
+      "filename": "offerKoala.png",
       "name": "Offer Koala",
       "description": "OMG YOU DID IT! YOU REALLY DID IT! NOT A LOT OF PEOPLE DO IT BUT YOU DID IT! DO YOU EVEN KNOW WHAT YOU'VE DONE! YOU JUST KOALAFIED FOR THE JOB! CONGRATS! King Koala is so proud of you!"
     }

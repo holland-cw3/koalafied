@@ -282,6 +282,7 @@ function App() {
           leftPos: Math.random() * 1000,
           bottomPos: Math.random() * 10,
           direction: Math.random() < 0.5 ? "left" : "right",
+          zIndex: Math.random() * 100 + 50,
           src: require("../koalas/" + koala.filename),
         });
       }
@@ -725,7 +726,11 @@ function App() {
                 className="koalaSprite"
                 src={item.src}
                 alt={item.name}
-                style={{ left: item.leftPos, bottom: item.bottomPos }}
+                style={{
+                  left: item.leftPos,
+                  bottom: item.bottomPos,
+                  zIndex: item.zIndex,
+                }}
               ></img>
             ))}
           </div>
