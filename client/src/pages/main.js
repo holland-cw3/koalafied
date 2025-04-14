@@ -1,12 +1,6 @@
 import Header from "../components/header";
-import { useState, useRef } from "react";
-import { useEffect } from "react";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-
+import { useState, useEffect, useRef } from "react";
+import {Modal, Box, Typography, TextField, MenuItem} from "@mui/material";
 
 /* -------- Components  -------- */
 import StatNotes from "../components/stats";  // Statistics and Quests
@@ -209,7 +203,6 @@ async function load(
   const token = localStorage.getItem("token");
 
   try {
-    // const response = await fetch("https://koala-fied-3.onrender.com/viewApplications", {
     const response = await fetch(
       "https://koala-fied-3.onrender.com/viewApplications",
       {
