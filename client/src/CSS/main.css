@@ -59,14 +59,16 @@ td {
   background-position: center;
   background-repeat: no-repeat;
   width: 90%;
-
   border: none;
   color: white;
   font-weight: bold;
   font-size: 18px;
   resize: none;
   outline: none;
-  padding: 50px;
+  padding-left: 47px;
+  padding-right: 47px;
+  padding-top: 7vh;
+  padding-bottom: 35vh;
   box-sizing: border-box;
   overflow-x: hidden;
 }
