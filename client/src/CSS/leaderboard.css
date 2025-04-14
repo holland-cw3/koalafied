@@ -26,10 +26,13 @@ a {
 
 .leaderboard {
   width: 50%;
-  margin: 2rem auto;
-  margin-top: 2rem;
-  padding: 1rem;
-  background: tan;
+  margin: .1rem auto;
+  padding-top: .05rem;
+  padding-bottom: 1.1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+
+  
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(130, 109, 109, 0.1);
   text-align: center; /* centers the header */
