@@ -31,7 +31,7 @@ app.use(cors({
   },
   credentials: true
 }));
-
+ 
 const uri = `mongodb+srv://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PASSWORD}@koalafied.szyjdqy.mongodb.net/?retryWrites=true&w=majority&appName=Koalafied`;
 
 const client = new MongoClient(uri, {
