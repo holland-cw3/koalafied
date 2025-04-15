@@ -1,10 +1,10 @@
 import Header from "../components/header";
 import { useState, useEffect, useRef } from "react";
-import {Modal, Box, Typography, TextField, MenuItem} from "@mui/material";
+import { Modal, Box, Typography, TextField, MenuItem } from "@mui/material";
 
 /* -------- Components  -------- */
-import StatNotes from "../components/stats";  // Statistics and Quests
-
+import StatNotes from "../components/stats"; // Statistics and Quests
+import KoalaFooter from "../components/koalaFooter";
 
 import "../CSS/main.css";
 const globalKoalaList = require("../koalas/koalas.json").koalas;
@@ -336,9 +336,6 @@ async function saveNotes(setNotes) {
     );
 
     if (response.ok) {
-      // const data = await response.json();
-      // console.log(data.applications);
-      // setNotes(data.applications);
       return;
     } else {
       alert("User not authenticated");
@@ -348,7 +345,7 @@ async function saveNotes(setNotes) {
   }
 }
 
-function App() {
+export default function App() {
   if (!localStorage.getItem("token")) {
     window.location.href = "/";
   }
@@ -952,29 +949,11 @@ function App() {
             onBlur={() => saveNotes()}
           ></textarea>
         </div>
-        <div className="footer">
-          <div className="koalas">
-            {koalaObjList.map((item) => (
-              <img
-                id={item.elemId}
-                className="koalaSprite"
-                src={item.src}
-                alt={item.name}
-                style={{
-                  left: item.leftPos,
-                  bottom: item.bottomPos,
-                  zIndex: item.zIndex,
-                }}
-                onClick={() =>
-                  handleOpenNewKoala(item.name, item.desc, item.filename, false)
-                }
-              ></img>
-            ))}
-          </div>
-        </div>
-      </div>
+        <KoalaFooter
+          koalaObjList={koalaObjList}
+          handleOpenNewKoala={handleOpenNewKoala}
+        />
+      </div> 
     </div>
   );
 }
-
-export default App;
