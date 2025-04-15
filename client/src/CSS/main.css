@@ -369,7 +369,7 @@ button {
 
 .statNotes.over {
   padding-top: 0;
-  max-height: 10vh;
+  max-height: 15vh;
   overflow-y: scroll;
   padding-bottom: 13px;
 }

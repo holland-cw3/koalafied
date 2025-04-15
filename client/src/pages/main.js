@@ -350,12 +350,12 @@ export default function App() {
     window.location.href = "/";
   }
 
-  function inKoalaList(id, list) {
-    for (let i = 0; i < list.length; i++) {
-      if (list[i].id === id) return true;
-    }
-    return false;
-  }
+  // function inKoalaList(id, list) {
+  //   for (let i = 0; i < list.length; i++) {
+  //     if (list[i].id === id) return true;
+  //   }
+  //   return false;
+  // }
 
   // States for table
   const [selectedSorting, setSelectedSorting] = useState("newest");
@@ -546,7 +546,7 @@ export default function App() {
       "top level"
       // koalaListChanged
     );
-  }, []);
+  }, [koalaList, koalaObjList]);
 
   useEffect(() => {
     // // koalaListChanged();
