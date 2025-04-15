@@ -17,7 +17,7 @@ async function login(username, password) {
     if (response.ok) {
       const res = await response.json();
       localStorage.setItem("token", res.token);
-      window.location.href = "/";
+      window.location.href = "/dashboard";
     } else {
       alert("Login Failed: Username or Password is incorrect");
     }

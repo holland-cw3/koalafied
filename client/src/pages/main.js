@@ -350,7 +350,7 @@ async function saveNotes(setNotes) {
 
 function App() {
   if (!localStorage.getItem("token")) {
-    window.location.href = "/login";
+    window.location.href = "/";
   }
 
   function inKoalaList(id, list) {
