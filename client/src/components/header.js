@@ -21,7 +21,7 @@ export default function Header({ isHomePage }) {
         ) : (
           <button
             className="leaderboard-button"
-            onClick={() => (window.location.href = "/")}
+            onClick={() => (window.location.href = "/dashboard")}
           >
             Home
           </button>

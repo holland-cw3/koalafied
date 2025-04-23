@@ -1,9 +1,9 @@
-
-body{
+body {
   width: 100%;
-  background-image: url('./images/bg.png');
+  background-image: url("./images/bg.png");
   background-size: cover;
-
 }
 
-
+html {
+  background: black;
+}

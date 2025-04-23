@@ -9,18 +9,16 @@ import Login from "./pages/login";
 import Leaderboard from "./pages/leaderboard";
 
 function App() {
+  // const blockInspectElement = (event) => {
+  //   event.preventDefault();
+  // }
 
-  const blockInspectElement = (event) =>{
-    event.preventDefault();
-  }
-
-  useEffect(() =>{
-    window.addEventListener('contextmenu', blockInspectElement);
-    return function cleanup(){
-      window.removeEventListener('contextmenu', blockInspectElement)
-    }
-  })
-
+  // useEffect(() =>{
+  //   window.addEventListener('contextmenu', blockInspectElement);
+  //   return function cleanup(){
+  //     window.removeEventListener('contextmenu', blockInspectElement)
+  //   }
+  // })
 
   return (
     <div className="App">
@@ -30,7 +28,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Home />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/*" element={<Login />}/>
+          <Route path="/*" element={<Login />} />
         </Routes>
       </Router>
     </div>
