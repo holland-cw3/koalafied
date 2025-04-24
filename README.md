@@ -1,70 +1,39 @@
-# Getting Started with Create React App
+# Inspiration
+Applying for internships and jobs can be tedious and boring. In a competitive job market, students like us are rushing to apply to hundreds of internships without a proper way to keep track of them. Many have turned to the bland Excel spreadsheets to mindlessly track their applications. This leaves students like us to be disorganized and bored when it comes to applying to jobs. We were inspired by idle games like Neko Atsume, and decided to create a similar mechanism for gamifying job applications.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# What it does
+Enter Koalafied, a gamified way to keep track of your job applications and important information like interviews and offers. As you work towards building a future for yourself, you also work towards building a community of cutesy and unique Koala's deep within a quiet forest.
 
-## Available Scripts
+Users can sign up for an account to rise up the leaderboards to a wide range of koala-ity career choices and unmatched fame. They can collect koalas by applying to jobs, interviewing, and receiving offers. Track status updates on their applications and keep track of important interviews or deadlines via a notepad. Most importantly, they can play with their koalas!
 
-In the project directory, you can run:
+# How we built it
+Koalafied is built on the MERN stack, meaning we used MongoDB, Express, React, and Node.js for our application.
 
-### `npm start`
+We first planned out our application by storyboarding and creating mock-ups for interfaces and then collaborated on setting up our database on MongoDB, discussing the structure of our data.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+We used Node and Express in combination with MongoDB to create users, an encrypted login system with JWT sessions, and store users' applications and of course those CUTE KOALAS. We found using MongoDB to be very efficient and easy to get started with. It made developing our backend a lot easier than we expected.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+For our frontend, we used React and Material UI to build a login form, a leaderboard, and most importantly the dashboard, which displays all of a user's application statuses, notes, and user statistics (applications, interviews, etc.). And don't forget about those CUTE KOALAS playing around on the bottom of the screen!
 
-### `npm test`
+Finally, we used Photoshop to edit and create graphics for our application, and Postman to test our backend API routes.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Challenges we ran into
+Building animations With Pure React: we found it difficult to set up the initial function structure that would allow for smooth animations and movement physics. There was a steep learning curve, but after gaining a better understanding of React's page update structure, we were able to create complex movement for our koalas.
 
-### `npm run build`
+Creating Sessions with JSON Web Tokens (JWT): Allowing users to login, stay logged in, and also be restricted from accessing protect routes without an account proved to be a struggle. This was one of the more difficult and annoying challenges to deal with, not through just it's difficulty, but also through its recurring nature. We learned that in times where you find yourself getting annoyed with problems like these it's important to stay calm and work together.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+As Always... Styling Everything: CSS is hard y'all. But we did it :)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# What we learned
+Evan Masiello, a second-time hackathon participant, first honed his existing skill for building react pages and creating backend connections when developing the dashboard and Express endpoints. Something that he did not expect to end up developing was the animation for the Koalas, but he found it to be a very fun experience. Evan enjoyed challenging himself by thinking of new ways the Koalas could move or be interacted with and figuring out how to implement them. He definitely strengthened his understanding and skills related to React.js through this process and also gained valuable experience using MongoDB for more intricate data than in the past.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Benjamin Johnson learned deeply about how react works and react syntax. A step up from what he was normally accustomed to, which was just HTML, CSS, and JavaScript for building a webpage. Ben expanded on his knowledge of MongoDB which he had minimal knowledge of before Bitcamp to implement the leaderboard functionality.
 
-### `npm run eject`
+Caleb Holland, a second-time Bitcamp participant traveled from his usual comfort as a frontend developer to explore the backend. He learned how to create an encrypted user system using Node and MongoDB, create sessions with JSON Web Tokens (JWT), and most importantly learned how to have a good time with his pals. In addition, he continued to hone his sense of design by creating a majority of the graphics for the application, and by building some of the components used on the login and dashboard page.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+# What's next for Koalafied
+Originally, we wanted to use the Gemini API to generate the sprites for the koalas and create endless quests for the user. Although this was beyond the scope of this hackathon, this is something we'd like to implement as we improve upon the project in the future.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+We also had aspirations to have this tool auto track your applications after applying for jobs, either through an extension, or an email connection. This would make it much easier for users to organize their applications, as this removes the need to manually add in their applications.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+In the end, it was a tree-at to create Koalafied. We learned a lot, and we look forward to expanding upon it in the future!
