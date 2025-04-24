@@ -22,6 +22,7 @@ export default function Stats({
         <div class="rowS">
           <h2>Hello, {username}!</h2>
         </div>
+        <h4 className="QuestTitle">Stats:</h4>
         <div class="statNotes">
           <h3 class="bronze">Applications - {numApps}</h3>
           <h3 class="silver">Interviews - {numInterviews}</h3>
