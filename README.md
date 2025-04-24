@@ -1,3 +1,5 @@
+![logo2](https://github.com/user-attachments/assets/102a17cd-3252-468d-ba73-f5cc61bb1f2e)
+
 # Inspiration
 Applying for internships and jobs can be tedious and boring. In a competitive job market, students like us are rushing to apply to hundreds of internships without a proper way to keep track of them. Many have turned to the bland Excel spreadsheets to mindlessly track their applications. This leaves students like us to be disorganized and bored when it comes to applying to jobs. We were inspired by idle games like Neko Atsume, and decided to create a similar mechanism for gamifying job applications.
 
