@@ -79,7 +79,12 @@ function Leaderboard() {
         return;
       }
     } catch (error) {
-      console.error("Error submitting data:", error);
+      // console.error("Error submitting data:", error);
+    }
+    // console.log("Getting Koalas!");
+    // console.log("Length is: " + koalaList.length);
+    if (koalaList.length === 0) {
+      setKoalaList(["basicKoala"]);
     }
   }
 
