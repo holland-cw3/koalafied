@@ -1,5 +1,5 @@
 import Header from "../components/header";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Modal, Box, Typography, TextField, MenuItem } from "@mui/material";
 
 /* -------- Components  -------- */
