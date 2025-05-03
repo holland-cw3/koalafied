@@ -44,3 +44,32 @@
   width: 45%;
   text-align: center;
 }
+
+@media (max-width: 800px) {
+  .container img {
+    position: absolute;
+    top: 25%; 
+    left: 50%;
+    transform: translateX(-47%); 
+    padding: 5px; 
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+    width: 50%;
+  }
+
+  .loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 45px;
+    padding-top: 10vh;
+  
+    padding-bottom:6vh;
+    background-image: url("../images/searcher.png");
+    background-size: contain;
+    border-radius: 8px;
+    box-shadow: 0 15px 20px rgba(30, 30, 30, 0.4);
+    width: 65%;
+    text-align: center;
+  }
+}
+  
