@@ -219,7 +219,7 @@ export default function App() {
   const [numOffers, setNumOffers] = useState(0);
 
   const today = new Date().toISOString().split("T")[0];
-  const [date, setDate] = useState(today);
+  const [date] = useState(today);
 
   function setKoalaListHelp(newList) {
     setKoalaList(newList);
@@ -241,6 +241,7 @@ export default function App() {
     setOpen(true);
     setModalAddingApp(true);
   };
+  
 
   const handleOpenNewKoala = (name, desc, filename, isNewKoala) => {
     setOpen(true);
@@ -322,7 +323,7 @@ export default function App() {
       handleOpenNewKoala,
       "top level"
     );
-  });
+  }, [koalaList, handleOpenNewKoala]);
 
   useEffect(() => {}, [koalaList]);
 
