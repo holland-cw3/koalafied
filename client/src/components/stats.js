@@ -27,7 +27,6 @@ export default function Stats({
           <h3 class="bronze">Applications - {numApps}</h3>
           <h3 class="silver">Interviews - {numInterviews}</h3>
           <h3 class="gold">Offer(s) - {numOffers}</h3>
-          {/* <h3 class="kCount">Koala(s) - {numKoalas}</h3> */}
         </div>
         <h4 className="QuestTitle">Quests:</h4>
         <div class="statNotes over">
