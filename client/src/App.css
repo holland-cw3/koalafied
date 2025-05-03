@@ -2,8 +2,13 @@ body {
   width: 100%;
   background-image: url("./images/bg.png");
   background-size: cover;
+  height: 100vh;
 }
 
 html {
   background: black;
+}
+
+@media (max-width: 800px) {
+
 }
