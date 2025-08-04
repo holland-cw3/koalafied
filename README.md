@@ -39,3 +39,12 @@ Originally, we wanted to use the Gemini API to generate the sprites for the koal
 We also had aspirations to have this tool auto track your applications after applying for jobs, either through an extension, or an email connection. This would make it much easier for users to organize their applications, as this removes the need to manually add in their applications.
 
 In the end, it was a tree-at to create Koalafied. We learned a lot, and we look forward to expanding upon it in the future!
+
+# Screenshots
+<img width="1598" height="743" alt="Screenshot 2025-04-13 045941" src="https://github.com/user-attachments/assets/bca7e8a1-88bd-42c6-8762-a49ea477b362" />
+
+<img width="1597" height="736" alt="Screenshot 2025-04-13 050415" src="https://github.com/user-attachments/assets/f968dd85-93cf-43b6-8b84-885ea65df97f" />
+
+<img width="1594" height="740" alt="Screenshot 2025-04-13 050736" src="https://github.com/user-attachments/assets/000a1992-cd38-4464-b127-b6c07d4c16a9" />
+<img width="1595" height="739" alt="Screenshot 2025-04-13 050431" src="https://github.com/user-attachments/assets/0cf5edfe-acff-46b5-8c02-cf1737d31fa7" />
+<img width="1597" height="736" alt="Screenshot 2025-04-13 050415" src="https://github.com/user-attachments/assets/436d8430-b6ac-4249-8629-12461018c3cb" />
