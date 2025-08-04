@@ -52,3 +52,7 @@ In the end, it was a tree-at to create Koalafied. We learned a lot, and we look 
 
 ### Leaderboard
 <img width="1595" height="739" alt="Screenshot 2025-04-13 050431" src="https://github.com/user-attachments/assets/0cf5edfe-acff-46b5-8c02-cf1737d31fa7" />
+
+### Adding an Application
+<img width="1597" height="739" alt="Screenshot 2025-04-13 050328" src="https://github.com/user-attachments/assets/579d9fd9-142e-400c-ac23-b2e0d82b6cb5" />
+
