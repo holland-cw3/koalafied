@@ -376,6 +376,7 @@ button {
 .rowS {
   display: flex;
   flex-direction: row;
+  margin-bottom: -25px;
 }
 
 .prof {

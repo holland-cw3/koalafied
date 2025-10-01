@@ -19,7 +19,7 @@ export default function Stats({
   return (
     <div className="notes">
       <div class="stats">
-        <div class="rowS">
+        <div class="rowS ">
           <h2>Hello, {username}!</h2>
         </div>
         <h4 className="QuestTitle">Stats:</h4>
